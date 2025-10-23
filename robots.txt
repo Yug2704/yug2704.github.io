@@ -1,0 +1,3 @@
+Sitemap: https://yug2704.github.io/cost-of-living/sitemap.xml
+User-agent: *
+Allow: /
