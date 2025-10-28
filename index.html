@@ -6,34 +6,47 @@
   <title>Prix de la vie – comparateur par pays et villes</title>
   <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
   <link rel="stylesheet" href="/assets/style.css">
+
   <style>
+    body { font-family: system-ui, sans-serif; margin:0; background:#fff; color:#222; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:16px 32px; border-bottom:1px solid #eee; background:#fff; position:sticky; top:0; z-index:10;}
+    header h1 { font-size:20px; font-weight:700; margin:0; color:#111;}
+    header nav a { margin-left:20px; text-decoration:none; color:#444; font-weight:500; transition:.15s; }
+    header nav a:hover { color:#ea580c; }
+
     .hero{background:linear-gradient(120deg,#f59e0b 0%, #ea580c 60%);color:#fff;padding:48px 16px;text-align:center}
-    .hero h1{font-size:38px;margin:0}
+    .hero h2{font-size:38px;margin:0}
     .hero p{max-width:720px;margin:12px auto 0;font-size:18px;line-height:1.55}
     .searchbox{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;width:240px}
+    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:15px;width:240px}
     .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer;transition:.15s}
     .searchbox button:hover{background:#fff7ed;color:#b45309;border-color:transparent}
-    .results{max-width:760px;margin:26px auto 0;text-align:left}
-    .summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px}
-    .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
-    .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
-    .kpi strong{display:block}
-    .note{font-size:13px;color:var(--muted);margin-top:6px}
-    .fade-in{animation:fadeIn .25s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .suggestions { position: relative; }
+    .suggest-list { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:6px; margin-top:6px; box-shadow:0 6px 18px rgba(0,0,0,.06); }
+    .suggest-item { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:8px; cursor:pointer; }
+    .suggest-item:hover { background:#fff7ed; }
+    .suggest-item small { color:#64748b; }
+    main { max-width:900px; margin:60px auto; padding:0 20px;}
+    footer { text-align:center; padding:24px; color:#777; font-size:14px; border-top:1px solid #eee;}
   </style>
 </head>
 <body>
 
-<!-- Header/Footers automatiques -->
-<div data-include="/partials/header.html"></div>
+<header>
+  <h1>Prix de la vie</h1>
+  <nav>
+    <a href="/">Accueil</a>
+    <a href="/categories.html">Catégories</a>
+    <a href="/recherche.html">Recherche</a>
+  </nav>
+</header>
 
-<section class="hero" id="recherche">
-  <h1>Comparez le coût de la vie 🌍</h1>
+<section class="hero">
+  <h2>Comparez le coût de la vie 🌍</h2>
   <p>Entrez un <strong>pays</strong> (ex. Japon, France) pour voir un résumé national, ou une <strong>ville</strong> (ex. Tokyo, Paris) pour ses prix détaillés. Montants en euros.</p>
 
   <div class="searchbox">
-    <input id="searchInput" type="text" placeholder="Exemples : Japon, France, Tokyo, Paris…">
+    <input id="searchInput" type="text" placeholder="Exemples : Japon, France, Tokyo, Madrid…">
     <select id="filterSelect">
       <option value="all">Toutes catégories</option>
       <option value="restaurant">Repas au restaurant</option>
@@ -44,11 +57,11 @@
     <button id="searchBtn">Rechercher</button>
   </div>
 
-  <div id="results" class="results"></div>
+  <div id="suggestions" class="suggestions" style="max-width:760px;margin:8px auto 0;"></div>
 </section>
 
-<main class="container">
-  <h2 id="categories">Catégories</h2>
+<main>
+  <h2>Catégories</h2>
   <div class="grid g3">
     <a class="card" href="/categories/restaurant.html"><strong>Repas au restaurant</strong></a>
     <a class="card" href="/categories/logement.html"><strong>Loyer (1 chambre centre)</strong></a>
@@ -57,96 +70,98 @@
   </div>
 </main>
 
-<div data-include="/partials/footer.html"></div>
+<footer>
+  © 2025 Prix de la vie — Tous les montants exprimés en euros pour comparaison mondiale.
+</footer>
 
-<!-- Données intégrées (plus de dépendance externe) -->
+
+<!-- TABLE DE DESTINATIONS -->
 <script>
-window.DATA = {
-  countries: [
-    {
-      slug: "france", name: "France",
-      summary: "Coût de la vie en France (moyennes nationales, en euros).",
-      values: { restaurant: 15, logement: 1140, transport: 1.8, tabac: 11.5 },
-      cities: [{ slug:"paris", name:"Paris" }, { slug:"lyon", name:"Lyon" }]
-    },
-    {
-      slug: "espagne", name: "Espagne",
-      summary: "Coût de la vie en Espagne (moyennes nationales, en euros).",
-      values: { restaurant: 12, logement: 900, transport: 1.5, tabac: 6 },
-      cities: [{ slug:"madrid", name:"Madrid" }]
-    },
-    {
-      slug: "japon", name: "Japon",
-      summary: "Coût de la vie au Japon (moyennes converties en euros).",
-      values: { restaurant: 8, logement: 750, transport: 1.3, tabac: 5.5 },
-      cities: [{ slug:"tokyo", name:"Tokyo" }]
-    }
-  ],
-  cities: [
-    { slug:"paris",  name:"Paris",  country:"france",  values:{ restaurant:18, logement:1300, transport:2.15, tabac:12 },  url:"/cities/paris.html" },
-    { slug:"lyon",   name:"Lyon",   country:"france",  values:{ restaurant:15, logement:950,  transport:1.90, tabac:11.8 }, url:"/cities/lyon.html"  },
-    { slug:"madrid", name:"Madrid", country:"espagne", values:{ restaurant:12, logement:900,  transport:1.50, tabac:6 },    url:"/cities/madrid.html"},
-    { slug:"tokyo",  name:"Tokyo",  country:"japon",   values:{ restaurant:8,  logement:750,  transport:1.30, tabac:5.5 },  url:"/cities/tokyo.html" }
-  ]
+const DEST = {
+  countries: {
+    "france":  "https://combien-coute.net/cout-de-la-vie/france/",
+    "espagne": "https://combien-coute.net/cout-de-la-vie/espagne/",
+    "japon":   "https://combien-coute.net/cout-de-la-vie/japon/",
+    "italie":  "https://combien-coute.net/cout-de-la-vie/italie/",
+    "allemagne": "https://combien-coute.net/cout-de-la-vie/allemagne/",
+  },
+  cities: {
+    "paris":   "https://combien-coute.net/villes/paris/",
+    "lyon":    "https://combien-coute.net/villes/lyon/",
+    "madrid":  "https://combien-coute.net/villes/madrid/",
+    "tokyo":   "https://combien-coute.net/villes/tokyo/",
+    "osaka":   "https://combien-coute.net/villes/osaka/",
+    "rome":    "https://combien-coute.net/villes/rome/",
+    "berlin":  "https://combien-coute.net/villes/berlin/"
+  }
 };
 </script>
 
-<!-- Script d’inclusion du header/footer -->
-<script src="/assets/include.js" defer></script>
-
-<!-- Logique de recherche (utilise window.DATA ci-dessus) -->
+<!-- LOGIQUE : auto-complétion + redirection -->
 <script>
-function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e;}
-function fmtVal(key,val){ if(val==null) return "—"; return (key==="logement") ? `${val} €/mois` : `${val} €`; }
+(function(){
+  const $input  = document.getElementById('searchInput');
+  const $btn    = document.getElementById('searchBtn');
+  const $sugg   = document.getElementById('suggestions');
 
-function renderCountry(country, filter){
-  const box = el("div","summary fade-in");
-  box.appendChild(el("div",null,`<strong>${country.name}</strong> — ${country.summary}`));
-  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
-  const keys=["restaurant","logement","transport","tabac"];
-  const kpis = el("div","kpis");
-  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
-    kpis.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,country.values?.[k])}</div>`));
-  });
-  box.appendChild(kpis);
-  if(country.cities?.length){
-    const links = country.cities.map(c=>`<a href="/city.html#${c.slug}">${c.name}</a>`).join(" · ");
-    box.appendChild(el("div","note",`À voir dans les villes : ${links}`));
+  const norm = s => (s||"").normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
+
+  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  function buildSuggestions(term){
+    const t = norm(term);
+    if(!t) return [];
+    const items = [];
+
+    Object.keys(DEST.countries).forEach(k=>{
+      if(k.includes(t)) items.push({type:'pays', key:k, url:DEST.countries[k], label: cap(k)});
+    });
+    Object.keys(DEST.cities).forEach(k=>{
+      if(k.includes(t)) items.push({type:'ville', key:k, url:DEST.cities[k], label: cap(k)});
+    });
+    return items.slice(0,6);
   }
-  return box;
-}
 
-function renderCity(city, filter){
-  const box = el("div","summary fade-in",`<div><strong>${city.name}</strong> — Prix par catégories</div>`);
-  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
-  const keys=["restaurant","logement","transport","tabac"];
-  const grid = el("div","kpis");
-  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
-    grid.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,(city.values||{})[k])}</div>`));
-  });
-  box.appendChild(grid);
-  box.appendChild(el("div","note",`Page ville : <a href="${city.url}">${city.name}</a>`));
-  return box;
-}
+  function renderSuggestions(term){
+    const items = buildSuggestions(term);
+    if(items.length===0){ $sugg.innerHTML=''; return; }
 
-function search(){
-  const term = document.getElementById("searchInput").value.trim().toLowerCase();
-  const filter = document.getElementById("filterSelect").value;
-  const results = document.getElementById("results"); results.innerHTML = "";
-  if(!term) return;
+    const ul = document.createElement('div');
+    ul.className = 'suggest-list';
+    items.forEach(it=>{
+      const li = document.createElement('div');
+      li.className = 'suggest-item';
+      li.innerHTML = `<span>${it.label}</span><small>${it.type}</small>`;
+      li.addEventListener('click', ()=> go(it.url));
+      ul.appendChild(li);
+    });
 
-  const ctry = (window.DATA.countries||[]).find(c=>c.name.toLowerCase()===term)
-            || (window.DATA.countries||[]).find(c=>c.name.toLowerCase().includes(term));
-  if(ctry){ results.appendChild(renderCountry(ctry,filter)); return; }
+    $sugg.innerHTML = '';
+    $sugg.appendChild(ul);
+  }
 
-  const city = (window.DATA.cities||[]).find(v=>v.name.toLowerCase()===term)
-            || (window.DATA.cities||[]).find(v=>v.name.toLowerCase().includes(term));
-  if(city){ results.appendChild(renderCity(city,filter)); return; }
+  function go(url){
+    if(!url) return;
+    window.location.href = url;
+  }
 
-  results.appendChild(el("p","muted fade-in","Aucun résultat trouvé."));
-}
-document.getElementById("searchBtn").addEventListener("click", search);
-document.getElementById("searchInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") search(); });
+  function onSearch(){
+    const t = norm($input.value);
+    if(!t) return;
+
+    if(DEST.countries[t]) { go(DEST.countries[t]); return; }
+    if(DEST.cities[t])    { go(DEST.cities[t]);    return; }
+
+    const first = buildSuggestions(t)[0];
+    if(first){ go(first.url); return; }
+
+    $sugg.innerHTML = '<div class="suggest-list"><div class="suggest-item">Aucun résultat.</div></div>';
+  }
+
+  $input.addEventListener('input', e=> renderSuggestions(e.target.value));
+  $input.addEventListener('keydown', e=> { if(e.key==='Enter'){ e.preventDefault(); onSearch(); }});
+  $btn  .addEventListener('click', onSearch);
+})();
 </script>
 
 </body>
