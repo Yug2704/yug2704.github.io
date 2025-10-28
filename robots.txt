@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: {{ site_url }}/sitemap.xml
+Sitemap: https://yug2704.github.io/sitemap.xml
