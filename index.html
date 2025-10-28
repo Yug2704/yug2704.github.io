@@ -5,53 +5,46 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Prix par catégories, pays et villes</title>
   <meta name="description" content="Explorez le coût de la vie dans le monde : restaurants, loyers, transports, etc.">
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;margin:0;color:#111}
-    header,main,footer{max-width:1000px;margin:auto;padding:16px}
-    header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee}
-    nav a{margin-right:12px;text-decoration:none;color:#111}
-    .grid{display:grid;gap:12px}
-    .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .card{border:1px solid #eee;border-radius:8px;padding:12px}
-    .muted{color:#666}
-    a.card{display:block;color:inherit;text-decoration:none}
-  </style>
-  <!-- AdSense (remplace par ton client) -->
+  <link rel="stylesheet" href="/assets/style.css">
+  <!-- AdSense (remplace ca-pub) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX" crossorigin="anonymous"></script>
-  <!-- GA4 (remplace par ton ID) -->
+  <!-- GA4 (remplace l’ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 </head>
 <body>
-<header>
-  <nav>
-    <a href="/index.html"><strong>Combien-Coûte</strong></a>
-    <a href="/index.html#categories">Catégories</a>
-    <a href="/index.html#pays">Pays</a>
-  </nav>
-</header>
-<main>
-  <h1>Prix par catégories, pays et villes</h1>
-  <p class="muted">Parcourez le coût de la vie par thème, pays puis ville.</p>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">Combien-Coûte</a>
+      <nav class="nav">
+        <a href="/index.html#categories">Catégories</a>
+        <a href="/index.html#pays">Pays</a>
+      </nav>
+    </div>
+  </header>
 
-  <h2 id="categories">Catégories</h2>
-  <div class="grid g3">
-    <a class="card" href="/categories/restaurant.html"><div><strong>Repas au restaurant</strong></div><div class="muted">€</div></a>
-    <a class="card" href="/categories/logement.html"><div><strong>Loyer (1 chambre centre)</strong></div><div class="muted">€/mois</div></a>
-    <a class="card" href="/categories/transport.html"><div><strong>Ticket de bus</strong></div><div class="muted">€</div></a>
-    <a class="card" href="/categories/tabac.html"><div><strong>Cigarettes (paquet)</strong></div><div class="muted">€</div></a>
-  </div>
+  <main class="container">
+    <h1>Prix par catégories, pays et villes</h1>
+    <p class="muted">Parcourez le coût de la vie par thème, pays puis ville.</p>
 
-  <h2 id="pays" style="margin-top:20px">Pays</h2>
-  <div class="grid g3">
-    <a class="card" href="/countries/france.html"><div><strong>France</strong></div></a>
-    <a class="card" href="/countries/espagne.html"><div><strong>Espagne</strong></div></a>
-    <a class="card" href="/countries/japon.html"><div><strong>Japon</strong></div></a>
-  </div>
-</main>
-<footer class="muted">
-  <p>© 2025 Combien-Coûte.net — Tous les montants exprimés en euros pour comparaison mondiale.</p>
-</footer>
+    <h2 id="categories">Catégories</h2>
+    <div class="grid g3">
+      <a class="card" href="/categories/restaurant.html"><strong>Repas au restaurant</strong><div class="muted">€</div></a>
+      <a class="card" href="/categories/logement.html"><strong>Loyer (1 chambre centre)</strong><div class="muted">€/mois</div></a>
+      <a class="card" href="/categories/transport.html"><strong>Ticket de bus</strong><div class="muted">€</div></a>
+      <a class="card" href="/categories/tabac.html"><strong>Cigarettes (paquet)</strong><div class="muted">€</div></a>
+    </div>
+
+    <h2 id="pays">Pays</h2>
+    <div class="grid g3">
+      <a class="card" href="/countries/france.html"><strong>France</strong></a>
+      <a class="card" href="/countries/espagne.html"><strong>Espagne</strong></a>
+      <a class="card" href="/countries/japon.html"><strong>Japon</strong></a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container muted">© 2025 Combien-Coûte.net — Tous les montants exprimés en euros pour comparaison mondiale.</div>
+  </footer>
 </body>
 </html>
