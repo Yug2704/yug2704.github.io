@@ -1,31 +1,23 @@
-<script>
-/* Données statiques (tout en EUR) — complète au fur et à mesure */
+// Données statiques (tout en EUR) — complète au fur et à mesure
 window.DATA = {
   countries: [
     {
       slug: "france", name: "France",
-      summary: "Coût de la vie en France (moyennes nationales en euros).",
+      summary: "Coût de la vie en France (moyennes nationales, en euros).",
       values: { restaurant: 15, logement: 1140, transport: 1.8, tabac: 11.5 },
-      cities: [
-        { slug:"paris", name:"Paris" },
-        { slug:"lyon", name:"Lyon" }
-      ]
+      cities: [{ slug:"paris", name:"Paris" }, { slug:"lyon", name:"Lyon" }]
     },
     {
       slug: "espagne", name: "Espagne",
-      summary: "Coût de la vie en Espagne (moyennes nationales en euros).",
+      summary: "Coût de la vie en Espagne (moyennes nationales, en euros).",
       values: { restaurant: 12, logement: 900, transport: 1.5, tabac: 6 },
-      cities: [
-        { slug:"madrid", name:"Madrid" }
-      ]
+      cities: [{ slug:"madrid", name:"Madrid" }]
     },
     {
       slug: "japon", name: "Japon",
-      summary: "Coût de la vie au Japon (moyennes nationales converties en euros).",
+      summary: "Coût de la vie au Japon (moyennes converties en euros).",
       values: { restaurant: 8, logement: 750, transport: 1.3, tabac: 5.5 },
-      cities: [
-        { slug:"tokyo", name:"Tokyo" }
-      ]
+      cities: [{ slug:"tokyo", name:"Tokyo" }]
     }
   ],
   cities: [
@@ -35,4 +27,3 @@ window.DATA = {
     { slug:"tokyo",  name:"Tokyo",  country:"japon",   values:{ restaurant:8,  logement:750,  transport:1.30, tabac:5.5 },  url:"/cities/tokyo.html" }
   ]
 };
-</script>
