@@ -5,29 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Prix de la vie – comparateur par pays et villes</title>
   <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
-  <link rel="stylesheet" href="/assets/style.css">
-
   <style>
-    body { font-family: system-ui, sans-serif; margin:0; background:#fff; color:#222; }
-    header { display:flex; justify-content:space-between; align-items:center; padding:16px 32px; border-bottom:1px solid #eee; background:#fff; position:sticky; top:0; z-index:10;}
-    header h1 { font-size:20px; font-weight:700; margin:0; color:#111;}
-    header nav a { margin-left:20px; text-decoration:none; color:#444; font-weight:500; transition:.15s; }
-    header nav a:hover { color:#ea580c; }
-
-    .hero{background:linear-gradient(120deg,#f59e0b 0%, #ea580c 60%);color:#fff;padding:48px 16px;text-align:center}
-    .hero h2{font-size:38px;margin:0}
-    .hero p{max-width:720px;margin:12px auto 0;font-size:18px;line-height:1.55}
+    :root{--line:#e5e7eb;--muted:#64748b}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;color:#111}
+    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+    header h1{margin:0;font-size:20px}
+    header nav a{margin-left:18px;text-decoration:none;color:#444;font-weight:500}
+    header nav a:hover{color:#ea580c}
+    .hero{background:linear-gradient(120deg,#f59e0b 0%,#ea580c 60%);color:#fff;text-align:center;padding:48px 16px}
+    .hero h2{margin:0 0 8px;font-size:38px}
+    .hero p{max-width:760px;margin:0 auto}
     .searchbox{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:15px;width:240px}
-    .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer;transition:.15s}
-    .searchbox button:hover{background:#fff7ed;color:#b45309;border-color:transparent}
-    .suggestions { position: relative; }
-    .suggest-list { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:6px; margin-top:6px; box-shadow:0 6px 18px rgba(0,0,0,.06); }
-    .suggest-item { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:8px; cursor:pointer; }
-    .suggest-item:hover { background:#fff7ed; }
-    .suggest-item small { color:#64748b; }
-    main { max-width:900px; margin:60px auto; padding:0 20px;}
-    footer { text-align:center; padding:24px; color:#777; font-size:14px; border-top:1px solid #eee;}
+    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;width:240px}
+    .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer}
+    .searchbox button:hover{background:#fff7ed;color:#b45309}
+    .suggestions{position:relative;max-width:760px;margin:8px auto 0}
+    .suggest-list{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    .suggest-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;cursor:pointer}
+    .suggest-item:hover{background:#fff7ed}
+    .suggest-item small{color:var(--muted)}
+    main{max-width:900px;margin:60px auto;padding:0 20px}
+    .grid{display:grid;gap:12px}
+    .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card{display:block;padding:16px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit}
+    .card:hover{background:#f9fafb}
+    footer{text-align:center;border-top:1px solid var(--line);padding:24px;color:#666}
   </style>
 </head>
 <body>
@@ -36,8 +38,8 @@
   <h1>Prix de la vie</h1>
   <nav>
     <a href="/">Accueil</a>
-    <a href="/categories.html">Catégories</a>
-    <a href="/recherche.html">Recherche</a>
+    <a href="/categories/restaurant.html">Catégories</a>
+    <a href="#recherche">Recherche</a>
   </nav>
 </header>
 
@@ -47,7 +49,7 @@
 
   <div class="searchbox">
     <input id="searchInput" type="text" placeholder="Exemples : Japon, France, Tokyo, Madrid…">
-    <select id="filterSelect">
+    <select id="filterSelect" aria-label="Filtre (non bloquant)">
       <option value="all">Toutes catégories</option>
       <option value="restaurant">Repas au restaurant</option>
       <option value="logement">Loyer</option>
@@ -57,11 +59,11 @@
     <button id="searchBtn">Rechercher</button>
   </div>
 
-  <div id="suggestions" class="suggestions" style="max-width:760px;margin:8px auto 0;"></div>
+  <div id="suggestions" class="suggestions"></div>
 </section>
 
-<main class="container">
-  <h2 id="categories">Catégories</h2>
+<main>
+  <h2>Catégories</h2>
   <div class="grid g3">
     <a class="card" href="/categories/restaurant.html"><strong>Repas au restaurant</strong></a>
     <a class="card" href="/categories/logement.html"><strong>Loyer (1 chambre centre)</strong></a>
@@ -71,35 +73,25 @@
 </main>
 
 <footer>
-  © 2025 Prix de la vie — Tous les montants exprimés en euros pour comparaison mondiale.
+  © 2025 Prix de la vie — Montants en euros pour comparaison mondiale.
 </footer>
 
-<!-- ====== IMPORTANT : URLs INTERNES (reste sur ton site) ====== -->
+<!-- ===== CONFIG SIMPLE : où sont tes pages ? ===== -->
 <script>
-const DEST = {
-  countries: {
-    // Pays → tes pages internes
-    "france":  "/countries/france.html",
-    "espagne": "/countries/espagne.html",
-    "japon":   "/countries/japon.html",
-    "italie":  "/countries/italie.html",
-    "allemagne": "/countries/allemagne.html"
-  },
-  cities: {
-    // Villes → tes pages internes
-    "paris":   "/cities/paris.html",
-    "lyon":    "/cities/lyon.html",
-    "madrid":  "/cities/madrid.html",
-    "tokyo":   "/cities/tokyo.html",
-    "osaka":   "/cities/osaka.html",
-    "rome":    "/cities/rome.html",
-    "berlin":  "/cities/berlin.html"
-  }
-};
-// 👉 Si tes pages sont ailleurs (ex. /en/countries/japon.html), change juste les chemins ci-dessus.
+// Chemins des pages PUBLIÉES (tu m’as confirmé /countries/ pour les pays)
+const BASE_COUNTRIES = "/countries/"; // ✅ confirmé
+const BASE_CITIES    = "/cities/";    // 👈 change si besoin (ex. "/en/cities/")
+
+// Liste des slugs (tout en minuscules, sans accents). Tu ajoutes/supprimes ici.
+const COUNTRIES = ["france","espagne","japon","italie","allemagne"];
+const CITIES    = ["paris","lyon","madrid","tokyo","osaka","rome","berlin"];
+
+// Construit l’URL interne automatiquement
+const urlCountry = slug => `${BASE_COUNTRIES}${slug}.html`;
+const urlCity    = slug => `${BASE_CITIES}${slug}.html`;
 </script>
 
-<!-- Auto-complétion + redirection (vers tes pages internes) -->
+<!-- Auto-complétion + redirection interne -->
 <script>
 (function(){
   const $input  = document.getElementById('searchInput');
@@ -113,8 +105,8 @@ const DEST = {
     const t = norm(term);
     if(!t) return [];
     const items = [];
-    Object.keys(DEST.countries).forEach(k=>{ if(k.includes(t)) items.push({type:'pays',  key:k, url:DEST.countries[k], label:cap(k)}); });
-    Object.keys(DEST.cities).forEach(k=>{    if(k.includes(t)) items.push({type:'ville', key:k, url:DEST.cities[k],    label:cap(k)}); });
+    COUNTRIES.forEach(slug=>{ if(slug.includes(t)) items.push({type:'pays',  label:cap(slug), url:urlCountry(slug)}); });
+    CITIES.forEach(slug=>{    if(slug.includes(t)) items.push({type:'ville', label:cap(slug), url:urlCity(slug)}); });
     return items.slice(0,8);
   }
 
@@ -137,8 +129,8 @@ const DEST = {
   function onSearch(){
     const t = norm($input.value);
     if(!t) return;
-    if(DEST.countries[t]) { window.location.href = DEST.countries[t]; return; }
-    if(DEST.cities[t])    { window.location.href = DEST.cities[t];    return; }
+    if (COUNTRIES.includes(t)) { window.location.href = urlCountry(t); return; }
+    if (CITIES.includes(t))    { window.location.href = urlCity(t);    return; }
     const first = buildSuggestions(t)[0];
     if(first){ window.location.href = first.url; return; }
     $sugg.innerHTML = '<div class="suggest-list"><div class="suggest-item">Aucun résultat.</div></div>';
