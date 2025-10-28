@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://yug2704.github.io/sitemap.xml
