@@ -1,26 +1,57 @@
-{% set title = "Prix par catégories, pays et villes" %}
-{% set description = "Explorez le coût de la vie dans le monde : restaurants, loyers, transports, etc." %}
-{% extends "base.html.j2" %}
-{% block content %}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prix par catégories, pays et villes</title>
+  <meta name="description" content="Explorez le coût de la vie dans le monde : restaurants, loyers, transports, etc.">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;margin:0;color:#111}
+    header,main,footer{max-width:1000px;margin:auto;padding:16px}
+    header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee}
+    nav a{margin-right:12px;text-decoration:none;color:#111}
+    .grid{display:grid;gap:12px}
+    .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card{border:1px solid #eee;border-radius:8px;padding:12px}
+    .muted{color:#666}
+    a.card{display:block;color:inherit;text-decoration:none}
+  </style>
+  <!-- AdSense (remplace par ton client) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <!-- GA4 (remplace par ton ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/index.html"><strong>Combien-Coûte</strong></a>
+    <a href="/index.html#categories">Catégories</a>
+    <a href="/index.html#pays">Pays</a>
+  </nav>
+</header>
+<main>
   <h1>Prix par catégories, pays et villes</h1>
   <p class="muted">Parcourez le coût de la vie par thème, pays puis ville.</p>
 
   <h2 id="categories">Catégories</h2>
   <div class="grid g3">
-    {% for c in categories %}
-      <a class="card" href="/categories/{{ c.slug }}.html">
-        <div><strong>{{ c.name }}</strong></div>
-        {% if c.unit %}<div class="muted">{{ c.unit }}</div>{% endif %}
-      </a>
-    {% endfor %}
+    <a class="card" href="/categories/restaurant.html"><div><strong>Repas au restaurant</strong></div><div class="muted">€</div></a>
+    <a class="card" href="/categories/logement.html"><div><strong>Loyer (1 chambre centre)</strong></div><div class="muted">€/mois</div></a>
+    <a class="card" href="/categories/transport.html"><div><strong>Ticket de bus</strong></div><div class="muted">€</div></a>
+    <a class="card" href="/categories/tabac.html"><div><strong>Cigarettes (paquet)</strong></div><div class="muted">€</div></a>
   </div>
 
   <h2 id="pays" style="margin-top:20px">Pays</h2>
   <div class="grid g3">
-    {% for p in countries %}
-      <a class="card" href="/countries/{{ p.slug }}.html">
-        <div><strong>{{ p.name }}</strong></div>
-      </a>
-    {% endfor %}
+    <a class="card" href="/countries/france.html"><div><strong>France</strong></div></a>
+    <a class="card" href="/countries/espagne.html"><div><strong>Espagne</strong></div></a>
+    <a class="card" href="/countries/japon.html"><div><strong>Japon</strong></div></a>
   </div>
-{% endblock %}
+</main>
+<footer class="muted">
+  <p>© 2025 Combien-Coûte.net — Tous les montants exprimés en euros pour comparaison mondiale.</p>
+</footer>
+</body>
+</html>
