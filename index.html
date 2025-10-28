@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Combien-Coûte – prix dans le monde</title>
-  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants exprimés en euros.">
+  <title>Prix de la vie – comparateur par pays et villes</title>
+  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
-    /* --- SUPPLÉMENT D’ACCUEIL (animations + bandeau) --- */
     .hero{background:linear-gradient(120deg,#f59e0b 0%, #ea580c 60%);color:#fff;padding:48px 16px;text-align:center}
     .hero h1{font-size:38px;margin:0}
     .hero p{max-width:720px;margin:12px auto 0;font-size:18px;line-height:1.55}
@@ -16,7 +15,6 @@
     .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer;transition:.15s}
     .searchbox button:hover{background:#fff7ed;color:#b45309;border-color:transparent}
     .results{max-width:760px;margin:26px auto 0;text-align:left}
-    .result-item{padding:10px 0;border-bottom:1px solid var(--line)}
     .summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px}
     .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
     .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
@@ -35,22 +33,21 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="/">Combien-Coûte</a>
+    <a class="brand" href="/">Prix de la vie</a>
     <nav class="nav">
+      <a href="/">Accueil</a>
       <a href="#categories">Catégories</a>
-      <a href="#pays">Pays</a>
+      <a href="#recherche">Recherche</a>
     </nav>
   </div>
 </header>
 
-<!-- BANDEAU + RECHERCHE -->
-<section class="hero">
-  <h1>Combien ça coûte&nbsp;? 🌍</h1>
-  <p>Comparez le coût de la vie par <strong>pays</strong> ou par <strong>ville</strong> : repas, loyer, transport, cigarettes.
-     Montants exprimés en euros pour comparer facilement.</p>
+<section class="hero" id="recherche">
+  <h1>Comparez le coût de la vie 🌍</h1>
+  <p>Entrez un <strong>pays</strong> (ex. Japon, France) pour voir un résumé national, ou une <strong>ville</strong> (ex. Tokyo, Paris) pour ses prix détaillés. Montants en euros.</p>
 
   <div class="searchbox">
-    <input id="searchInput" type="text" placeholder="Par ex. : Japon, France, Tokyo, Paris…">
+    <input id="searchInput" type="text" placeholder="Exemples : Japon, France, Tokyo, Paris…">
     <select id="filterSelect">
       <option value="all">Toutes catégories</option>
       <option value="restaurant">Repas au restaurant</option>
@@ -64,7 +61,6 @@
   <div id="results" class="results"></div>
 </section>
 
-<!-- CONTENU STATIQUE DE SECTIONS -->
 <main class="container">
   <h2 id="categories">Catégories</h2>
   <div class="grid g3">
@@ -74,68 +70,71 @@
     <a class="card" href="/categories/tabac.html"><strong>Cigarettes (paquet)</strong></a>
   </div>
 
-  <h2 id="pays">Pays</h2>
-  <div class="grid g3">
-    <a class="card" href="/countries/france.html"><strong>France</strong></a>
-    <a class="card" href="/countries/espagne.html"><strong>Espagne</strong></a>
-    <a class="card" href="/countries/japon.html"><strong>Japon</strong></a>
-  </div>
+  <!-- Section “Pays” retirée car tu ne veux pas qu’ils soient cliquables ;
+       ils restent accessibles uniquement via la recherche. -->
 </main>
 
 <footer class="footer">
-  <div class="container muted">© 2025 Combien-Coûte.net — Tous les montants exprimés en euros pour comparaison mondiale.</div>
+  <div class="container muted">© 2025 Prix de la vie — Tous les montants exprimés en euros pour comparaison mondiale.</div>
 </footer>
 
-<!-- Données statiques utilisées par la recherche -->
+<!-- Données -->
 <script src="/assets/data.js"></script>
 
-<!-- LOGIQUE DE RECHERCHE -->
+<!-- Logique de recherche -->
 <script>
 function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e;}
 function fmtVal(key,val){ if(val==null) return "—"; return (key==="logement") ? `${val} €/mois` : `${val} €`; }
 
 function renderCountry(country, filter){
-  const wrap = el("div","fade-in");
-  const box = el("div","summary");
+  const box = el("div","summary fade-in");
   box.appendChild(el("div",null,`<strong>${country.name}</strong> — ${country.summary}`));
   const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
   const keys=["restaurant","logement","transport","tabac"];
   const kpis = el("div","kpis");
   keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
-    const v = country.values?.[k]; kpis.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,v)}</div>`));
+    kpis.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,country.values?.[k])}</div>`));
   });
   box.appendChild(kpis);
   if(country.cities?.length){
-    const links = country.cities.map(c=>`<a href="/cities/${c.slug}.html">${c.name}</a>`).join(" · ");
+    const links = country.cities.map(c=>`<a href="/city.html#${c.slug}">${c.name}</a>`).join(" · ");
     box.appendChild(el("div","note",`À voir dans les villes : ${links}`));
   }
-  wrap.appendChild(box); return wrap;
+  return box;
 }
 
 function renderCity(city, filter){
-  const wrap = el("div","fade-in");
+  const box = el("div","summary fade-in",`<div><strong>${city.name}</strong> — Prix par catégories</div>`);
   const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
   const keys=["restaurant","logement","transport","tabac"];
-  const box = el("div","summary",`<strong>${city.name}</strong> — Prix par catégories`);
   const grid = el("div","kpis");
   keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
     grid.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,(city.values||{})[k])}</div>`));
   });
   box.appendChild(grid);
-  box.appendChild(el("div","note",`Page ville : <a href="${city.url}">${city.name}</a>`));
-  wrap.appendChild(box); return wrap;
+  box.appendChild(el("div","note",`Page ville : <a href="/city.html#${city.slug||city.name.toLowerCase()}">${city.name}</a>`));
+  return box;
 }
 
 function search(){
   const term = document.getElementById("searchInput").value.trim().toLowerCase();
   const filter = document.getElementById("filterSelect").value;
-  const results = document.getElementById("results"); results.innerHTML = ""; if(!term) return;
-  const ctry = (window.DATA.countries.find(c=>c.name.toLowerCase()===term) || window.DATA.countries.find(c=>c.name.toLowerCase().includes(term)));
+  const results = document.getElementById("results"); results.innerHTML = "";
+  if(!term) return;
+
+  // D’abord pays (résumé national)…
+  const ctry = (window.DATA.countries||[]).find(c=>c.name.toLowerCase()===term)
+            || (window.DATA.countries||[]).find(c=>c.name.toLowerCase().includes(term));
   if(ctry){ results.appendChild(renderCountry(ctry,filter)); return; }
-  const city = (window.DATA.cities.find(v=>v.name.toLowerCase()===term) || window.DATA.cities.find(v=>v.name.toLowerCase().includes(term)));
+
+  // …sinon ville
+  const city = (window.DATA.cities||[]).find(v=>v.name.toLowerCase()===term)
+            || (window.DATA.cities||[]).find(v=>v.name.toLowerCase().includes(term));
   if(city){ results.appendChild(renderCity(city,filter)); return; }
-  results.innerHTML = `<p class="muted fade-in">Aucun résultat trouvé.</p>`;
+
+  results.appendChild(el("p","muted fade-in","Aucun résultat trouvé."));
 }
+
 document.getElementById("searchBtn").addEventListener("click", search);
 document.getElementById("searchInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") search(); });
 </script>
