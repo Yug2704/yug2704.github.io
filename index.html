@@ -4,21 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Combien-Coûte – prix dans le monde</title>
-  <meta name="description" content="Comparez le coût de la vie par ville ou pays : repas, loyers, transports, cigarettes, etc.">
+  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants exprimés en euros.">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
-    /* --- STYLE ADDITIONNEL POUR L'ACCUEIL --- */
-    .hero{background:#dc2626;color:white;padding:50px 20px;text-align:center}
-    .hero h1{font-size:36px;margin:0}
-    .hero p{max-width:700px;margin:12px auto 0;font-size:18px;line-height:1.5}
-    .searchbox{margin-top:30px;display:flex;justify-content:center;gap:10px}
-    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid #ddd;border-radius:8px;font-size:15px;width:240px}
-    .searchbox button{background:#ef4444;border:none;color:#fff;padding:12px 22px;border-radius:8px;font-weight:600;cursor:pointer;transition:0.2s}
-    .searchbox button:hover{background:#b91c1c}
-    .results{max-width:700px;margin:40px auto 0;text-align:left}
-    .result-item{padding:10px 0;border-bottom:1px solid #eee}
-    .fade-in{animation:fadeIn .4s ease-in-out}@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    /* --- SUPPLÉMENT D’ACCUEIL (animations + bandeau) --- */
+    .hero{background:linear-gradient(120deg,#f59e0b 0%, #ea580c 60%);color:#fff;padding:48px 16px;text-align:center}
+    .hero h1{font-size:38px;margin:0}
+    .hero p{max-width:720px;margin:12px auto 0;font-size:18px;line-height:1.55}
+    .searchbox{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;width:240px}
+    .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer;transition:.15s}
+    .searchbox button:hover{background:#fff7ed;color:#b45309;border-color:transparent}
+    .results{max-width:760px;margin:26px auto 0;text-align:left}
+    .result-item{padding:10px 0;border-bottom:1px solid var(--line)}
+    .summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px}
+    .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+    .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
+    .kpi strong{display:block}
+    .note{font-size:13px;color:var(--muted);margin-top:6px}
+    .fade-in{animation:fadeIn .25s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   </style>
+
+  <!-- AdSense (remplace par ton client si besoin) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <!-- GA4 (remplace par ton ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 </head>
 <body>
 
@@ -32,13 +43,14 @@
   </div>
 </header>
 
+<!-- BANDEAU + RECHERCHE -->
 <section class="hero">
-  <h1>Combien coûte&nbsp;? 🌍</h1>
-  <p>Découvrez le coût de la vie dans le monde entier : repas, loyers, transports, cigarettes et bien plus.  
-  Tous les prix sont affichés en euros pour une comparaison facile entre pays et villes.</p>
+  <h1>Combien ça coûte&nbsp;? 🌍</h1>
+  <p>Comparez le coût de la vie par <strong>pays</strong> ou par <strong>ville</strong> : repas, loyer, transport, cigarettes.
+     Montants exprimés en euros pour comparer facilement.</p>
 
   <div class="searchbox">
-    <input id="searchInput" type="text" placeholder="Ville ou pays (ex : Paris, Japon...)">
+    <input id="searchInput" type="text" placeholder="Par ex. : Japon, France, Tokyo, Paris…">
     <select id="filterSelect">
       <option value="all">Toutes catégories</option>
       <option value="restaurant">Repas au restaurant</option>
@@ -46,12 +58,13 @@
       <option value="transport">Transport</option>
       <option value="tabac">Cigarettes</option>
     </select>
-    <button onclick="search()">Rechercher</button>
+    <button id="searchBtn">Rechercher</button>
   </div>
 
   <div id="results" class="results"></div>
 </section>
 
+<!-- CONTENU STATIQUE DE SECTIONS -->
 <main class="container">
   <h2 id="categories">Catégories</h2>
   <div class="grid g3">
@@ -73,38 +86,58 @@
   <div class="container muted">© 2025 Combien-Coûte.net — Tous les montants exprimés en euros pour comparaison mondiale.</div>
 </footer>
 
-<script>
-const data = [
-  { name: "Paris", url: "/cities/paris.html", cat: "restaurant" },
-  { name: "Lyon", url: "/cities/lyon.html", cat: "restaurant" },
-  { name: "Madrid", url: "/cities/madrid.html", cat: "restaurant" },
-  { name: "Tokyo", url: "/cities/tokyo.html", cat: "restaurant" },
-  { name: "France", url: "/countries/france.html", cat: "pays" },
-  { name: "Espagne", url: "/countries/espagne.html", cat: "pays" },
-  { name: "Japon", url: "/countries/japon.html", cat: "pays" }
-];
+<!-- Données statiques utilisées par la recherche -->
+<script src="/assets/data.js"></script>
 
-function search() {
-  const term = document.getElementById("searchInput").value.toLowerCase();
-  const filter = document.getElementById("filterSelect").value;
-  const results = document.getElementById("results");
-  results.innerHTML = "";
-  if (!term) return;
-  const filtered = data.filter(item => 
-    item.name.toLowerCase().includes(term) &&
-    (filter === "all" || item.cat === filter)
-  );
-  if (filtered.length === 0) {
-    results.innerHTML = `<p class="muted fade-in">Aucun résultat trouvé.</p>`;
-  } else {
-    filtered.forEach(r => {
-      const el = document.createElement("div");
-      el.className = "result-item fade-in";
-      el.innerHTML = `<a href="${r.url}"><strong>${r.name}</strong></a>`;
-      results.appendChild(el);
-    });
+<!-- LOGIQUE DE RECHERCHE -->
+<script>
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e;}
+function fmtVal(key,val){ if(val==null) return "—"; return (key==="logement") ? `${val} €/mois` : `${val} €`; }
+
+function renderCountry(country, filter){
+  const wrap = el("div","fade-in");
+  const box = el("div","summary");
+  box.appendChild(el("div",null,`<strong>${country.name}</strong> — ${country.summary}`));
+  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
+  const keys=["restaurant","logement","transport","tabac"];
+  const kpis = el("div","kpis");
+  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
+    const v = country.values?.[k]; kpis.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,v)}</div>`));
+  });
+  box.appendChild(kpis);
+  if(country.cities?.length){
+    const links = country.cities.map(c=>`<a href="/cities/${c.slug}.html">${c.name}</a>`).join(" · ");
+    box.appendChild(el("div","note",`À voir dans les villes : ${links}`));
   }
+  wrap.appendChild(box); return wrap;
 }
+
+function renderCity(city, filter){
+  const wrap = el("div","fade-in");
+  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
+  const keys=["restaurant","logement","transport","tabac"];
+  const box = el("div","summary",`<strong>${city.name}</strong> — Prix par catégories`);
+  const grid = el("div","kpis");
+  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
+    grid.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,(city.values||{})[k])}</div>`));
+  });
+  box.appendChild(grid);
+  box.appendChild(el("div","note",`Page ville : <a href="${city.url}">${city.name}</a>`));
+  wrap.appendChild(box); return wrap;
+}
+
+function search(){
+  const term = document.getElementById("searchInput").value.trim().toLowerCase();
+  const filter = document.getElementById("filterSelect").value;
+  const results = document.getElementById("results"); results.innerHTML = ""; if(!term) return;
+  const ctry = (window.DATA.countries.find(c=>c.name.toLowerCase()===term) || window.DATA.countries.find(c=>c.name.toLowerCase().includes(term)));
+  if(ctry){ results.appendChild(renderCountry(ctry,filter)); return; }
+  const city = (window.DATA.cities.find(v=>v.name.toLowerCase()===term) || window.DATA.cities.find(v=>v.name.toLowerCase().includes(term)));
+  if(city){ results.appendChild(renderCity(city,filter)); return; }
+  results.innerHTML = `<p class="muted fade-in">Aucun résultat trouvé.</p>`;
+}
+document.getElementById("searchBtn").addEventListener("click", search);
+document.getElementById("searchInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") search(); });
 </script>
 
 </body>
