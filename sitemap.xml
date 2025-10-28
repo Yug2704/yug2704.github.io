@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Page d’accueil -->
   <url><loc>https://yug2704.github.io/index.html</loc></url>
+
+  <!-- Catégories -->
   <url><loc>https://yug2704.github.io/categories/restaurant.html</loc></url>
   <url><loc>https://yug2704.github.io/categories/logement.html</loc></url>
   <url><loc>https://yug2704.github.io/categories/transport.html</loc></url>
   <url><loc>https://yug2704.github.io/categories/tabac.html</loc></url>
+
+  <!-- Pays -->
   <url><loc>https://yug2704.github.io/countries/france.html</loc></url>
   <url><loc>https://yug2704.github.io/countries/espagne.html</loc></url>
   <url><loc>https://yug2704.github.io/countries/japon.html</loc></url>
+
+  <!-- Villes -->
   <url><loc>https://yug2704.github.io/cities/paris.html</loc></url>
   <url><loc>https://yug2704.github.io/cities/lyon.html</loc></url>
   <url><loc>https://yug2704.github.io/cities/madrid.html</loc></url>
