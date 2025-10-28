@@ -25,6 +25,7 @@
 </head>
 <body>
 
+<!-- Header/Footers automatiques -->
 <div data-include="/partials/header.html"></div>
 
 <section class="hero" id="recherche">
@@ -58,10 +59,95 @@
 
 <div data-include="/partials/footer.html"></div>
 
-<script src="/assets/data.js"></script>
-<script src="/assets/include.js" defer></script>
+<!-- Données intégrées (plus de dépendance externe) -->
 <script>
-// script de recherche (inchangé)
+window.DATA = {
+  countries: [
+    {
+      slug: "france", name: "France",
+      summary: "Coût de la vie en France (moyennes nationales, en euros).",
+      values: { restaurant: 15, logement: 1140, transport: 1.8, tabac: 11.5 },
+      cities: [{ slug:"paris", name:"Paris" }, { slug:"lyon", name:"Lyon" }]
+    },
+    {
+      slug: "espagne", name: "Espagne",
+      summary: "Coût de la vie en Espagne (moyennes nationales, en euros).",
+      values: { restaurant: 12, logement: 900, transport: 1.5, tabac: 6 },
+      cities: [{ slug:"madrid", name:"Madrid" }]
+    },
+    {
+      slug: "japon", name: "Japon",
+      summary: "Coût de la vie au Japon (moyennes converties en euros).",
+      values: { restaurant: 8, logement: 750, transport: 1.3, tabac: 5.5 },
+      cities: [{ slug:"tokyo", name:"Tokyo" }]
+    }
+  ],
+  cities: [
+    { slug:"paris",  name:"Paris",  country:"france",  values:{ restaurant:18, logement:1300, transport:2.15, tabac:12 },  url:"/cities/paris.html" },
+    { slug:"lyon",   name:"Lyon",   country:"france",  values:{ restaurant:15, logement:950,  transport:1.90, tabac:11.8 }, url:"/cities/lyon.html"  },
+    { slug:"madrid", name:"Madrid", country:"espagne", values:{ restaurant:12, logement:900,  transport:1.50, tabac:6 },    url:"/cities/madrid.html"},
+    { slug:"tokyo",  name:"Tokyo",  country:"japon",   values:{ restaurant:8,  logement:750,  transport:1.30, tabac:5.5 },  url:"/cities/tokyo.html" }
+  ]
+};
 </script>
+
+<!-- Script d’inclusion du header/footer -->
+<script src="/assets/include.js" defer></script>
+
+<!-- Logique de recherche (utilise window.DATA ci-dessus) -->
+<script>
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e;}
+function fmtVal(key,val){ if(val==null) return "—"; return (key==="logement") ? `${val} €/mois` : `${val} €`; }
+
+function renderCountry(country, filter){
+  const box = el("div","summary fade-in");
+  box.appendChild(el("div",null,`<strong>${country.name}</strong> — ${country.summary}`));
+  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
+  const keys=["restaurant","logement","transport","tabac"];
+  const kpis = el("div","kpis");
+  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
+    kpis.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,country.values?.[k])}</div>`));
+  });
+  box.appendChild(kpis);
+  if(country.cities?.length){
+    const links = country.cities.map(c=>`<a href="/city.html#${c.slug}">${c.name}</a>`).join(" · ");
+    box.appendChild(el("div","note",`À voir dans les villes : ${links}`));
+  }
+  return box;
+}
+
+function renderCity(city, filter){
+  const box = el("div","summary fade-in",`<div><strong>${city.name}</strong> — Prix par catégories</div>`);
+  const labels={restaurant:"Repas au restaurant",logement:"Loyer (1 chambre centre)",transport:"Ticket de bus",tabac:"Cigarettes (paquet)"};
+  const keys=["restaurant","logement","transport","tabac"];
+  const grid = el("div","kpis");
+  keys.forEach(k=>{ if(filter!=="all" && k!==filter) return;
+    grid.appendChild(el("div","kpi",`<strong>${labels[k]}</strong><div class="muted">${fmtVal(k,(city.values||{})[k])}</div>`));
+  });
+  box.appendChild(grid);
+  box.appendChild(el("div","note",`Page ville : <a href="${city.url}">${city.name}</a>`));
+  return box;
+}
+
+function search(){
+  const term = document.getElementById("searchInput").value.trim().toLowerCase();
+  const filter = document.getElementById("filterSelect").value;
+  const results = document.getElementById("results"); results.innerHTML = "";
+  if(!term) return;
+
+  const ctry = (window.DATA.countries||[]).find(c=>c.name.toLowerCase()===term)
+            || (window.DATA.countries||[]).find(c=>c.name.toLowerCase().includes(term));
+  if(ctry){ results.appendChild(renderCountry(ctry,filter)); return; }
+
+  const city = (window.DATA.cities||[]).find(v=>v.name.toLowerCase()===term)
+            || (window.DATA.cities||[]).find(v=>v.name.toLowerCase().includes(term));
+  if(city){ results.appendChild(renderCity(city,filter)); return; }
+
+  results.appendChild(el("p","muted fade-in","Aucun résultat trouvé."));
+}
+document.getElementById("searchBtn").addEventListener("click", search);
+document.getElementById("searchInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") search(); });
+</script>
+
 </body>
 </html>
