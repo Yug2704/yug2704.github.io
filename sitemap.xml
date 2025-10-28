@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>{{ site_url }}/index.html</loc></url>
-  {% for c in categories %}<url><loc>{{ site_url }}/categories/{{ c.slug }}.html</loc></url>{% endfor %}
-  {% for p in countries %}<url><loc>{{ site_url }}/countries/{{ p.slug }}.html</loc></url>{% endfor %}
-  {% for ci in cities %}<url><loc>{{ site_url }}/cities/{{ ci.slug }}.html</loc></url>{% endfor %}
+  <url><loc>https://yug2704.github.io/index.html</loc></url>
+  <url><loc>https://yug2704.github.io/categories/restaurant.html</loc></url>
+  <url><loc>https://yug2704.github.io/categories/logement.html</loc></url>
+  <url><loc>https://yug2704.github.io/categories/transport.html</loc></url>
+  <url><loc>https://yug2704.github.io/categories/tabac.html</loc></url>
+  <url><loc>https://yug2704.github.io/countries/france.html</loc></url>
+  <url><loc>https://yug2704.github.io/countries/espagne.html</loc></url>
+  <url><loc>https://yug2704.github.io/countries/japon.html</loc></url>
+  <url><loc>https://yug2704.github.io/cities/paris.html</loc></url>
+  <url><loc>https://yug2704.github.io/cities/lyon.html</loc></url>
+  <url><loc>https://yug2704.github.io/cities/madrid.html</loc></url>
+  <url><loc>https://yug2704.github.io/cities/tokyo.html</loc></url>
 </urlset>
