@@ -41,7 +41,7 @@
   </nav>
 </header>
 
-<section class="hero">
+<section class="hero" id="recherche">
   <h2>Comparez le coût de la vie 🌍</h2>
   <p>Entrez un <strong>pays</strong> (ex. Japon, France) pour voir un résumé national, ou une <strong>ville</strong> (ex. Tokyo, Paris) pour ses prix détaillés. Montants en euros.</p>
 
@@ -60,8 +60,8 @@
   <div id="suggestions" class="suggestions" style="max-width:760px;margin:8px auto 0;"></div>
 </section>
 
-<main>
-  <h2>Catégories</h2>
+<main class="container">
+  <h2 id="categories">Catégories</h2>
   <div class="grid g3">
     <a class="card" href="/categories/restaurant.html"><strong>Repas au restaurant</strong></a>
     <a class="card" href="/categories/logement.html"><strong>Loyer (1 chambre centre)</strong></a>
@@ -74,30 +74,32 @@
   © 2025 Prix de la vie — Tous les montants exprimés en euros pour comparaison mondiale.
 </footer>
 
-
-<!-- TABLE DE DESTINATIONS -->
+<!-- ====== IMPORTANT : URLs INTERNES (reste sur ton site) ====== -->
 <script>
 const DEST = {
   countries: {
-    "france":  "https://combien-coute.net/cout-de-la-vie/france/",
-    "espagne": "https://combien-coute.net/cout-de-la-vie/espagne/",
-    "japon":   "https://combien-coute.net/cout-de-la-vie/japon/",
-    "italie":  "https://combien-coute.net/cout-de-la-vie/italie/",
-    "allemagne": "https://combien-coute.net/cout-de-la-vie/allemagne/",
+    // Pays → tes pages internes
+    "france":  "/countries/france.html",
+    "espagne": "/countries/espagne.html",
+    "japon":   "/countries/japon.html",
+    "italie":  "/countries/italie.html",
+    "allemagne": "/countries/allemagne.html"
   },
   cities: {
-    "paris":   "https://combien-coute.net/villes/paris/",
-    "lyon":    "https://combien-coute.net/villes/lyon/",
-    "madrid":  "https://combien-coute.net/villes/madrid/",
-    "tokyo":   "https://combien-coute.net/villes/tokyo/",
-    "osaka":   "https://combien-coute.net/villes/osaka/",
-    "rome":    "https://combien-coute.net/villes/rome/",
-    "berlin":  "https://combien-coute.net/villes/berlin/"
+    // Villes → tes pages internes
+    "paris":   "/cities/paris.html",
+    "lyon":    "/cities/lyon.html",
+    "madrid":  "/cities/madrid.html",
+    "tokyo":   "/cities/tokyo.html",
+    "osaka":   "/cities/osaka.html",
+    "rome":    "/cities/rome.html",
+    "berlin":  "/cities/berlin.html"
   }
 };
+// 👉 Si tes pages sont ailleurs (ex. /en/countries/japon.html), change juste les chemins ci-dessus.
 </script>
 
-<!-- LOGIQUE : auto-complétion + redirection -->
+<!-- Auto-complétion + redirection (vers tes pages internes) -->
 <script>
 (function(){
   const $input  = document.getElementById('searchInput');
@@ -105,56 +107,40 @@ const DEST = {
   const $sugg   = document.getElementById('suggestions');
 
   const norm = s => (s||"").normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
-
-  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  const cap  = s => s.charAt(0).toUpperCase()+s.slice(1);
 
   function buildSuggestions(term){
     const t = norm(term);
     if(!t) return [];
     const items = [];
-
-    Object.keys(DEST.countries).forEach(k=>{
-      if(k.includes(t)) items.push({type:'pays', key:k, url:DEST.countries[k], label: cap(k)});
-    });
-    Object.keys(DEST.cities).forEach(k=>{
-      if(k.includes(t)) items.push({type:'ville', key:k, url:DEST.cities[k], label: cap(k)});
-    });
-    return items.slice(0,6);
+    Object.keys(DEST.countries).forEach(k=>{ if(k.includes(t)) items.push({type:'pays',  key:k, url:DEST.countries[k], label:cap(k)}); });
+    Object.keys(DEST.cities).forEach(k=>{    if(k.includes(t)) items.push({type:'ville', key:k, url:DEST.cities[k],    label:cap(k)}); });
+    return items.slice(0,8);
   }
 
   function renderSuggestions(term){
     const items = buildSuggestions(term);
     if(items.length===0){ $sugg.innerHTML=''; return; }
-
-    const ul = document.createElement('div');
-    ul.className = 'suggest-list';
+    const box = document.createElement('div');
+    box.className = 'suggest-list';
     items.forEach(it=>{
-      const li = document.createElement('div');
-      li.className = 'suggest-item';
-      li.innerHTML = `<span>${it.label}</span><small>${it.type}</small>`;
-      li.addEventListener('click', ()=> go(it.url));
-      ul.appendChild(li);
+      const row = document.createElement('div');
+      row.className = 'suggest-item';
+      row.innerHTML = `<span>${it.label}</span><small>${it.type}</small>`;
+      row.addEventListener('click', ()=> window.location.href = it.url);
+      box.appendChild(row);
     });
-
     $sugg.innerHTML = '';
-    $sugg.appendChild(ul);
-  }
-
-  function go(url){
-    if(!url) return;
-    window.location.href = url;
+    $sugg.appendChild(box);
   }
 
   function onSearch(){
     const t = norm($input.value);
     if(!t) return;
-
-    if(DEST.countries[t]) { go(DEST.countries[t]); return; }
-    if(DEST.cities[t])    { go(DEST.cities[t]);    return; }
-
+    if(DEST.countries[t]) { window.location.href = DEST.countries[t]; return; }
+    if(DEST.cities[t])    { window.location.href = DEST.cities[t];    return; }
     const first = buildSuggestions(t)[0];
-    if(first){ go(first.url); return; }
-
+    if(first){ window.location.href = first.url; return; }
     $sugg.innerHTML = '<div class="suggest-list"><div class="suggest-item">Aucun résultat.</div></div>';
   }
 
