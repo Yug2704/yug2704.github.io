@@ -1,10 +1,7 @@
 <header class="site-header">
   <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0">
     <a href="/" class="brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit">
-      <!-- Pastille € rose -->
-      <span class="brand-badge" style="
-        display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:999px;
-      ">€</span>
+      <span class="brand-badge" style="display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:999px;">€</span>
       <strong>prix de la vie</strong>
     </a>
 
@@ -12,6 +9,7 @@
       <a href="/" style="text-decoration:none;color:inherit">Accueil</a>
       <a href="/categories/" style="text-decoration:none;color:inherit">Toutes les catégories</a>
       <a href="/cout-de-la-vie/" style="text-decoration:none;color:inherit">Coût de la vie</a>
+      <!-- Header search (works site-wide) -->
       <form action="/recherche" method="GET" style="margin:0;display:flex;gap:8px">
         <input name="q" aria-label="Recherche" placeholder="Rechercher"
                style="border:1px solid #e5e7eb;border-radius:10px;padding:6px 10px"/>
@@ -23,55 +21,58 @@
 </header>
 
 <script>
-  // Recherche universelle (header + bannières) : redirige vers /cout-de-la-vie/<slug>/
-  (function(){
-    function normalize(s){
-      return (s||"").toLowerCase()
-        .normalize('NFD').replace(/\p{Diacritic}/gu,'')
-        .replace(/[^a-z0-9\s-]/g,' ')
-        .replace(/\s+/g,' ').trim();
-    }
-    async function handleSearch(ev){
-      ev.preventDefault();
-      const form = ev.currentTarget;
-      const q = normalize(new FormData(form).get('q'));
-      if(!q) return;
+/* --- Universal search handler (header + any <form action="/recherche">) --- */
+(function(){
+  function normalize(s){
+    return (s||"").toLowerCase()
+      .normalize('NFD').replace(/\p{Diacritic}/gu,'')
+      .replace(/[^a-z0-9\s-]/g,' ')
+      .replace(/\s+/g,' ').trim();
+  }
+  async function handleSearch(ev){
+    ev.preventDefault();
+    const form = ev.currentTarget;
+    const qRaw = new FormData(form).get('q');
+    const q = normalize(qRaw);
+    if(!q) return;
 
-      try{
-        const res = await fetch('/data/locations.json',{cache:'no-store'});
-        const db  = await res.json();
-        const entries = Object.values(db).filter(n=>n && n.type);
+    try{
+      const res = await fetch('/data/locations.json',{cache:'no-store'});
+      const db  = await res.json();
 
-        // Scoring simple (exact > start > include)
-        let best = null, bestScore = -1;
-        for(const n of entries){
-          const name = normalize(n.name);
-          const slug = normalize(n.slug || n.id || '');
-          let score = -1;
-          if(q === slug || q === name) score = 3;
-          else if(name.startsWith(q) || slug.startsWith(q)) score = 2;
-          else if(name.includes(q) || slug.includes(q)) score = 1;
-          if(score > bestScore){ best = n; bestScore = score; }
-        }
-        if(best && best.slug){
-          location.href = `/cout-de-la-vie/${best.slug}/`;
-        }else{
-          alert("Lieu non trouvé pour : " + q);
-        }
-      }catch(e){
-        console.error(e);
-        alert("Recherche momentanément indisponible.");
+      // Build candidates (use BOTH object key and n.slug/n.name)
+      const entries = Object.entries(db).map(([key,n])=>({key,n}));
+      let best=null, bestScore=-1;
+
+      for(const {key,n} of entries){
+        if(!n) continue;
+        const name = normalize(n.name);
+        const slug = normalize(n.slug || key);
+        // score: exact > start > include
+        let s = -1;
+        if(q === slug || q === name) s = 3;
+        else if(slug.startsWith(q) || name.startsWith(q)) s = 2;
+        else if(slug.includes(q) || name.includes(q)) s = 1;
+        if(s > bestScore){ best = {slug:(n.slug||key)}, bestScore = s; }
       }
-    }
 
-    // Attache sur tous les formulaires action="/recherche"
-    function bindAll(){
-      document.querySelectorAll('form[action="/recherche"]').forEach(f=>{
-        if(!f.__bound){ f.addEventListener('submit', handleSearch); f.__bound = true; }
-      });
+      if(best && best.slug){
+        location.href = `/cout-de-la-vie/${best.slug}/`;
+      }else{
+        alert("Lieu non trouvé : " + qRaw);
+      }
+    }catch(e){
+      console.error(e);
+      alert("Recherche momentanément indisponible.");
     }
-    document.addEventListener('DOMContentLoaded', bindAll);
-    // Si du contenu est injecté dynamiquement :
-    new MutationObserver(bindAll).observe(document.documentElement,{subtree:true,childList:true});
-  })();
+  }
+
+  function bindAll(){
+    document.querySelectorAll('form[action="/recherche"]').forEach(f=>{
+      if(!f.__bound){ f.addEventListener('submit', handleSearch); f.__bound = true; }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', bindAll);
+  new MutationObserver(bindAll).observe(document.documentElement,{subtree:true,childList:true});
+})();
 </script>
