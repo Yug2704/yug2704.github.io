@@ -9,52 +9,51 @@
   <link rel="stylesheet" href="/assets/css/site.css" />
 
   <style>
-    /* ===== Bannière fine ===== */
-    .hero-banner {
-      width: 100%;
-      height: 120px; /* fine et élégante */
-      background-image: url("https://upload.wikimedia.org/wikipedia/commons/0/0e/Mount_Fuji_banner_Fuji_and_cherry_blossoms.png");
-      background-size: cover;
-      background-position: center;
-      border-radius: 10px;
-      margin: 14px 0 18px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
+    /* --- Bannière fine (image réelle, pas en background) --- */
+    .hero-thin { margin:14px 0 18px; border-radius:10px; overflow:hidden; }
+    .hero-thin img{ display:block; width:100%; height:120px; object-fit:cover; }
 
-    /* ===== Bloc descriptif ===== */
-    .country-intro {
-      background: #fff;
-      border: 1px solid var(--line, #e5e7eb);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin-top: 10px;
+    /* --- Bloc d'intro avec chiffres --- */
+    .country-intro{
+      background:#fff; border:1px solid var(--line,#e5e7eb);
+      border-radius:12px; padding:16px 18px; margin-top:10px;
     }
-    .country-intro p {
-      margin: 0 0 8px;
-      line-height: 1.55;
-    }
-    .country-intro ul {
-      margin: 6px 0 4px 18px;
-    }
-    .country-intro li {
-      margin: 5px 0;
-    }
-    .country-intro .muted {
-      color: var(--muted, #64748b);
-      font-size: 0.95rem;
-    }
-    .pill {
-      display:inline-block;
-      font-weight:600;
-      padding:.1rem .5rem;
-      border-radius:999px;
-      background:#f1f5f9;
-      border:1px solid #e2e8f0;
-      margin-left:.25rem;
-    }
-    .delta-ok { color:#0a7f3f; }
-    .delta-bad { color:#b42318; }
+    .country-intro p{ margin:0 0 8px; line-height:1.55; }
+    .country-intro ul{ margin:6px 0 4px 18px; }
+    .country-intro li{ margin:5px 0; }
+    .country-intro .muted{ color:var(--muted,#64748b); font-size:.95rem; }
+    .pill{ display:inline-block; font-weight:600; padding:.1rem .5rem; border-radius:999px; background:#f1f5f9; border:1px solid #e2e8f0; margin-left:.25rem; }
+    .delta-ok{ color:#0a7f3f; }
+    .delta-bad{ color:#b42318; }
   </style>
+
+  <script>
+    // util: charge un fragment HTML
+    async function include(selector, url){
+      const el = document.querySelector(selector);
+      const res = await fetch(url,{cache:'no-store'});
+      el.outerHTML = await res.text();
+    }
+    // util: format prix
+    const fmtEUR = (n)=> (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits: (Number.isInteger(n)?0:2)}) + " €";
+    // util: % écart
+    function pctDiff(v, ref){
+      if (!ref || ref===0) return null;
+      const p = Math.round(((v - ref)/ref)*100);
+      return {p, label: p===0 ? "identique" : (p<0 ? `${Math.abs(p)}% de moins` : `${p}% de plus`), cls: (p<=0?'ok':'bad')};
+    }
+    // map libellés
+    const LABELS = {
+      "dejeuner_restaurant": ["Déjeuner","Prix d’un repas au restaurant"],
+      "diner_3plats": ["Dîner 3 plats","Prix d’un dîner au restaurant (3 plats)"],
+      "menu_fastfood": ["Menu McDo / fast-food","Prix d’un menu chez McDonald’s (ou équivalent)"],
+      "biere_locale_05": ["Bière locale (0,5 L)","Prix d’une bière pression (0,5 L)"],
+      "biere_etrangere_033": ["Bière étrangère (0,33 L)","Prix d’une bière en bouteille (0,33 L)"],
+      "cappuccino": ["Cappuccino","Prix d’une tasse de cappuccino"],
+      "soda_canette": ["Soda (canette)","Prix d’une canette de soda"],
+      "eau_petite": ["Bouteille d’eau (petite)","Prix d’une petite bouteille d’eau"]
+    };
+  </script>
 </head>
 
 <body>
@@ -62,8 +61,11 @@
   <div id="header-placeholder"></div>
 
   <main>
-    <!-- ===== BANNIÈRE FINE ===== -->
-    <section class="hero-banner" role="img" aria-label="Mont Fuji et cerisiers en fleurs"></section>
+    <!-- ===== BANNIÈRE FINE (image <img>) ===== -->
+    <figure class="hero-thin" role="img" aria-label="Mont Fuji et cerisiers en fleurs">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Mount_Fuji_banner_Fuji_and_cherry_blossoms.png"
+           alt="Mont Fuji avec cerisiers en fleurs">
+    </figure>
 
     <section class="page-hero">
       <div class="container">
@@ -76,15 +78,12 @@
         <!-- Accroche chiffrée -->
         <div class="country-intro" id="intro-rich">
           <p>
-            Découvrez le coût de la vie au <strong>Japon</strong> en 2025&nbsp;: logement, nourriture, transport, loisirs…  
-            Comparez directement avec la France et explorez les différences entre Tokyo, Osaka ou Kyoto.  
-            <span class="pill delta-ok">≈ 10–15 % moins cher que la France</span>
+            Découvrez le coût de la vie au <strong>Japon</strong> en 2025&nbsp;: logement, nourriture, transport, loisirs…
+            Comparez directement avec la France et explorez les différences entre Tokyo, Osaka ou Kyoto.
+            <span id="pill-delta" class="pill delta-ok" style="display:none"></span>
           </p>
-          <ul>
-            <li>Un déjeuner au restaurant : <strong>5,6 €</strong></li>
-            <li>Une place de cinéma : <strong>10,7 €</strong></li>
-            <li>Loyer (50 m² centre-ville) : <strong>≈ 1 046 € / mois</strong></li>
-            <li>Salaire mensuel moyen : <strong>1 752 €</strong></li>
+          <ul id="intro-list">
+            <!-- lignes injectées -->
           </ul>
           <p class="muted">Ces chiffres sont des moyennes indicatives basées sur les données 2025.</p>
         </div>
@@ -102,16 +101,98 @@
     </section>
   </main>
 
+  <!-- Footer partagé -->
   <div id="footer-placeholder"></div>
 
   <script>
-    async function include(selector, url){
-      const el = document.querySelector(selector);
-      const res = await fetch(url,{cache:'no-store'});
-      el.outerHTML = await res.text();
-    }
+    // Injecte header/footer
     include('#header-placeholder','/partials/header.html');
     include('#footer-placeholder','/partials/footer.html');
+
+    // Lit le slug depuis l’URL (/cout-de-la-vie/<slug>/)
+    const slug = location.pathname.replace(/\/$/,'').split('/').pop() || 'japon';
+
+    async function bootstrap(){
+      const res = await fetch('/data/locations.json',{cache:'no-store'});
+      const db = await res.json();
+
+      const node = db[slug];
+      if(!node){ document.getElementById('page-title').textContent = "Lieu introuvable"; return; }
+
+      // Contexte FR de comparaison
+      const ref = node.compare_to ? db[node.compare_to] : db['france'];
+
+      // SEO/Title dynamiques
+      const isCountry = node.type === 'country';
+      const title = `Coût de la vie ${isCountry?'au':'à'} ${node.name} en 2025 : tous les prix`;
+      document.title = title;
+      document.getElementById('page-title').textContent = title;
+      document.getElementById('crumb-name').textContent = node.name;
+
+      // Accroche chiffrée : pill + 4 lignes si on a les données
+      const pill = document.getElementById('pill-delta');
+      if (node.headline && typeof node.headline.delta_vs_france_pct === 'number'){
+        const d = node.headline.delta_vs_france_pct;
+        pill.textContent = (d>0?`+${d}%`:`${d}%`) + " vs France (moyenne)";
+        pill.classList.toggle('delta-ok', d<=0);
+        pill.classList.toggle('delta-bad', d>0);
+        pill.style.display = 'inline-block';
+      }
+      const list = document.getElementById('intro-list');
+      const rows = [];
+      if (node.meta?.dejeuner_moins_cher) rows.push(`Un déjeuner au restaurant : <strong>${fmtEUR(node.meta.dejeuner_moins_cher)}</strong>`);
+      if (node.meta?.place_de_cinema)    rows.push(`Une place de cinéma : <strong>${fmtEUR(node.meta.place_de_cinema)}</strong>`);
+      if (node.meta?.loyer_centre_ville_50m2) rows.push(`Loyer (50 m² centre-ville) : <strong>≈ ${fmtEUR(node.meta.loyer_centre_ville_50m2)} / mois</strong>`);
+      if (node.meta?.salaire_mensuel_net) rows.push(`Salaire mensuel moyen : <strong>${fmtEUR(node.meta.salaire_mensuel_net)}</strong>`);
+      list.innerHTML = rows.map(x=>`<li>${x}</li>`).join('');
+
+      // Headline (badge)
+      const head = document.getElementById('headline');
+      if (node.headline && typeof node.headline.delta_vs_france_pct === 'number'){
+        const d = node.headline.delta_vs_france_pct;
+        head.textContent = (d>=0?`+${d}%`:`${d}%`) + " vs France (moyenne)";
+      } else {
+        head.textContent = "Comparatif avec la France";
+      }
+
+      // Bullets de résumé (section existante)
+      const bullets = document.getElementById('bullets');
+      const items = [];
+      if (node.meta?.salaire_mensuel_net) items.push(`Le salaire mensuel net est de : <strong>${fmtEUR(node.meta.salaire_mensuel_net)}</strong>`);
+      if (node.meta?.dejeuner_moins_cher) items.push(`Un déjeuner au restaurant : <strong>${fmtEUR(node.meta.dejeuner_moins_cher)}</strong>`);
+      if (node.meta?.place_de_cinema) items.push(`Le prix d’une place de cinéma est de <strong>${fmtEUR(node.meta.place_de_cinema)}</strong>`);
+      if (node.meta?.loyer_centre_ville_50m2) items.push(`La location d’un 50 m² en centre-ville coûte <strong>${fmtEUR(node.meta.loyer_centre_ville_50m2)}</strong>`);
+      if (node.headline?.resume) items.unshift(node.headline.resume);
+      bullets.innerHTML = items.map(x=>`<li>${x}</li>`).join("");
+
+      // Date MAJ
+      const last = node.last_update || new Date().toLocaleDateString('fr-FR');
+      document.getElementById('last-update').textContent = last;
+
+      // Cartes “restaurant / boissons”
+      const cards = document.getElementById('cards');
+      cards.innerHTML = "";
+      const order = ["dejeuner_restaurant","diner_3plats","menu_fastfood","biere_locale_05","biere_etrangere_033","cappuccino","soda_canette","eau_petite"];
+      order.forEach(key=>{
+        if(!(key in node.basket)) return;
+        const [t, sub] = LABELS[key] || [key,key];
+        const val = node.basket[key];
+        const base = ref?.basket?.[key];
+        const diff = (base!=null) ? pctDiff(val, base) : null;
+
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <div class="card-head">${t}</div>
+          <div class="card-body">
+            <div class="price">${fmtEUR(val)}</div>
+            <div class="sub">${sub} en ${node.name} (2025)</div>
+            ${ (base!=null && diff) ? `<div class="delta ${diff.cls}">↳ ${diff.label} (France : ${fmtEUR(base)})</div>` : `` }
+          </div>`;
+        cards.appendChild(el);
+      });
+    }
+    bootstrap();
   </script>
 </body>
 </html>
