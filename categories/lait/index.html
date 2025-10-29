@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Combien coûte une bouteille de lait ? Pays les moins et plus chers</title>
+  <meta name="description" content="Classement du prix du lait (1 L) par pays en 2025 : où c’est le moins cher et le plus cher, avec lien vers chaque page pays.">
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <style>
+    .hero{border-radius:14px;height:180px;background-size:cover;background-position:center;margin:14px 0 18px}
+    .intro{border:1px solid var(--line,#e5e7eb);border-radius:12px;padding:14px;background:#fff}
+    .tables{display:grid;gap:18px;margin:18px 0}
+    @media(min-width:1000px){.tables{grid-template-columns:1fr 1fr}}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line,#e5e7eb);border-radius:12px;overflow:hidden}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--line,#e5e7eb);text-align:left}
+    th{background:#f9fafb}
+    tbody tr:last-child td{border-bottom:none}
+    .badge{display:inline-block;background:#ef4444;color:#fff;font-weight:700;border-radius:999px;padding:.15rem .5rem;font-size:.85rem}
+    .badge.green{background:#16a34a}
+    .muted{color:var(--muted,#64748b)}
+    .country-link{text-decoration:none;color:inherit}
+    .country-link:hover{text-decoration:underline}
+  </style>
+  <script>
+    // Utils
+    const fmtEUR = n => (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits:(Number.isInteger(n)?0:2)})+" €";
+    async function include(sel,url){ const el=document.querySelector(sel); const r=await fetch(url,{cache:'no-store'}); el.outerHTML=await r.text(); }
+
+    // Clé de la donnée "lait" dans locations.json (adapte si besoin)
+    const MILK_KEY = "lait_1l";     // ex: node.basket.lait_1l
+
+    // Construit une ligne <tr>
+    function trCountryRow(node){
+      const price = node?.basket?.[MILK_KEY];
+      if (price==null) return null;
+
+      // Lien vers la page pays /cout-de-la-vie/<slug>/
+      const to = `/cout-de-la-vie/${node.slug || node.id || (node.name||'').toLowerCase()}/`;
+
+      // Optionnel : fourchette min/max si tu ajoutes node.prices_range[MILK_KEY]
+      const minMax = (node.ranges && node.ranges[MILK_KEY])
+        ? `${fmtEUR(node.ranges[MILK_KEY][0])} à ${fmtEUR(node.ranges[MILK_KEY][1])}`
+        : "—";
+
+      return `<tr>
+        <td><a class="country-link" href="${to}">${node.name}</a></td>
+        <td>${fmtEUR(price)}</td>
+        <td>${minMax}</td>
+      </tr>`;
+    }
+
+    async function bootstrap(){
+      // Bannière
+      document.querySelector('.hero').style.backgroundImage =
+        'url(https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?q=80&w=1600&auto=format&fit=crop)';
+
+      // Données
+      const res = await fetch('/data/locations.json',{cache:'no-store'});
+      const db  = await res.json();
+
+      // On prend uniquement les pays
+      const countries = Object.values(db).filter(n => n && n.type === 'country' && n.basket && n.basket[MILK_KEY]!=null);
+
+      // Tri ascendant (moins cher)
+      const asc = [...countries].sort((a,b)=> a.basket[MILK_KEY] - b.basket[MILK_KEY]);
+      // Tri descendant (plus cher)
+      const desc = [...countries].sort((a,b)=> b.basket[MILK_KEY] - a.basket[MILK_KEY]);
+
+      // Remplissage tableaux (top 10 par défaut — change le slice si tu veux tout)
+      const cheapBody = document.getElementById('tbody-cheap');
+      const priceyBody= document.getElementById('tbody-pricey');
+
+      cheapBody.innerHTML  = asc.slice(0,10).map(trCountryRow).filter(Boolean).join('');
+      priceyBody.innerHTML = desc.slice(0,10).map(trCountryRow).filter(Boolean).join('');
+
+      // Petits compteurs
+      document.getElementById('count-cheap').textContent  = asc.length;
+      document.getElementById('count-pricey').textContent = desc.length;
+    }
+    document.addEventListener('DOMContentLoaded', bootstrap);
+  </script>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="container">
+    <div class="hero" role="img" aria-label="Catégorie Lait"></div>
+
+    <h1>Combien coûte une bouteille de lait&nbsp;?</h1>
+    <div class="intro">
+      <p>Comparez le <strong>prix d’un litre de lait</strong> par pays. Retrouvez ci-dessous les classements des pays où le lait coûte le <strong>moins cher</strong> et où il coûte le <strong>plus cher</strong>. Cliquez sur un pays pour voir tous ses prix détaillés.</p>
+    </div>
+
+    <section class="tables">
+      <div>
+        <h2>Lait&nbsp;: les pays où cela coûte <span class="badge green">le moins cher</span></h2>
+        <p class="muted">Classement basé sur <span id="count-cheap">—</span> pays avec données disponibles.</p>
+        <table>
+          <thead>
+            <tr><th>Pays</th><th>Prix moyen en 2025</th><th>Prix minimum et maximum</th></tr>
+          </thead>
+          <tbody id="tbody-cheap"></tbody>
+        </table>
+      </div>
+
+      <div>
+        <h2>Lait&nbsp;: les pays où cela coûte <span class="badge">le plus cher</span></h2>
+        <p class="muted">Classement basé sur <span id="count-pricey">—</span> pays avec données disponibles.</p>
+        <table>
+          <thead>
+            <tr><th>Pays</th><th>Prix moyen en 2025</th><th>Prix minimum et maximum</th></tr>
+          </thead>
+          <tbody id="tbody-pricey"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    include('#header-placeholder','/partials/header.html');
+    include('#footer-placeholder','/partials/footer.html');
+  </script>
+</body>
+</html>
