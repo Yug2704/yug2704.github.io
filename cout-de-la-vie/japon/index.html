@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coût de la vie au Japon en 2025 : tous les prix</title>
+  <meta name="description" content="Prix moyens au Japon et comparaison avec la France : restaurant, boissons, loyer, salaire, etc. Données mises à jour.">
+  <meta property="og:title" content="Coût de la vie au Japon en 2025" />
+  <meta property="og:description" content="Comparatif avec la France et prix détaillés par panier de biens et services." />
+  <link rel="canonical" href="." />
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <script>
+    // util: charge un fragment HTML
+    async function include(selector, url){
+      const el = document.querySelector(selector);
+      const res = await fetch(url,{cache:'no-store'});
+      el.outerHTML = await res.text();
+    }
+    // util: format prix
+    const fmtEUR = (n)=> (Math.round(n*100)/100).toLocaleString('fr-FR',{minimumFractionDigits: (Number.isInteger(n)?0:2)}) + " €";
+    // util: % écart
+    function pctDiff(v, ref){
+      if (!ref || ref===0) return null;
+      const p = Math.round(((v - ref)/ref)*100);
+      return {p, label: p===0 ? "identique" : (p<0 ? `${Math.abs(p)}% de moins` : `${p}% de plus`), cls: (p<=0?'ok':'bad')};
+    }
+    // map libellés
+    const LABELS = {
+      "dejeuner_restaurant": ["Déjeuner","Prix d’un repas au restaurant"],
+      "diner_3plats": ["Dîner 3 plats","Prix d’un dîner au restaurant (3 plats)"],
+      "menu_fastfood": ["Menu McDo / fast-food","Prix d’un menu chez McDonald’s (ou équivalent)"],
+      "biere_locale_05": ["Bière locale (0,5 L)","Prix d’une bière pression (0,5 L)"],
+      "biere_etrangere_033": ["Bière étrangère (0,33 L)","Prix d’une bière en bouteille (0,33 L)"],
+      "cappuccino": ["Cappuccino","Prix d’une tasse de cappuccino"],
+      "soda_canette": ["Soda (canette)","Prix d’une canette de soda"],
+      "eau_petite": ["Bouteille d’eau (petite)","Prix d’une petite bouteille d’eau"]
+    };
+  </script>
+</head>
+<body>
+  <!-- Header partagé -->
+  <div id="header-placeholder"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <nav aria-label="Fil d’Ariane" class="muted" style="font-size:13px">
+          <a href="/">Accueil</a> › <a href="/cout-de-la-vie/">Coût de la vie</a> › <span id="crumb-name">Japon</span>
+        </nav>
+        <h1 id="page-title">Coût de la vie au Japon en 2025 : tous les prix</h1>
+        <p class="lead" id="page-lead">
+          À partir d’une soixantaine de prix moyens, découvrez le coût de la vie au Japon comparé à la France.
+        </p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="summary" id="summary">
+        <div class="badge" id="headline"></div>
+        <ul class="bullets" id="bullets">
+          <!-- items injectés -->
+        </ul>
+        <small class="muted">🕒 Dernière mise à jour : <span id="last-update">—</span></small>
+      </div>
+
+      <div class="cards" id="cards">
+        <!-- cartes injectées -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer partagé -->
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Injecte header/footer
+    include('#header-placeholder','/partials/header.html');
+    include('#footer-placeholder','/partials/footer.html');
+
+    // Lit le slug depuis l’URL (/cout-de-la-vie/<slug>/)
+    const slug = location.pathname.replace(/\/$/,'').split('/').pop() || 'japon';
+
+    async function bootstrap(){
+      const res = await fetch('/data/locations.json',{cache:'no-store'});
+      const db = await res.json();
+
+      const node = db[slug];
+      if(!node){ document.getElementById('page-title').textContent = "Lieu introuvable"; return; }
+
+      // Contexte FR de comparaison
+      const ref = node.compare_to ? db[node.compare_to] : db['france'];
+
+      // SEO/Title dynamiques
+      const isCountry = node.type === 'country';
+      const title = `Coût de la vie ${isCountry?'au':'à'} ${node.name} en 2025 : tous les prix`;
+      document.title = title;
+      document.getElementById('page-title').textContent = title;
+      document.getElementById('crumb-name').textContent = node.name;
+
+      // Headline
+      const head = document.getElementById('headline');
+      if (node.headline && typeof node.headline.delta_vs_france_pct === 'number'){
+        const d = node.headline.delta_vs_france_pct;
+        head.textContent = (d>=0?`+${d}%`:`${d}%`) + " vs France (moyenne)";
+      } else {
+        head.textContent = "Comparatif avec la France";
+      }
+
+      // Bullets de résumé (exemple adaptés à tes captures)
+      const bullets = document.getElementById('bullets');
+      bullets.innerHTML = "";
+      const items = [];
+      if (node.meta?.salaire_mensuel_net) items.push(`Le salaire mensuel net est de : <strong>${fmtEUR(node.meta.salaire_mensuel_net)}</strong>`);
+      if (node.meta?.dejeuner_moins_cher) items.push(`Un déjeuner au restaurant : <strong>${fmtEUR(node.meta.dejeuner_moins_cher)}</strong>`);
+      if (node.meta?.place_de_cinema) items.push(`Le prix d’une place de cinéma est de <strong>${fmtEUR(node.meta.place_de_cinema)}</strong>`);
+      if (node.meta?.loyer_centre_ville_50m2) items.push(`La location d’un 50 m² en centre-ville coûte <strong>${fmtEUR(node.meta.loyer_centre_ville_50m2)}</strong>`);
+      if (node.headline?.resume) items.unshift(node.headline.resume);
+      bullets.innerHTML = items.map(x=>`<li>${x}</li>`).join("");
+
+      // Date MAJ (exposée au footer si besoin)
+      const last = node.last_update || new Date().toLocaleDateString('fr-FR');
+      document.getElementById('last-update').textContent = last;
+      window.__pageLastUpdate = last;
+
+      // Cartes “restaurant / boissons” à la façon du screen
+      const cards = document.getElementById('cards');
+      cards.innerHTML = "";
+      const order = ["dejeuner_restaurant","diner_3plats","menu_fastfood","biere_locale_05","biere_etrangere_033","cappuccino","soda_canette","eau_petite"];
+      order.forEach(key=>{
+        if(!(key in node.basket)) return;
+        const [title, subtitle] = LABELS[key] || [key,key];
+        const val = node.basket[key];
+        const base = ref?.basket?.[key];
+        const diff = (base!=null) ? pctDiff(val, base) : null;
+
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <div class="card-head">${title}</div>
+          <div class="card-body">
+            <div class="price">${fmtEUR(val)}</div>
+            <div class="sub">${subtitle} en ${node.name} (2025)</div>
+            ${
+              (base!=null && diff) ?
+              `<div class="delta ${diff.cls}">↳ ${diff.label} (France : ${fmtEUR(base)})</div>`
+              : ``
+            }
+          </div>`;
+        cards.appendChild(el);
+      });
+    }
+    bootstrap();
+  </script>
+</body>
+</html>
