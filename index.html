@@ -3,76 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Prix de la vie – comparateur par pays et villes</title>
-  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
-  <link rel="stylesheet" href="/assets/css/site.css">
-  <style>
-    :root{--line:#e5e7eb;--muted:#64748b}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:0;background:#fff;color:#111}
-    main.container{max-width:900px;margin:auto;padding:1.5rem}
-    .hero{border:1px solid var(--line);border-radius:12px;padding:1.5rem;background:#fff;margin:1rem 0 2rem}
-    h1{font-size:1.8rem;margin-bottom:.25rem}
-    .lead{color:var(--muted);font-size:1rem;margin-bottom:1rem}
-    form.search{display:flex;gap:.5rem;max-width:720px;margin:1rem auto}
-    input[type=text]{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem;font-size:1rem}
-    button{border:none;border-radius:8px;padding:.6rem 1rem;background:#111;color:#fff;cursor:pointer}
-    button:hover{opacity:.9}
-    footer{border-top:1px solid var(--line);margin-top:3rem;padding:1rem 0;text-align:center;font-size:.9rem;color:var(--muted)}
-  </style>
-  <script>
-    async function include(sel,url){
-      const el=document.querySelector(sel);
-      const r=await fetch(url,{cache:'no-store'});
-      el.outerHTML=await r.text();
-    }
-
-    // redirection de recherche
-    async function handleSearch(ev){
-      ev.preventDefault();
-      const q = ev.target.q.value.trim().toLowerCase();
-      if(!q) return;
-      const res = await fetch('/data/locations.json',{cache:'no-store'});
-      const db  = await res.json();
-      for(const [slug,node] of Object.entries(db)){
-        if(node.name && node.name.toLowerCase()===q || slug===q){
-          location.href='/cout-de-la-vie/'+slug+'/';
-          return;
-        }
-      }
-      alert("Lieu introuvable : "+q);
-    }
-  </script>
+  <title>Combien ça coûte ? – Accueil & moteur de recherche</title>
+  <meta name="description" content="Comparez le coût de la vie par pays et par catégorie (lait, hôtel, restaurant...) avec un moteur simple et rapide.">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script defer src="./assets/data.js"></script>
+  <script defer src="./assets/script.js"></script>
 </head>
 <body>
-  <!-- En-tête partagé -->
-  <div id="header-placeholder"></div>
+  <header class="site-header">
+    <div class="ribbon"></div>
+    <div class="header-inner">
+      <a class="logo" href="/">€ CombienCoûte</a>
+      <form id="search-form" class="search">
+        <div class="search-row">
+          <input id="country-input" class="input" type="text" placeholder="Choisir un pays (ex : Japon)" autocomplete="off">
+          <input id="product-input" class="input" type="text" placeholder="Choisir une catégorie (ex : Lait)" autocomplete="off">
+          <button class="btn" type="submit">Voir le prix</button>
+        </div>
+        <p class="hint">Astuce : tu peux saisir uniquement un pays <em>ou</em> uniquement une catégorie, ou les deux.</p>
+      </form>
+    </div>
+  </header>
 
   <main class="container">
-    <section class="hero">
-      <h1>Le vrai prix des choses, partout dans le monde</h1>
-      <p class="lead">Comparez le coût de la vie par pays et par ville : repas, loyers, transports, loisirs… Données actualisées en euros.</p>
-      <form class="search" onsubmit="handleSearch(event)">
-        <input type="text" name="q" placeholder="Ville ou pays (ex. Tokyo ou Japon)">
-        <button type="submit">Rechercher</button>
-      </form>
-    </section>
+    <section class="grid">
+      <a class="card" href="./pays/japon.html">
+        <h2>Japon</h2>
+        <p>Coût de la vie au Japon (comparé à la France) + prix par catégories.</p>
+      </a>
 
-    <section>
-      <h2>Découvrez les prix moyens par pays</h2>
-      <p class="muted">Cliquez sur un pays pour consulter le détail des coûts.</p>
-      <ul>
-        <li><a href="/cout-de-la-vie/france/">France</a></li>
-        <li><a href="/cout-de-la-vie/japon/">Japon</a></li>
-        <li><a href="/cout-de-la-vie/espagne/">Espagne</a></li>
-      </ul>
+      <a class="card" href="./produit/lait.html">
+        <h2>Lait</h2>
+        <p>Comparatif du prix du lait par pays, avec lien direct vers chaque page pays.</p>
+      </a>
     </section>
   </main>
 
-  <div id="footer-placeholder"></div>
+  <footer class="site-footer">
+    <p>© <span id="y"></span> CombienCoûte – Données démo. <a href="./sitemap.xml">Sitemap</a></p>
+  </footer>
 
   <script>
-    include('#header-placeholder','/partials/header.html');
-    include('#footer-placeholder','/partials/footer.html');
+    // Affiche l’année
+    document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
