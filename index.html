@@ -1,57 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Prix de la vie – comparateur par pays et villes</title>
-  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports. Montants en euros.">
-  <link rel="stylesheet" href="/assets/css/site.css" />
+  <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <style>
+    :root{--line:#e5e7eb;--muted:#64748b}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:0;background:#fff;color:#111}
+    main.container{max-width:900px;margin:auto;padding:1.5rem}
+    .hero{border:1px solid var(--line);border-radius:12px;padding:1.5rem;background:#fff;margin:1rem 0 2rem}
+    h1{font-size:1.8rem;margin-bottom:.25rem}
+    .lead{color:var(--muted);font-size:1rem;margin-bottom:1rem}
+    form.search{display:flex;gap:.5rem;max-width:720px;margin:1rem auto}
+    input[type=text]{flex:1;border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem;font-size:1rem}
+    button{border:none;border-radius:8px;padding:.6rem 1rem;background:#111;color:#fff;cursor:pointer}
+    button:hover{opacity:.9}
+    footer{border-top:1px solid var(--line);margin-top:3rem;padding:1rem 0;text-align:center;font-size:.9rem;color:var(--muted)}
+  </style>
   <script>
     async function include(sel,url){
       const el=document.querySelector(sel);
       const r=await fetch(url,{cache:'no-store'});
       el.outerHTML=await r.text();
     }
+
+    // redirection de recherche
+    async function handleSearch(ev){
+      ev.preventDefault();
+      const q = ev.target.q.value.trim().toLowerCase();
+      if(!q) return;
+      const res = await fetch('/data/locations.json',{cache:'no-store'});
+      const db  = await res.json();
+      for(const [slug,node] of Object.entries(db)){
+        if(node.name && node.name.toLowerCase()===q || slug===q){
+          location.href='/cout-de-la-vie/'+slug+'/';
+          return;
+        }
+      }
+      alert("Lieu introuvable : "+q);
+    }
   </script>
 </head>
 <body>
+  <!-- En-tête partagé -->
   <div id="header-placeholder"></div>
 
   <main class="container">
-    <!-- Pink banner + search -->
-    <section class="hero-search hero-pink">
-      <form action="/recherche" method="GET" style="display:flex;gap:10px;align-items:center;max-width:860px;margin:auto">
-        <input name="q" placeholder="Ville ou pays (ex. Tokyo ou Japon)"
-               style="flex:1;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;font-size:16px;background:#fff"/>
-        <button type="submit"
-                style="border:1px solid var(--brand-pink-border,#f9a8d4);border-radius:10px;padding:12px 16px;background:#111;color:#fff">
-          Rechercher
-        </button>
+    <section class="hero">
+      <h1>Le vrai prix des choses, partout dans le monde</h1>
+      <p class="lead">Comparez le coût de la vie par pays et par ville : repas, loyers, transports, loisirs… Données actualisées en euros.</p>
+      <form class="search" onsubmit="handleSearch(event)">
+        <input type="text" name="q" placeholder="Ville ou pays (ex. Tokyo ou Japon)">
+        <button type="submit">Rechercher</button>
       </form>
     </section>
 
-    <h1>Le vrai prix des choses, partout dans le monde</h1>
-    <p class="muted">Consultez le coût de la vie par pays et comparez avec la France. Données synthétiques et mises à jour.</p>
-
-    <!-- Categories -->
-    <section id="home-categories" style="margin-top:28px">
-      <h2>Alimentation : combien ça coûte en 2025&nbsp;?</h2>
-      <div class="grid-cats" style="margin-top:12px">
-        <!-- LAIT (SVG thumbnail; no external URL) -->
-        <a href="/categories/lait/" class="card" style="text-decoration:none;color:inherit">
-          <div class="milk-bg" style="height:140px;display:flex;align-items:center;justify-content:center">
-            <!-- Simple milk bottle SVG -->
-            <svg width="76" height="100" viewBox="0 0 76 100" xmlns="http://www.w3.org/2000/svg" aria-label="Bouteille de lait">
-              <path class="milk-fill" d="M22 20h32c2 0 3 2 2 4l-5 8v56c0 5-4 9-9 9H34c-5 0-9-4-9-9V32l-5-8c-1-2 0-4 2-4z"/>
-              <path class="milk-stroke" d="M22 20h32m-34 0c-2 0-3 2-2 4l5 8v56c0 5 4 9 9 9h8c5 0 9-4 9-9V32l5-8c1-2 0-4-2-4M27 32h22" fill="none" stroke-width="2"/>
-            </svg>
-          </div>
-          <div style="padding:12px 14px">
-            <div style="font-weight:700">Lait (1&nbsp;L)</div>
-            <div class="muted">Les pays où c’est le moins/plus cher</div>
-          </div>
-        </a>
-      </div>
+    <section>
+      <h2>Découvrez les prix moyens par pays</h2>
+      <p class="muted">Cliquez sur un pays pour consulter le détail des coûts.</p>
+      <ul>
+        <li><a href="/cout-de-la-vie/france/">France</a></li>
+        <li><a href="/cout-de-la-vie/japon/">Japon</a></li>
+        <li><a href="/cout-de-la-vie/espagne/">Espagne</a></li>
+      </ul>
     </section>
   </main>
 
