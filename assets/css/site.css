@@ -84,3 +84,43 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.
 }
 .card:hover{ transform:translateY(-2px); }
 
+/* THEME ROSE (mêmes tons que la pastille €) */
+:root{
+  --brand-pink-bg:     #ffe4f1;
+  --brand-pink-bg-2:   #fff0f7;
+  --brand-pink-border: #f9a8d4;
+}
+/* Pastille € rose (header + footer) */
+.brand-badge{
+  background:var(--brand-pink-bg);
+  border:1px solid var(--brand-pink-border);
+  color:#be185d;
+  font-weight:700;
+}
+
+/* Banderole rose derrière la recherche (accueil) */
+.hero-search{
+  border:1px solid #f1f5f9;
+  border-radius:12px;
+  padding:20px 18px;
+  margin:14px 0 22px;
+}
+.hero-pink{
+  background: linear-gradient(180deg, var(--brand-pink-bg-2), var(--brand-pink-bg));
+  box-shadow: 0 8px 24px rgba(190,24,93,0.06) inset, 0 1px 0 rgba(0,0,0,.02);
+}
+
+/* Grille de catégories */
+.grid-cats{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
+}
+.card{
+  border:1px solid var(--line,#e5e7eb);
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+  transition:.15s transform;
+}
+.card:hover{ transform:translateY(-2px); }
