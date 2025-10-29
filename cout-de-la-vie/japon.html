@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr" data-country-slug="japon">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Japon – Prix & coût de la vie</title>
+  <meta name="description" content="Prix moyens par catégories au Japon (vs France) : lait, repas, hôtel, restaurant, etc.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script defer src="../assets/data.js"></script>
+  <script defer src="../assets/script.js"></script>
+</head>
+<body>
+  <header class="sub-header">
+    <a class="logo" href="../index.html">€ CombienCoûte</a>
+    <nav class="breadcrumb">
+      <a href="../index.html">Accueil</a> <span>›</span> <strong>Japon</strong>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 id="country-title">Japon</h1>
+    <p id="country-summary" class="muted">Chargement...</p>
+
+    <h2>Prix par catégories</h2>
+    <div id="category-list" class="grid"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="y"></span> CombienCoûte – <a href="../sitemap.xml">Sitemap</a></p>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Récupère le slug pays depuis l’attribut du <html>
+    const countrySlug = document.documentElement.getAttribute('data-country-slug');
+
+    // Une fois data.js chargé, on peuple la page
+    window.addEventListener('DOMContentLoaded', () => {
+      const country = CC_DATA.utils.getCountryBySlug(countrySlug);
+      if (!country) {
+        document.getElementById('country-summary').textContent = "Pays introuvable dans les données.";
+        return;
+      }
+
+      document.title = `${country.name} – Prix & coût de la vie`;
+      document.getElementById('country-title').textContent = country.name;
+
+      // Petit résumé vs France si dispo
+      const summary = CC_DATA.utils.buildCountrySummary(country);
+      document.getElementById('country-summary').textContent = summary;
+
+      // Liste des catégories disponibles pour ce pays
+      const container = document.getElementById('category-list');
+      container.innerHTML = '';
+      Object.keys(country.categories).forEach((catSlug) => {
+        const product = CC_DATA.utils.getProductBySlug(catSlug);
+        const price = country.categories[catSlug];
+        const name = product ? product.name : CC_DATA.utils.toTitle(catSlug);
+
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = `../produit/${catSlug}.html?pays=${country.slug}`;
+        a.innerHTML = `<h3>${name}</h3><p>≈ ${CC_DATA.utils.formatEUR(price)} – en savoir plus</p>`;
+        container.appendChild(a);
+      });
+    });
+  </script>
+</body>
+</html>
