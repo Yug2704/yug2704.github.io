@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr" data-product-slug="lait">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lait – Comparatif par pays</title>
+  <meta name="description" content="Prix du lait par pays et lien retour vers la page pays sélectionnée.">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script defer src="../assets/data.js"></script>
+  <script defer src="../assets/script.js"></script>
+</head>
+<body>
+  <header class="sub-header">
+    <a class="logo" href="../index.html">€ CombienCoûte</a>
+    <nav class="breadcrumb">
+      <a href="../index.html">Accueil</a> <span>›</span> <strong>Lait</strong>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 id="product-title">Lait</h1>
+
+    <div id="context-return" class="context-return" hidden>
+      <span id="context-text"></span>
+      <a id="back-to-country" class="btn small" href="#">Retour : page pays</a>
+    </div>
+
+    <div class="table-wrap">
+      <table id="price-table" class="table">
+        <thead>
+          <tr>
+            <th>Pays</th>
+            <th>Prix</th>
+          </tr>
+        </thead>
+        <tbody><!-- rempli via JS --></tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="y"></span> CombienCoûte – <a href="../sitemap.xml">Sitemap</a></p>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    const productSlug = document.documentElement.getAttribute('data-product-slug');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const product = CC_DATA.utils.getProductBySlug(productSlug);
+      if (!product) return;
+
+      document.title = `${product.name} – Comparatif par pays`;
+      document.getElementById('product-title').textContent = product.name;
+
+      // Construit la table prix
+      const tbody = document.querySelector('#price-table tbody');
+      tbody.innerHTML = '';
+      CC_DATA.countries
+        .filter(c => c.categories[product.slug] != null)
+        .sort((a,b) => a.categories[product.slug] - b.categories[product.slug])
+        .forEach(country => {
+          const tr = document.createElement('tr');
+          const price = country.categories[product.slug];
+          tr.innerHTML = `
+            <td><a href="../pays/${country.slug}.html">${country.name}</a></td>
+            <td>${CC_DATA.utils.formatEUR(price)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      // Contexte ?pays=
+      const params = new URLSearchParams(location.search);
+      const cSlug = params.get('pays');
+      if (cSlug) {
+        const c = CC_DATA.utils.getCountryBySlug(cSlug);
+        if (c) {
+          const block = document.getElementById('context-return');
+          const ctx = document.getElementById('context-text');
+          const back = document.getElementById('back-to-country');
+          ctx.textContent = `Contexte : tu consultes « ${product.name} » pour ${c.name}.`;
+          back.href = `../pays/${c.slug}.html`;
+          block.hidden = false;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
