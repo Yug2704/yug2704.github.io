@@ -10,6 +10,39 @@
   <meta property="og:description" content="Comparatif avec la France et prix détaillés par panier de biens et services." />
   <link rel="canonical" href="." />
   <link rel="stylesheet" href="/assets/css/site.css" />
+
+  <!-- Styles spécifiques bannière + intro -->
+  <style>
+    .hero-banner{
+      width:100%;
+      height:260px;                 /* ajuste à 300–340px si tu veux plus d’impact */
+      background-size:cover;
+      background-position:center;
+      border-radius:14px;
+      margin:14px auto 18px;
+      box-shadow:0 1px 0 rgba(0,0,0,.03) inset;
+    }
+    @media (min-width: 900px){ .hero-banner{ height:300px; } }
+
+    .country-intro{
+      background:#fff;
+      border:1px solid var(--line,#e5e7eb);
+      border-radius:12px;
+      padding:18px;
+      margin-top:10px;
+    }
+    .country-intro p{ margin:0 0 10px; line-height:1.55; }
+    .country-intro ul{ margin:8px 0 4px 18px; }
+    .country-intro li{ margin:6px 0; }
+    .country-intro .muted{ color:var(--muted,#64748b); font-size:.95rem; }
+    .country-intro .pill{
+      display:inline-block; font-weight:600; padding:.1rem .5rem; border-radius:999px;
+      background:#f1f5f9; border:1px solid #e2e8f0; margin-left:.25rem;
+    }
+    .delta-ok{ color:#0a7f3f; }
+    .delta-bad{ color:#b42318; }
+  </style>
+
   <script>
     // util: charge un fragment HTML
     async function include(selector, url){
@@ -36,6 +69,12 @@
       "soda_canette": ["Soda (canette)","Prix d’une canette de soda"],
       "eau_petite": ["Bouteille d’eau (petite)","Prix d’une petite bouteille d’eau"]
     };
+
+    // Bannières par pays (fallback générique)
+    const HERO_IMAGES = {
+      "japon": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Mount_Fuji_banner_Fuji_and_cherry_blossoms.png"
+    };
+    const HERO_FALLBACK = "https://upload.wikimedia.org/wikipedia/commons/0/0e/Mount_Fuji_banner_Fuji_and_cherry_blossoms.png";
   </script>
 </head>
 <body>
@@ -43,30 +82,32 @@
   <div id="header-placeholder"></div>
 
   <main>
+    <!-- ===== BANNIÈRE LARGE ===== -->
+    <section class="hero-banner" id="hero-banner" role="img" aria-label="Paysage du Japon"></section>
+
     <section class="page-hero">
       <div class="container">
         <nav aria-label="Fil d’Ariane" class="muted" style="font-size:13px">
           <a href="/">Accueil</a> › <a href="/cout-de-la-vie/">Coût de la vie</a> › <span id="crumb-name">Japon</span>
         </nav>
         <h1 id="page-title">Coût de la vie au Japon en 2025 : tous les prix</h1>
-        <p class="lead" id="page-lead">
-          À partir d’une soixantaine de prix moyens, découvrez le coût de la vie au Japon comparé à la France.
-        </p>
+
+        <!-- Accroche chiffrée (inspirée de Combien-coûte) -->
+        <div class="country-intro" id="intro-rich">
+          <!-- contenu injecté dynamiquement -->
+        </div>
       </div>
     </section>
 
     <section class="container">
+      <!-- Ton résumé existant est conservé -->
       <div class="summary" id="summary">
         <div class="badge" id="headline"></div>
-        <ul class="bullets" id="bullets">
-          <!-- items injectés -->
-        </ul>
+        <ul class="bullets" id="bullets"></ul>
         <small class="muted">🕒 Dernière mise à jour : <span id="last-update">—</span></small>
       </div>
 
-      <div class="cards" id="cards">
-        <!-- cartes injectées -->
-      </div>
+      <div class="cards" id="cards"></div>
     </section>
   </main>
 
@@ -81,7 +122,47 @@
     // Lit le slug depuis l’URL (/cout-de-la-vie/<slug>/)
     const slug = location.pathname.replace(/\/$/,'').split('/').pop() || 'japon';
 
+    function setHero(slugVal){
+      const url = HERO_IMAGES[slugVal] || HERO_FALLBACK;
+      const hero = document.getElementById('hero-banner');
+      hero.style.backgroundImage = `url("${url}")`;
+    }
+
+    function buildIntro(node, ref){
+      // Données utilisées pour l’accroche
+      const delta = (node.headline && typeof node.headline.delta_vs_france_pct === 'number')
+        ? node.headline.delta_vs_france_pct : null;
+
+      const dej = node.meta?.dejeuner_moins_cher ?? node.basket?.dejeuner_restaurant ?? null;
+      const cine = node.meta?.place_de_cinema ?? null;
+      const loyer = node.meta?.loyer_centre_ville_50m2 ?? null;
+      const sal = node.meta?.salaire_mensuel_net ?? null;
+
+      // Comparatifs si on a la France
+      const baseDej = ref?.basket?.dejeuner_restaurant ?? null;
+      const dDej = (baseDej!=null && dej!=null) ? pctDiff(dej, baseDej) : null;
+
+      const parts = [];
+      // Paragraphe d’intro
+      parts.push(`<p>Découvrez le coût de la vie au <strong>${node.name}</strong> en 2025&nbsp;: logement, nourriture, transport, loisirs…
+      Comparez directement avec la France et explorez les différences entre Tokyo, Osaka ou Kyoto${delta!==null ? `.<span class="pill ${delta<=0?'delta-ok':'delta-bad'}">${delta>0?`+${delta}%`:`${delta}%`} vs France (moyenne)</span>` : ''}</p>`);
+
+      // Liste d’accroche chiffrée
+      const lines = [];
+      if (dej!=null) lines.push(`Un déjeuner au restaurant&nbsp;: <strong>${fmtEUR(dej)}</strong>${dDej?` – ${dDej.label} vs France`:''}`);
+      if (cine!=null) lines.push(`Une place de cinéma&nbsp;: <strong>${fmtEUR(cine)}</strong>`);
+      if (loyer!=null) lines.push(`Loyer ~50&nbsp;m² en centre-ville&nbsp;: <strong>${fmtEUR(loyer)}</strong> / mois`);
+      if (sal!=null) lines.push(`Salaire mensuel net moyen&nbsp;: <strong>${fmtEUR(sal)}</strong>`);
+      if (lines.length){
+        parts.push(`<ul>${lines.map(x=>`<li>${x}</li>`).join('')}</ul>`);
+      }
+      parts.push(`<p class="muted">Ces valeurs sont des ordres de grandeur issus de ta base (mises à jour automatiquement). Elles peuvent varier selon la ville et le quartier.</p>`);
+      return parts.join('');
+    }
+
     async function bootstrap(){
+      setHero(slug);
+
       const res = await fetch('/data/locations.json',{cache:'no-store'});
       const db = await res.json();
 
@@ -98,6 +179,9 @@
       document.getElementById('page-title').textContent = title;
       document.getElementById('crumb-name').textContent = node.name;
 
+      // Accroche chiffrée sous le titre
+      document.getElementById('intro-rich').innerHTML = buildIntro(node, ref);
+
       // Headline
       const head = document.getElementById('headline');
       if (node.headline && typeof node.headline.delta_vs_france_pct === 'number'){
@@ -107,7 +191,7 @@
         head.textContent = "Comparatif avec la France";
       }
 
-      // Bullets de résumé (exemple adaptés à tes captures)
+      // Bullets de résumé (section existante)
       const bullets = document.getElementById('bullets');
       bullets.innerHTML = "";
       const items = [];
@@ -118,12 +202,12 @@
       if (node.headline?.resume) items.unshift(node.headline.resume);
       bullets.innerHTML = items.map(x=>`<li>${x}</li>`).join("");
 
-      // Date MAJ (exposée au footer si besoin)
+      // Date MAJ
       const last = node.last_update || new Date().toLocaleDateString('fr-FR');
       document.getElementById('last-update').textContent = last;
       window.__pageLastUpdate = last;
 
-      // Cartes “restaurant / boissons” à la façon du screen
+      // Cartes
       const cards = document.getElementById('cards');
       cards.innerHTML = "";
       const order = ["dejeuner_restaurant","diner_3plats","menu_fastfood","biere_locale_05","biere_etrangere_033","cappuccino","soda_canette","eau_petite"];
