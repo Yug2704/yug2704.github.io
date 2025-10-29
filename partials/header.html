@@ -1,14 +1,18 @@
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="/" aria-label="Accueil Combien-coûte">
-      <span class="brand-badge">€</span>
-      <span class="brand-text">prix de la vie</span>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0">
+    <a href="/" class="brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit">
+      <span style="display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:999px;background:#f1f5f9;border:1px solid #e5e7eb;">€</span>
+      <strong>prix de la vie</strong>
     </a>
-    <nav class="main-nav" aria-label="Navigation principale">
-      <a href="/">Accueil</a>
-      <a href="/toutes-les-categories/">Toutes les catégories</a>
-      <a href="/cout-de-la-vie/">Coût de la vie</a>
-      <button class="btn-search" data-open-search aria-label="Rechercher">🔍</button>
+
+    <nav class="main-nav" style="display:flex;gap:18px;align-items:center">
+      <a href="/" style="text-decoration:none;color:inherit">Accueil</a>
+      <a href="/categories/" style="text-decoration:none;color:inherit">Toutes les catégories</a>
+      <a href="/cout-de-la-vie/" style="text-decoration:none;color:inherit">Coût de la vie</a>
+      <form action="/recherche" method="GET" style="margin:0">
+        <input name="q" aria-label="Recherche" placeholder="Rechercher" style="border:1px solid #e5e7eb;border-radius:10px;padding:6px 10px"/>
+      </form>
     </nav>
   </div>
+  <hr style="border:none;border-top:1px solid #f1f5f9;margin:0">
 </header>
