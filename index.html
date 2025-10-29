@@ -5,44 +5,68 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Prix de la vie – comparateur par pays et villes</title>
   <meta name="description" content="Comparez le coût de la vie par pays et par ville : repas, loyers, transports, cigarettes. Montants en euros.">
+
   <style>
-    :root{--line:#e5e7eb;--muted:#64748b}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;color:#111}
-    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+    :root{
+      --bg:#ffffff; --fg:#111827; --muted:#64748b; --line:#e5e7eb;
+      --accent:#ea580c; --accent-weak:#fff7ed; --card:#ffffff;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b0f14; --fg:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
+        --accent:#ff8a3d; --accent-weak:#2b190f; --card:#0f141a;
+      }
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);
+      padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
     header h1{margin:0;font-size:20px}
-    header nav a{margin-left:18px;text-decoration:none;color:#444;font-weight:500}
-    header nav a:hover{color:#ea580c}
-    .hero{background:linear-gradient(120deg,#f59e0b 0%,#ea580c 60%);color:#fff;text-align:center;padding:48px 16px}
+    header nav a{margin-left:18px;text-decoration:none;color:var(--fg);opacity:.85;font-weight:600}
+    header nav a:hover{color:var(--accent);opacity:1}
+
+    /* Hero */
+    .hero{
+      background:linear-gradient(120deg,#f59e0b 0%,var(--accent) 60%);
+      color:#fff;text-align:center;padding:48px 16px
+    }
     .hero h2{margin:0 0 8px;font-size:38px}
     .hero p{max-width:760px;margin:0 auto}
+
+    /* Search */
     .searchbox{margin-top:22px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-    .searchbox input,.searchbox select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;width:240px}
-    .searchbox button{background:#fff;color:#ea580c;border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:700;cursor:pointer}
-    .searchbox button:hover{background:#fff7ed;color:#b45309}
-    
+    .searchbox input,.searchbox select{
+      padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;width:260px;background:var(--card);color:var(--fg)
+    }
+    .searchbox button{
+      background:#fff;color:var(--accent);border:2px solid #fff;padding:12px 22px;border-radius:12px;font-weight:800;cursor:pointer
+    }
+    .searchbox button:hover{background:var(--accent-weak)}
+
     /* Suggestions */
     .suggestions{position:relative;max-width:760px;margin:8px auto 0}
     .suggest-list{
-      background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:6px;
-      box-shadow:0 6px 18px rgba(0,0,0,.06);
-      color:#111;                 /* <-- FORCE le texte en noir */
-      position:relative; z-index:20;
-      }
+      background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);position:relative;z-index:20;color:var(--fg)
+    }
     .suggest-item{
       display:flex;justify-content:space-between;align-items:center;
-      padding:10px 12px;border-radius:8px;cursor:pointer;
-      color:#111;                 /* <-- idem ici pour être sûr */
-      background:#fff;
-      }
-    .suggest-item:hover{background:#fff7ed}
-    .suggest-item small{color:#64748b}
+      padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--fg);background:var(--card)
+    }
+    .suggest-item:hover{background:var(--accent-weak)}
+    .suggest-item small{color:var(--muted)}
 
+    /* Main */
     main{max-width:900px;margin:60px auto;padding:0 20px}
     .grid{display:grid;gap:12px}
     .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .card{display:block;padding:16px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit}
-    .card:hover{background:#f9fafb}
-    footer{text-align:center;border-top:1px solid var(--line);padding:24px;color:#666}
+    .card{display:block;padding:16px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit;background:var(--card)}
+    .card:hover{background:rgba(0,0,0,.03)}
+    @media (prefers-color-scheme:dark){ .card:hover{background:#121a22}}
+
+    footer{text-align:center;border-top:1px solid var(--line);padding:24px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -60,8 +84,9 @@
   <h2>Comparez le coût de la vie 🌍</h2>
   <p>Entrez un <strong>pays</strong> (ex. Japon, France) pour voir un résumé national, ou une <strong>ville</strong> (ex. Tokyo, Paris) pour ses prix détaillés. Montants en euros.</p>
 
-  <div class="searchbox">
-    <input id="searchInput" type="text" placeholder="Exemples : Japon, France, Tokyo, Madrid…">
+  <div class="searchbox" role="search">
+    <input id="searchInput" type="text" inputmode="search" autocomplete="off"
+           placeholder="Exemples : Japon, France, Tokyo, Madrid…" aria-label="Rechercher un pays ou une ville">
     <select id="filterSelect" aria-label="Filtre (non bloquant)">
       <option value="all">Toutes catégories</option>
       <option value="restaurant">Repas au restaurant</option>
@@ -69,10 +94,10 @@
       <option value="transport">Transport</option>
       <option value="tabac">Cigarettes</option>
     </select>
-    <button id="searchBtn">Rechercher</button>
+    <button id="searchBtn" aria-label="Lancer la recherche">Rechercher</button>
   </div>
 
-  <div id="suggestions" class="suggestions"></div>
+  <div id="suggestions" class="suggestions" aria-live="polite"></div>
 </section>
 
 <main>
@@ -89,70 +114,67 @@
   © 2025 Prix de la vie — Montants en euros pour comparaison mondiale.
 </footer>
 
-<!-- ===== CONFIG SIMPLE : où sont tes pages ? ===== -->
+<!-- ========= ROUTAGE / AUTOCOMPLÉTION ========= -->
 <script>
-// Chemins des pages PUBLIÉES (tu m’as confirmé /countries/ pour les pays)
-const BASE_COUNTRIES = "/countries/"; // ✅ confirmé
-const BASE_CITIES    = "/cities/";    // 👈 change si besoin (ex. "/en/cities/")
+  // Toutes les pages pays/ville sont sous /cout-de-la-vie/<slug>/
+  const BASE = "/cout-de-la-vie/";
 
-// Liste des slugs (tout en minuscules, sans accents). Tu ajoutes/supprimes ici.
-const COUNTRIES = ["france","espagne","japon","italie","allemagne"];
-const CITIES    = ["paris","lyon","madrid","tokyo","osaka","rome","berlin"];
+  // 🔧 Liste minimale actuelle (élargis au fur et à mesure)
+  const COUNTRIES = ["japon","france","espagne"];  // ajoute: "italie","allemagne", etc.
+  const CITIES    = ["tokyo","paris","madrid","lyon"]; // à activer quand tu auras les pages villes
 
-// Construit l’URL interne automatiquement
-const urlCountry = slug => `${BASE_COUNTRIES}${slug}.html`;
-const urlCity    = slug => `${BASE_CITIES}${slug}.html`;
-</script>
+  const urlTo = (slug) => `${BASE}${slug}/`;
 
-<!-- Auto-complétion + redirection interne -->
-<script>
-(function(){
-  const $input  = document.getElementById('searchInput');
-  const $btn    = document.getElementById('searchBtn');
-  const $sugg   = document.getElementById('suggestions');
-
+  // Normalisation "japon" <= "Japon", "japôn "
   const norm = s => (s||"").normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase().trim();
   const cap  = s => s.charAt(0).toUpperCase()+s.slice(1);
 
-  function buildSuggestions(term){
-    const t = norm(term);
-    if(!t) return [];
-    const items = [];
-    COUNTRIES.forEach(slug=>{ if(slug.includes(t)) items.push({type:'pays',  label:cap(slug), url:urlCountry(slug)}); });
-    CITIES.forEach(slug=>{    if(slug.includes(t)) items.push({type:'ville', label:cap(slug), url:urlCity(slug)}); });
-    return items.slice(0,8);
-  }
+  (function(){
+    const $input  = document.getElementById('searchInput');
+    const $btn    = document.getElementById('searchBtn');
+    const $sugg   = document.getElementById('suggestions');
 
-  function renderSuggestions(term){
-    const items = buildSuggestions(term);
-    if(items.length===0){ $sugg.innerHTML=''; return; }
-    const box = document.createElement('div');
-    box.className = 'suggest-list';
-    items.forEach(it=>{
-      const row = document.createElement('div');
-      row.className = 'suggest-item';
-      row.innerHTML = `<span>${it.label}</span><small>${it.type}</small>`;
-      row.addEventListener('click', ()=> window.location.href = it.url);
-      box.appendChild(row);
-    });
-    $sugg.innerHTML = '';
-    $sugg.appendChild(box);
-  }
+    function buildSuggestions(term){
+      const t = norm(term);
+      if(!t) return [];
+      const items = [];
+      COUNTRIES.forEach(slug=>{ if(slug.includes(t)) items.push({type:'pays',  label:cap(slug), url:urlTo(slug)}); });
+      CITIES.forEach(slug=>{    if(slug.includes(t)) items.push({type:'ville', label:cap(slug), url:urlTo(slug)}); });
+      return items.slice(0,8);
+    }
 
-  function onSearch(){
-    const t = norm($input.value);
-    if(!t) return;
-    if (COUNTRIES.includes(t)) { window.location.href = urlCountry(t); return; }
-    if (CITIES.includes(t))    { window.location.href = urlCity(t);    return; }
-    const first = buildSuggestions(t)[0];
-    if(first){ window.location.href = first.url; return; }
-    $sugg.innerHTML = '<div class="suggest-list"><div class="suggest-item">Aucun résultat.</div></div>';
-  }
+    function renderSuggestions(term){
+      const items = buildSuggestions(term);
+      if(items.length===0){ $sugg.innerHTML=''; return; }
+      const box = document.createElement('div');
+      box.className = 'suggest-list';
+      items.forEach(it=>{
+        const row = document.createElement('div');
+        row.className = 'suggest-item';
+        row.innerHTML = `<span>${it.label}</span><small>${it.type}</small>`;
+        row.addEventListener('click', ()=> window.location.href = it.url);
+        box.appendChild(row);
+      });
+      $sugg.innerHTML = '';
+      $sugg.appendChild(box);
+    }
 
-  $input.addEventListener('input', e=> renderSuggestions(e.target.value));
-  $input.addEventListener('keydown', e=> { if(e.key==='Enter'){ e.preventDefault(); onSearch(); }});
-  $btn  .addEventListener('click', onSearch);
-})();
+    function onSearch(){
+      const t = norm($input.value);
+      if(!t) return;
+      // priorité aux correspondances exactes
+      if (COUNTRIES.includes(t)) { window.location.href = urlTo(t); return; }
+      if (CITIES.includes(t))    { window.location.href = urlTo(t); return; }
+      // sinon première suggestion
+      const first = buildSuggestions(t)[0];
+      if(first){ window.location.href = first.url; return; }
+      $sugg.innerHTML = '<div class="suggest-list"><div class="suggest-item">Aucun résultat.</div></div>';
+    }
+
+    $input.addEventListener('input', e=> renderSuggestions(e.target.value));
+    $input.addEventListener('keydown', e=> { if(e.key==='Enter'){ e.preventDefault(); onSearch(); }});
+    $btn  .addEventListener('click', onSearch);
+  })();
 </script>
 
 </body>
