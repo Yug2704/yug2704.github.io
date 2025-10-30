@@ -88,6 +88,30 @@ import categories from "../data/categories.json";
       }
       code{background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
       footer{border-top:1px solid var(--line);margin-top:28px}
+
+        /* --- Cases cliquables catégories --- */
+      .chips{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-top:14px;
+      }
+      .chip{
+        display:inline-block;
+        padding:8px 12px;
+        border-radius:999px;
+        background:var(--accent-100);
+        color:#a61b4d;
+        border:1px solid #ffd0df;
+        font-size:.95rem;
+        box-shadow: var(--shadow);
+        transition: all .15s ease;
+      }
+      .chip:hover{
+        filter:brightness(1.05);
+        transform:translateY(-1px);
+      }
+
     </style>
   </head>
   <body>
