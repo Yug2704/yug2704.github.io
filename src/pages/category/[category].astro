@@ -1,29 +1,24 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-// On génère 7 pages: /category/restaurant, /category/salaire, /category/loyer, /category/essence, /category/cinema, /category/hotel, /category/habiter
+// On génère 7 routes statiques
 const CATS = ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"];
-
 export function getStaticPaths() {
-  return CATS.map(slug => ({ params: { category: slug } }));
+  return CATS.map((slug) => ({ params: { category: slug } }));
 }
 
 const { category } = Astro.params;
-
-// (optionnel) récupérer le ?country=... si présent
 const country = Astro.url.searchParams.get("country") || null;
 
-// charger les JSON pays (pour afficher les chiffres ici si tu veux)
-const files = import.meta.glob("../../data/countries/*.json", { eager: true }) as Record<string, any>;
-const ALL = Object.values(files).map((m:any) => m.default ?? m);
+// Charger les pays
+const files = import.meta.glob("../../data/countries/*.json", { eager: true });
+const ALL = Object.values(files).map((m) => m.default ?? m);
 
-// trouves la France et le pays demandé
-const FR = ALL.find((c:any) => c.slug === "france");
-const C  = country ? ALL.find((c:any) => c.slug === country) : null;
+const FR = ALL.find((c) => c.slug === "france");
+const C  = country ? ALL.find((c) => c.slug === country) : null;
 
-// petit helper affichage
-function eur(n:number){ return n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
-function fmt(cat:string, v:number){ return cat==="habiter" ? String(v) : eur(v); }
+function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+function fmt(cat, v){ return cat==="habiter" ? String(v) : eur(v); }
 
 const title = country ? `Catégorie ${category} — ${country}` : `Catégorie ${category}`;
 ---
@@ -33,8 +28,8 @@ const title = country ? `Catégorie ${category} — ${country}` : `Catégorie ${
       {category} {country && <>— {country}</>}
     </h1>
     <p style="color:var(--muted);margin:0;">
-      Page catégorie. Tu peux afficher ici le prix pour le pays sélectionné,
-      la comparaison vs France, puis (plus tard) un top des pays moins chers / plus chers.
+      Page catégorie dynamique. Tu pourras afficher ici le prix du pays, la comparaison vs France
+      et plus tard un top des pays moins chers / plus chers.
     </p>
   </div>
 
@@ -45,12 +40,11 @@ const title = country ? `Catégorie ${category} — ${country}` : `Catégorie ${
         {(() => {
           const key = category === "salaire" ? "salaireNet"
                    : category === "habiter" ? "habiterIndex" : category;
-          const val = C.kpis[key];     // valeur pays
-          const ref = FR.kpis[key];    // valeur France
+          const val = C.kpis[key];
+          const ref = FR.kpis[key];
           if (val == null || ref == null) return "Donnée indisponible.";
           const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
-          const label = abs < 1 ? "similaire" : (pct < 0 ? `${abs.toFixed(0)}% moins cher` : `${abs.toFixed(0)}% plus cher`);
-          const color = pct < 0 ? "var(--green)" : (pct > 0 ? "var(--red)" : "var(--muted)");
+          const label = !isFinite(pct) ? "—" : abs < 1 ? "similaire" : (pct < 0 ? `${abs.toFixed(0)}% moins cher` : `${abs.toFixed(0)}% plus cher`);
           return `Prix/indice: ${fmt(category, val)} — En France: ${fmt(category, ref)} → ${label}`;
         })()}
       </p>
