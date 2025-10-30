@@ -1,0 +1,28 @@
+---
+const { icon="📌", label, value, frValue, diffHtml, categorySlug, countrySlug } = Astro.props;
+const href  = categorySlug ? `/category/${categorySlug}${countrySlug ? `?country=${countrySlug}` : ""}` : null;
+const probe = categorySlug ? `/category/${categorySlug}/index.html` : null;
+---
+<div class="card kpi" data-href={href || ""} data-probe={probe || ""} style="cursor:default;">
+  <div class="kpi-title">{icon} {label}</div>
+  <div class="kpi-value">{value}</div>
+  {frValue && <div class="kpi-sub">En France : {frValue}{diffHtml && <span set:html={" → " + diffHtml}></span>}</div>}
+</div>
+
+<style>
+  .kpi-title{display:flex;align-items:center;gap:.4rem}
+  .kpi-value{font-size:1.4rem;color:var(--accent);font-weight:600}
+  .kpi-sub{color:var(--muted);margin-top:6px}
+  .kpi-link{text-decoration:none;display:block}
+  .kpi-link:hover{box-shadow:0 6px 18px rgba(255,77,141,.12);transform:translateY(-1px);transition:.15s ease}
+</style>
+
+<script>
+  const el = document.currentScript.closest('.kpi');
+  const probe = el?.dataset?.probe, href = el?.dataset?.href;
+  if (probe && href) {
+    fetch(probe,{method:'HEAD'}).then(r=>{ if(r.ok){ const a=document.createElement('a');
+      a.href=href; a.className='card kpi-link'; a.innerHTML=el.innerHTML; el.replaceWith(a);
+    }});
+  }
+</script>
