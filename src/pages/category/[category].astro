@@ -1,21 +1,16 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-// ✅ Liste des catégories à générer
-const CATS = ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"];
-
-// ✅ Fonction qui crée les routes statiques
+// ✅ Routes statiques (pas de variable externe)
 export function getStaticPaths() {
-  return CATS.map((slug) => ({
-    params: { category: slug },
-  }));
+  const cats = ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"];
+  return cats.map((slug) => ({ params: { category: slug } }));
 }
 
-// ✅ Récupère le nom de la catégorie et du pays (si présent en query ?country=)
 const { category } = Astro.params;
 const country = Astro.url.searchParams.get("country") || null;
 
-// ✅ Charge les fichiers JSON de pays
+// Charger tous les pays (JSON)
 const files = import.meta.glob("../../data/countries/*.json", { eager: true });
 const ALL = Object.values(files).map((m) => m.default ?? m);
 
@@ -27,15 +22,14 @@ function fmt(cat, v){ return cat==="habiter" ? String(v) : eur(v); }
 
 const title = country ? `Catégorie ${category} — ${country}` : `Catégorie ${category}`;
 ---
-
 <BaseLayout title={title}>
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h1 style="margin:0 0 10px 0;font-size:1.6rem;">
       {category} {country && <>— {country}</>}
     </h1>
     <p style="color:var(--muted);margin:0;">
-      Page catégorie dynamique. Tu pourras afficher ici le prix du pays, la comparaison vs France,
-      et plus tard un top des pays moins chers / plus chers.
+      Page catégorie. Tu pourras afficher ici le prix du pays, la comparaison vs France,
+      puis (plus tard) un top des pays moins chers / plus chers.
     </p>
   </div>
 
