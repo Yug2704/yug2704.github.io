@@ -2,11 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import KpiCard from "../../components/KpiCard.astro";
 
-// Charge tous les JSON pays à la compilation (SSG)
+// ✅ Charger TOUS les JSON pays (défini AVANT getStaticPaths)
 const files = import.meta.glob("../../data/countries/*.json", { eager: true });
 const ALL = Object.values(files).map((m) => m.default ?? m);
 
-// Routes statiques : /country/<slug>
+// ✅ Routes statiques : /country/<slug>
 export function getStaticPaths() {
   return ALL.map((c) => ({
     params: { country: c.slug },
@@ -22,15 +22,14 @@ const isFrance = country.slug === "france";
 function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
 function diffLabel(val, ref){
   if (isFrance) return { text: "référence France", color: "var(--muted)" };
-  const pct = ((val - ref) / ref) * 100;
-  const abs = Math.abs(pct);
+  const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
   if (!isFinite(pct)) return { text: "—", color: "var(--muted)" };
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
   return pct < 0 ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
                  : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
-// Définition des KPI
+// KPI (ordre + libellés + icônes)
 const KPIS = [
   { key: "restaurant",   label: "Repas au restaurant",                     icon: "🍽️", fmt: eur },
   { key: "salaireNet",   label: "Salaire mensuel net moyen",               icon: "💰",  fmt: eur },
