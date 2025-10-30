@@ -1,36 +1,45 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-/* Données moyennes */
+/* ====== Données FR (référence) ====== */
 const FR = {
-  restaurant: 15.5,
-  salaireNet: 2150,
-  loyer: 800
-};
-const JP = {
-  restaurant: 9.8,
-  salaireNet: 1900,
-  loyer: 650
+  restaurant: 15.5,      // € repas moyen
+  salaireNet: 2150,      // € salaire mensuel net moyen
+  loyer: 800,            // € loyer 1ch centre-ville
+  essence: 1.90,         // € / L
+  cinema: 11.0,          // € la place
+  hotel: 100,            // € / nuit
+  habiterIndex: 100      // indice de référence (France = 100)
 };
 
-function pctVsFrance(valJP:number, valFR:number) {
+/* ====== Données JP (exemples) ======
+   Tu ajusteras librement ces chiffres plus tard. */
+const JP = {
+  restaurant: 9.8,       // €
+  salaireNet: 1900,      // €
+  loyer: 650,            // €
+  essence: 1.30,         // €
+  cinema: 10.7,          // €
+  hotel: 113,            // €  → ~13% plus cher que FR
+  habiterIndex: 82       // → ~18% moins cher que FR
+};
+
+function diffLabel(valJP:number, valFR:number) {
   const pct = ((valJP - valFR) / valFR) * 100;
   const abs = Math.abs(pct);
-  const label = abs < 5 ? "similaire" : (pct < 0 ? `${abs.toFixed(0)}% moins cher` : `${abs.toFixed(0)}% plus cher`);
-  const color = pct < 0 ? "var(--green)" : (pct > 0 ? "var(--red)" : "var(--muted)");
-  return `<span style="color:${color};font-weight:600">${label}</span>`;
+  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
+  return pct < 0
+    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)"   };
 }
-
 function eur(n:number){ return n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
 
 const title = "Prix de la vie au Japon (comparé à la France)";
 ---
-<BaseLayout title={title} description="Repas, salaires et loyers au Japon comparés à la France.">
+<BaseLayout title={title} description="Repas, salaires, loyers, essence, cinéma, hôtel et indice 'Habiter' au Japon — comparés à la France.">
   <style>
-    :root {
-      --red:#e03131;
-      --green:#2f9e44;
-    }
+    :root { --red:#e03131; --green:#2f9e44; }
+    .kpi-title{display:flex;align-items:center;gap:.4rem}
   </style>
 
   <!-- Bannière Japon -->
@@ -38,41 +47,86 @@ const title = "Prix de la vie au Japon (comparé à la France)";
     <img src="/banners/japon.jpg" alt="Bannière Japon" style="width:100%;height:220px;object-fit:cover;" />
   </div>
 
-  <!-- Bloc intro -->
+  <!-- Intro -->
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h1 style="margin:0 0 10px 0;font-size:1.8rem;">Japon 🇯🇵 — Comparé à la France</h1>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
-      Découvrez les principaux coûts de la vie au Japon, avec une comparaison directe
-      par rapport aux prix moyens observés en France. Les chiffres varient selon les
-      régions (Tokyo, Osaka, Kyoto), mais représentent une moyenne nationale réaliste.
+      Aperçu des coûts moyens au Japon, avec comparaison directe à la référence France.
+      Les valeurs varient selon les régions (Tokyo, Osaka, Kyoto), mais donnent une tendance nationale.
     </p>
   </div>
 
-  <!-- Cartes de prix -->
+  <!-- Chiffres clés -->
   <h2 style="margin-top:26px;">Chiffres clés (vs France)</h2>
   <div class="grid">
+    <!-- Restaurant -->
     <div class="card">
-      <div>🍽️ Repas au restaurant</div>
+      <div class="kpi-title">🍽️ Repas au restaurant</div>
       <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.restaurant)}</div>
-      <div style="color:var(--muted);margin-top:6px;">
-        En France : {eur(FR.restaurant)} → <span set:html={pctVsFrance(JP.restaurant, FR.restaurant)}></span>
-      </div>
+      {(() => {
+        const {text,color} = diffLabel(JP.restaurant, FR.restaurant);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.restaurant)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
     </div>
 
+    <!-- Salaire -->
     <div class="card">
-      <div>💰 Salaire mensuel net moyen</div>
+      <div class="kpi-title">💰 Salaire mensuel net moyen</div>
       <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.salaireNet)}</div>
-      <div style="color:var(--muted);margin-top:6px;">
-        En France : {eur(FR.salaireNet)} → <span set:html={pctVsFrance(JP.salaireNet, FR.salaireNet)}></span>
-      </div>
+      {(() => {
+        const {text,color} = diffLabel(JP.salaireNet, FR.salaireNet);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.salaireNet)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
     </div>
 
+    <!-- Loyer -->
     <div class="card">
-      <div>🏠 Loyer mensuel (1 chambre, centre-ville)</div>
+      <div class="kpi-title">🏠 Loyer mensuel (1 chambre, centre-ville)</div>
       <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.loyer)}</div>
-      <div style="color:var(--muted);margin-top:6px;">
-        En France : {eur(FR.loyer)} → <span set:html={pctVsFrance(JP.loyer, FR.loyer)}></span>
-      </div>
+      {(() => {
+        const {text,color} = diffLabel(JP.loyer, FR.loyer);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.loyer)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
+    </div>
+
+    <!-- Essence -->
+    <div class="card">
+      <div class="kpi-title">⛽ Essence (1 L)</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.essence)}</div>
+      {(() => {
+        const {text,color} = diffLabel(JP.essence, FR.essence);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.essence)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
+    </div>
+
+    <!-- Cinéma -->
+    <div class="card">
+      <div class="kpi-title">🎬 Cinéma (1 place)</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.cinema)}</div>
+      {(() => {
+        const {text,color} = diffLabel(JP.cinema, FR.cinema);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.cinema)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
+    </div>
+
+    <!-- Hôtel -->
+    <div class="card">
+      <div class="kpi-title">🛎️ Hôtel (1 nuit)</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.hotel)}</div>
+      {(() => {
+        const {text,color} = diffLabel(JP.hotel, FR.hotel);
+        return <div style={`color:var(--muted);margin-top:6px;`}>En France : {eur(FR.hotel)} → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
+    </div>
+
+    <!-- Indice “Habiter” -->
+    <div class="card">
+      <div class="kpi-title">🏡 Indice “Habiter”</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{JP.habiterIndex}</div>
+      {(() => {
+        const {text,color} = diffLabel(JP.habiterIndex, FR.habiterIndex);
+        return <div style={`color:var(--muted);margin-top:6px;`}>France = 100 → <strong style={`color:${color}`}>{text}</strong></div>
+      })()}
     </div>
   </div>
 </BaseLayout>
