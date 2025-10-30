@@ -2,11 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import KpiCard from "../../components/KpiCard.astro";
 
-// ✅ Charger tous les JSON (défini AVANT getStaticPaths)
+/* 1) Charger tous les JSON de pays (AVANT getStaticPaths) */
 const files = import.meta.glob("../../data/countries/*.json", { eager: true });
 const ALL = Object.values(files).map((m) => m.default ?? m);
 
-// ✅ Routes statiques (appelées pendant le build)
+/* 2) Générer les routes statiques : /country/<slug> */
 export function getStaticPaths() {
   return ALL.map((c) => ({
     params: { country: c.slug },
@@ -14,12 +14,12 @@ export function getStaticPaths() {
   }));
 }
 
-// Props
+/* 3) Données de la page */
 const { country } = Astro.props;
 const FR = ALL.find((c) => c.slug === "france");
 const isFrance = country.slug === "france";
 
-// Helpers
+/* Helpers */
 function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
 function diffLabel(val, ref){
   if (isFrance) return { text: "référence France", color: "var(--muted)" };
@@ -30,7 +30,7 @@ function diffLabel(val, ref){
                  : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
-// KPI
+/* KPI affichés */
 const KPIS = [
   { key:"restaurant",   label:"Repas au restaurant",                     icon:"🍽️", fmt:eur },
   { key:"salaireNet",   label:"Salaire mensuel net moyen",               icon:"💰",  fmt:eur },
@@ -41,13 +41,14 @@ const KPIS = [
   { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) },
 ];
 
-// Mapping pour redirection par catégorie
+/* Associer la clé KPI au slug de catégorie */
 function keyToCategorySlug(key){
   if (key === "salaireNet")   return "salaire";
   if (key === "habiterIndex") return "habiter";
-  return key;
+  return key; // restaurant, loyer, essence, cinema, hotel
 }
 
+/* Titre + bannière + textes */
 const title = isFrance
   ? "Prix de la vie en France (référence)"
   : `Prix de la vie en ${country.name} (comparé à la France)`;
@@ -77,7 +78,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     </p>
   </div>
 
-  <!-- Chiffres clés -->
+  <!-- Chiffres clés encadrés -->
   <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
   <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
     <div class="grid">
