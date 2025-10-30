@@ -2,11 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import KpiCard from "../../components/KpiCard.astro";
 
-// 1) Charger TOUS les JSON (AVANT getStaticPaths)
+// ✅ Charger tous les JSON (défini AVANT getStaticPaths)
 const files = import.meta.glob("../../data/countries/*.json", { eager: true });
 const ALL = Object.values(files).map((m) => m.default ?? m);
 
-// 2) Routes statiques
+// ✅ Routes statiques (appelées pendant le build)
 export function getStaticPaths() {
   return ALL.map((c) => ({
     params: { country: c.slug },
@@ -14,6 +14,7 @@ export function getStaticPaths() {
   }));
 }
 
+// Props
 const { country } = Astro.props;
 const FR = ALL.find((c) => c.slug === "france");
 const isFrance = country.slug === "france";
@@ -29,6 +30,7 @@ function diffLabel(val, ref){
                  : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
+// KPI
 const KPIS = [
   { key:"restaurant",   label:"Repas au restaurant",                     icon:"🍽️", fmt:eur },
   { key:"salaireNet",   label:"Salaire mensuel net moyen",               icon:"💰",  fmt:eur },
@@ -39,6 +41,7 @@ const KPIS = [
   { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) },
 ];
 
+// Mapping pour redirection par catégorie
 function keyToCategorySlug(key){
   if (key === "salaireNet")   return "salaire";
   if (key === "habiterIndex") return "habiter";
@@ -57,10 +60,12 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     .kpi-title{display:flex;gap:.4rem;align-items:center}
   </style>
 
+  <!-- Bannière -->
   <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
     <img src={bannerSrc} alt={`Bannière ${country.name}`} style="width:100%;height:220px;object-fit:cover;" />
   </div>
 
+  <!-- Intro -->
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
       {country.name} {isFrance ? "🇫🇷 — Référence" : "— Comparé à la France"}
@@ -72,6 +77,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     </p>
   </div>
 
+  <!-- Chiffres clés -->
   <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
   <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
     <div class="grid">
@@ -98,6 +104,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     </div>
   </div>
 
+  <!-- À propos -->
   <h2 style="margin-top:26px;">{aboutTitle}</h2>
   <div class="card" style="margin-top:10px;">
     {country.notes?.map((p, i) => (
