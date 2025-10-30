@@ -11,13 +11,13 @@ const title = "Prix de la vie – Accueil";
       :root{
         --bg:#ffffff;
         --text:#111827;
-        --muted:#6b7280;
+        --muted:#4b5563;
         --line:#e5e7eb;
         --card:#ffffff;
         --shadow:0 6px 18px rgba(17,24,39,.06);
         --accent:#ff4d8d;
         --accent-600:#ef437f;
-        --accent-100:#ffe0ea;
+        --accent-100:#fff1f6;  /* rose pâle du fond */
       }
       *{box-sizing:border-box}
       body{
@@ -64,7 +64,23 @@ const title = "Prix de la vie – Accueil";
         box-shadow:0 4px 12px rgba(255,77,141,.35);
       }
       .btn:hover{background:var(--accent-600)}
-      .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+      .intro{
+        background:var(--accent-100);
+        border-radius:16px;
+        padding:24px 20px;
+        box-shadow:var(--shadow);
+        margin-top:20px;
+      }
+      .intro h2{
+        margin:0 0 10px 0;
+      }
+      .intro p{
+        color:var(--muted);
+        font-size:1.02rem;
+        line-height:1.65;
+        margin:0;
+      }
+      .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:22px;}
       .card{
         background:var(--card);border:1px solid var(--line);
         border-radius:16px;padding:16px;box-shadow:var(--shadow);
@@ -97,14 +113,16 @@ const title = "Prix de la vie – Accueil";
         </div>
       </div>
 
-      <h2 style="margin-top:22px">Bienvenue sur Prix de la vie</h2>
-      <p style="color:var(--muted);max-width:720px;margin-top:4px;line-height:1.6;">
-        Découvrez les prix de la vie dans des dizaines de <strong>pays</strong> et de <strong>villes</strong> à travers le monde.
-        Chaque donnée est comparée à la <strong>France</strong> pour vous aider à visualiser les différences
-        de coût de la vie, que ce soit pour les <em>repas, logements, transports</em> ou produits du quotidien.
-      </p>
+      <div class="intro">
+        <h2>Bienvenue sur Prix de la vie</h2>
+        <p>
+          Découvrez les prix de la vie dans des dizaines de pays et de villes à travers le monde.
+          Chaque donnée est comparée à la France pour vous aider à visualiser les différences
+          de coût de la vie, que ce soit pour les repas, logements, transports ou produits du quotidien.
+        </p>
+      </div>
 
-      <div class="grid" style="margin-top:20px;">
+      <div class="grid">
         <div class="card">Ajoute des pages et données dans <code>src/pages</code> et <code>src/data</code>.</div>
         <div class="card">Le déploiement GitHub Pages est automatique.</div>
       </div>
