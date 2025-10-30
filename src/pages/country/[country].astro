@@ -3,54 +3,52 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import KpiCard from "../../components/KpiCard.astro";
 
 // Charge tous les JSON pays à la compilation (SSG)
-const files = import.meta.glob("../../data/countries/*.json", { eager: true }) as Record<string, any>;
-const ALL = Object.values(files).map((m: any) => m.default ?? m);
+const files = import.meta.glob("../../data/countries/*.json", { eager: true });
+const ALL = Object.values(files).map((m) => m.default ?? m);
 
-// Crée les routes statiques : /country/<slug>
+// Routes statiques : /country/<slug>
 export function getStaticPaths() {
-  return ALL.map((c: any) => ({
+  return ALL.map((c) => ({
     params: { country: c.slug },
     props: { country: c },
   }));
 }
 
 const { country } = Astro.props;
-const FR = ALL.find((c: any) => c.slug === "france");
+const FR = ALL.find((c) => c.slug === "france");
 const isFrance = country.slug === "france";
 
-// Helpers affichage
-function eur(n: number) {
-  return n.toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
-}
-function diffLabel(val: number, ref: number) {
+// Helpers
+function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+function diffLabel(val, ref){
   if (isFrance) return { text: "référence France", color: "var(--muted)" };
   const pct = ((val - ref) / ref) * 100;
   const abs = Math.abs(pct);
+  if (!isFinite(pct)) return { text: "—", color: "var(--muted)" };
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-  return pct < 0
-    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
+  return pct < 0 ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+                 : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
-// Définition des KPI (ordre + libellés + icônes)
+// Définition des KPI
 const KPIS = [
-  { key: "restaurant",   label: "Repas au restaurant",                         icon: "🍽️", fmt: eur },
-  { key: "salaireNet",   label: "Salaire mensuel net moyen",                   icon: "💰",  fmt: eur },
-  { key: "loyer",        label: "Loyer mensuel (1 chambre, centre-ville)",     icon: "🏠",  fmt: eur },
-  { key: "essence",      label: "Essence (1 L)",                                icon: "⛽",  fmt: eur },
-  { key: "cinema",       label: "Cinéma (1 place)",                             icon: "🎬",  fmt: eur },
-  { key: "hotel",        label: "Hôtel (1 nuit)",                               icon: "🛎️", fmt: eur },
-  { key: "habiterIndex", label: "Indice “Habiter”",                              icon: "🏡",  fmt: (n: number) => String(n) },
+  { key: "restaurant",   label: "Repas au restaurant",                     icon: "🍽️", fmt: eur },
+  { key: "salaireNet",   label: "Salaire mensuel net moyen",               icon: "💰",  fmt: eur },
+  { key: "loyer",        label: "Loyer mensuel (1 chambre, centre-ville)", icon: "🏠",  fmt: eur },
+  { key: "essence",      label: "Essence (1 L)",                            icon: "⛽",  fmt: eur },
+  { key: "cinema",       label: "Cinéma (1 place)",                         icon: "🎬",  fmt: eur },
+  { key: "hotel",        label: "Hôtel (1 nuit)",                           icon: "🛎️", fmt: eur },
+  { key: "habiterIndex", label: "Indice “Habiter”",                          icon: "🏡",  fmt: (n)=>String(n) },
 ];
 
-// Mapping clé KPI -> slug de catégorie (pour les liens)
-const keyToCategorySlug = (key: string) => {
+// Map clé KPI -> slug catégorie
+function keyToCategorySlug(key){
   if (key === "salaireNet")   return "salaire";
   if (key === "habiterIndex") return "habiter";
   return key; // restaurant, loyer, essence, cinema, hotel
-};
+}
 
-// Titre + bannière (bannière personnalisée si fournie, sinon fallback)
+// Titre + bannière
 const title = isFrance
   ? "Prix de la vie en France (référence)"
   : `Prix de la vie en ${country.name} (comparé à la France)`;
@@ -84,7 +82,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
   <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
   <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
     <div class="grid">
-      {KPIS.map(k => {
+      {KPIS.map((k) => {
         const val   = country.kpis[k.key];
         const ref   = FR.kpis[k.key];
         const diff  = diffLabel(val, ref);
@@ -92,7 +90,6 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
         const frVal = k.key === "habiterIndex" ? "France = 100" : (k.fmt ? k.fmt(ref) : String(ref));
         const diffHtml = isFrance ? null : `<strong style="color:${diff.color}">${diff.text}</strong>`;
         const categorySlug = keyToCategorySlug(k.key);
-
         return (
           <KpiCard
             icon={k.icon}
@@ -108,10 +105,10 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     </div>
   </div>
 
-  <!-- À propos / À savoir -->
+  <!-- À propos -->
   <h2 style="margin-top:26px;">{aboutTitle}</h2>
   <div class="card" style="margin-top:10px;">
-    {country.notes?.map((p: string, i: number) => (
+    {country.notes?.map((p, i) => (
       <p style={`color:var(--muted);line-height:1.7;${i===0?"margin-top:0;":""}${i===country.notes.length-1?"margin-bottom:0;":""}`}>{p}</p>
     ))}
   </div>
