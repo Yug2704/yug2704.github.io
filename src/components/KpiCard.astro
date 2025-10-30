@@ -1,6 +1,7 @@
 ---
-const { icon="📌", label, value, frValue, diffHtml, categorySlug, countrySlug } = Astro.props;
+const { icon = "📌", label, value, frValue, diffHtml, categorySlug, countrySlug } = Astro.props;
 const href  = categorySlug ? `/category/${categorySlug}${countrySlug ? `?country=${countrySlug}` : ""}` : null;
+// On teste l’existence de la route statique (sans query)
 const probe = categorySlug ? `/category/${categorySlug}/index.html` : null;
 ---
 <div class="card kpi" data-href={href || ""} data-probe={probe || ""} style="cursor:default;">
@@ -19,10 +20,16 @@ const probe = categorySlug ? `/category/${categorySlug}/index.html` : null;
 
 <script>
   const el = document.currentScript.closest('.kpi');
-  const probe = el?.dataset?.probe, href = el?.dataset?.href;
+  const probe = el?.dataset?.probe;
+  const href  = el?.dataset?.href;
   if (probe && href) {
-    fetch(probe,{method:'HEAD'}).then(r=>{ if(r.ok){ const a=document.createElement('a');
-      a.href=href; a.className='card kpi-link'; a.innerHTML=el.innerHTML; el.replaceWith(a);
-    }});
+    fetch(probe, { method: 'HEAD' })
+      .then(r => { if (r.ok) {
+        const a = document.createElement('a');
+        a.href = href;
+        a.className = 'card kpi-link';
+        a.innerHTML = el.innerHTML;
+        el.replaceWith(a);
+      }});
   }
 </script>
