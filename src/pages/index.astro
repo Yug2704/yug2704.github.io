@@ -123,6 +123,13 @@ import categories from "../data/categories.json";
         </p>
       </div>
 
+      <!-- Catégories cliquables -->
+      <div class="chips">
+        {categories.map(cat => (
+          <a class="chip" href={`/category/${cat.slug}`}>{cat.name}</a>
+        ))}
+      </div>
+
       <div class="grid">
         <div class="card">Ajoute des pages et données dans <code>src/pages</code> et <code>src/data</code>.</div>
         <div class="card">Le déploiement GitHub Pages est automatique.</div>
