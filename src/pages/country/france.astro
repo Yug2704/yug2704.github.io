@@ -1,44 +1,46 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-const title = "Prix de la vie en France";
+
+const FR = {
+  restaurant: 15.5,
+  salaireNet: 2150,
+  loyer: 800,
+  essence: 1.90,
+  cinema: 11.0,
+  hotel: 100,
+  habiterIndex: 100
+};
+
+function eur(n:number){ return n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+
+const title = "Prix de la vie en France (référence)";
 ---
-<BaseLayout title={title} description="Prix moyens en France : restaurants, salaires et loyers. Page de référence utilisée pour comparer les autres pays.">
+<BaseLayout title={title} description="Page de référence France : repas, salaires, loyers, essence, cinéma, hôtel et indice 'Habiter'.">
   <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
     <img src="/banners/france.jpg" alt="Bannière France" style="width:100%;height:220px;object-fit:cover;" />
   </div>
 
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
-    <h1 style="margin:0 0 10px 0;font-size:1.8rem;">La vie en France 🇫🇷</h1>
+    <h1 style="margin:0 0 10px 0;font-size:1.8rem;">France 🇫🇷 — Référence</h1>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
-      Contrairement aux autres pages du site, celle-ci présente les prix de référence utilisés pour comparer les autres pays.
-      Les coûts varient selon les régions (Paris, Lyon, Marseille…), mais les chiffres ci-dessous donnent une bonne moyenne nationale.
+      Cette page présente les valeurs de référence utilisées pour comparer les autres pays.
+      Les montants ci-dessous correspondent à des moyennes nationales (les villes peuvent varier).
     </p>
   </div>
 
-  <h2 style="margin-top:26px;">Quelques chiffres clés</h2>
+  <h2 style="margin-top:26px;">Chiffres clés (référence France)</h2>
   <div class="grid">
-    <div class="card">
-      <div>🍽️ Repas au restaurant</div>
-      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">15,50 €</div>
-      <div style="color:var(--muted);margin-top:6px;">Prix moyen d’un repas pour une personne</div>
-    </div>
-    <div class="card">
-      <div>💰 Salaire mensuel net moyen</div>
-      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">2 150 €</div>
-      <div style="color:var(--muted);margin-top:6px;">Estimation du revenu net mensuel moyen</div>
-    </div>
-    <div class="card">
-      <div>🏠 Loyer mensuel (1 chambre, centre-ville)</div>
-      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">800 €</div>
-      <div style="color:var(--muted);margin-top:6px;">En moyenne, dans les grandes villes françaises</div>
-    </div>
+    <div class="card"><div>🍽️ Repas au restaurant</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.restaurant)}</div></div>
+    <div class="card"><div>💰 Salaire mensuel net moyen</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.salaireNet)}</div></div>
+    <div class="card"><div>🏠 Loyer mensuel (1 chambre, centre-ville)</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.loyer)}</div></div>
+    <div class="card"><div>⛽ Essence (1 L)</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.essence)}</div></div>
+    <div class="card"><div>🎬 Cinéma (1 place)</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.cinema)}</div></div>
+    <div class="card"><div>🛎️ Hôtel (1 nuit)</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(FR.hotel)}</div></div>
+    <div class="card"><div>🏡 Indice “Habiter”</div><div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{FR.habiterIndex}</div><div style="color:var(--muted);margin-top:6px;">France = 100 (référence)</div></div>
   </div>
 
   <!-- Espace futur pour catégories FR -->
   <div class="chips" style="margin-top:18px;">
-    <!-- Exemples à activer plus tard :
-    <a class="chip" href="/category/restaurant">Restaurant</a>
-    <a class="chip" href="/category/lait">Lait</a>
-    -->
+    <!-- Quand tu auras des pages catégories, on activera des liens ici -->
   </div>
 </BaseLayout>
