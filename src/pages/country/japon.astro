@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+/* =======================
+   Données moyennes (exemples)
+   ======================= */
+const FR = {
+  restaurant: 15.5,      // € repas moyen
+  salaireNet: 2150,      // € salaire mensuel net moyen
+  loyer: 800             // € loyer 1ch centre-ville
+};
+const JP = {
+  restaurant: 9.8,       // €
+  salaireNet: 1900,      // €
+  loyer: 650             // €
+};
+
+function pctVsFrance(valJP:number, valFR:number) {
+  const pct = ((valJP - valFR) / valFR) * 100;
+  const sign = pct >= 0 ? "+" : "";
+  const abs = Math.abs(pct);
+  const texte = abs < 5 ? "similaire" : (pct < 0 ? `${abs.toFixed(0)}% moins cher` : `${abs.toFixed(0)}% plus cher`);
+  return texte;
+}
+function eur(n:number){ return n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+
+const title = "Prix de la vie au Japon (comparé à la France)";
+---
+<BaseLayout title={title} description="Repas, salaires et loyers au Japon comparés à la France.">
+  
+  <!-- Bannière Japon -->
+  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+    <img src="/banners/japon.jpg" alt="Bannière Japon" style="width:100%;height:220px;object-fit:cover;" />
+  </div>
+
+  <!-- Bloc d’introduction -->
+  <div class="card" style="background:var(--accent-100);margin-top:20px;">
+    <h1 style="margin:0 0 10px 0;font-size:1.8rem;">Japon 🇯🇵 — Comparé à la France</h1>
+    <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
+      Découvrez les principaux coûts de la vie au Japon, avec une comparaison directe
+      par rapport aux prix moyens observés en France. Les chiffres varient selon les
+      régions (Tokyo, Osaka, Kyoto), mais représentent une moyenne nationale réaliste.
+    </p>
+  </div>
+
+  <!-- Cartes de prix -->
+  <h2 style="margin-top:26px;">Chiffres clés (vs France)</h2>
+  <div class="grid">
+    <div class="card">
+      <div>🍽️ Repas au restaurant</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.restaurant)}</div>
+      <div style="color:var(--muted);margin-top:6px;">
+        En France : {eur(FR.restaurant)} → {pctVsFrance(JP.restaurant, FR.restaurant)}
+      </div>
+    </div>
+
+    <div class="card">
+      <div>💰 Salaire mensuel net moyen</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.salaireNet)}</div>
+      <div style="color:var(--muted);margin-top:6px;">
+        En France : {eur(FR.salaireNet)} → {pctVsFrance(JP.salaireNet, FR.salaireNet)}
+      </div>
+    </div>
+
+    <div class="card">
+      <div>🏠 Loyer mensuel (1 chambre, centre-ville)</div>
+      <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{eur(JP.loyer)}</div>
+      <div style="color:var(--muted);margin-top:6px;">
+        En France : {eur(FR.loyer)} → {pctVsFrance(JP.loyer, FR.loyer)}
+      </div>
+    </div>
+  </div>
+
+  <!-- (futur espace pour catégories) -->
+  <div class="chips" style="margin-top:18px;">
+    <!-- Exemple à activer plus tard :
+    <a class="chip" href="/category/restaurant">Restaurant</a>
+    -->
+  </div>
+</BaseLayout>
