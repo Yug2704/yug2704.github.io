@@ -8,20 +8,123 @@ const title = "Prix de la vie – Accueil";
     <title>{title}</title>
     <meta name="description" content="Comparez les prix par pays et par catégories — toujours vs France." />
     <style>
-      :root{--bg:#0b0c10;--card:#111318;--text:#e6e8ec;--muted:#98a2b3;--accent:#ff2b6a;--line:#1f2430}
+      :root{
+        /* Thème clair */
+        --bg:#ffffff;
+        --text:#111827;          /* gris très foncé */
+        --muted:#6b7280;         /* gris moyen */
+        --line:#e5e7eb;          /* gris très clair (bordures) */
+        --card:#ffffff;
+        --shadow: 0 6px 18px rgba(17,24,39,.06);
+
+        /* Rose chaleureux */
+        --accent:#ff4d8d;        /* rose principal */
+        --accent-600:#ef437f;    /* hover */
+        --accent-100:#ffe0ea;    /* fond pâle */
+      }
+
       *{box-sizing:border-box}
-      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto;background:var(--bg);color:var(--text)}
+      body{
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+        background:var(--bg);
+        color:var(--text);
+      }
       .container{max-width:1100px;margin:0 auto;padding:16px}
-      header{border-bottom:1px solid var(--line)}
-      .pill{background:#171923;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);text-decoration:none}
-      .banner{margin:12px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden}
-      .banner img{width:100%;height:180px;object-fit:cover}
-      .search{display:flex;gap:8px;background:#0f1117;border:1px solid var(--line);border-radius:999px;padding:8px 10px;align-items:center}
-      .search input{flex:1;background:transparent;border:none;color:var(--text);outline:none}
-      .btn{display:inline-block;padding:.65rem 1rem;border-radius:999px;background:var(--accent);color:white;text-decoration:none}
-      .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-      .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-      footer{border-top:1px solid var(--line);margin-top:24px}
+
+      header{
+        position:sticky; top:0; background:#fffcc;
+        background: #ffffffcc;
+        backdrop-filter: saturate(1.2) blur(6px);
+        border-bottom:1px solid var(--line);
+        z-index:10;
+      }
+      a{color:inherit;text-decoration:none}
+
+      /* Pills nav (clair) */
+      .pill{
+        background:#f8fafc;
+        border:1px solid var(--line);
+        border-radius:999px;
+        padding:6px 12px;
+        color:var(--muted);
+      }
+      .pill:hover{background:#f1f5f9}
+
+      /* Bannière */
+      .banner{
+        margin:18px 0;
+        border:1px solid var(--line);
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow: var(--shadow);
+      }
+      .banner img{width:100%;height:220px;object-fit:cover}
+
+      /* Ruban rose derrière la barre de recherche */
+      .search-wrap{
+        position:relative;
+        margin-top:-22px; /* remonte sous la bannière */
+        padding:10px 0;
+      }
+      .ribbon{
+        position:absolute; inset:0;
+        height:64px;
+        margin:auto;
+        left:8px; right:8px;
+        background: linear-gradient(90deg, #ffc2d5, #ff8db2, #ffc2d5);
+        border-radius:999px;
+        filter: blur(10px) saturate(1.1);
+        opacity:.7;
+        z-index:0;
+      }
+
+      /* Barre de recherche (sur le ruban) */
+      .search{
+        position:relative; z-index:1;
+        display:flex; gap:8px; align-items:center;
+        background:#ffffff;
+        border:1px solid var(--line);
+        border-radius:999px;
+        padding:10px 12px;
+        box-shadow: var(--shadow);
+      }
+      .search input{
+        flex:1; background:transparent; border:none; outline:none; color:var(--text);
+      }
+      .btn{
+        display:inline-block; padding:.65rem 1rem; border-radius:999px;
+        background:var(--accent); color:#fff; border:1px solid transparent;
+        box-shadow: 0 4px 12px rgba(255,77,141,.35);
+      }
+      .btn:hover{ background:var(--accent-600) }
+
+      /* Grille & cartes (clair) */
+      .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+      .card{
+        background:var(--card);
+        border:1px solid var(--line);
+        border-radius:16px;
+        padding:16px;
+        box-shadow: var(--shadow);
+      }
+      code{background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+
+      footer{
+        border-top:1px solid var(--line);
+        margin-top:28px;
+      }
+
+      /* Petit badge rose pâle réutilisable */
+      .tag{
+        display:inline-block;
+        padding:6px 10px;
+        border-radius:999px;
+        background:var(--accent-100);
+        color:#a61b4d;
+        border:1px solid #ffd0df;
+        font-size:.92rem;
+      }
     </style>
   </head>
   <body>
@@ -36,16 +139,21 @@ const title = "Prix de la vie – Accueil";
     </header>
 
     <main class="container">
+      <!-- Bannière -->
       <div class="banner">
         <img src="/banners/france.jpg" alt="Bannière" />
       </div>
 
-      <div class="search">
-        <input id="q" placeholder="Rechercher (ex: Japon, Tokyo, Lait, Japon-lait)" />
-        <a class="btn" id="go" href="#">Rechercher</a>
+      <!-- Banderole rose + recherche -->
+      <div class="search-wrap">
+        <div class="ribbon" aria-hidden="true"></div>
+        <div class="search">
+          <input id="q" placeholder="Rechercher (ex: Japon, Tokyo, Lait, Japon-lait)" />
+          <a class="btn" id="go" href="#">Rechercher</a>
+        </div>
       </div>
 
-      <h2 style="margin-top:18px">Bienvenue sur Prix de la vie</h2>
+      <h2 style="margin-top:22px">Bienvenue sur Prix de la vie <span class="tag">nouvelle DA</span></h2>
       <div class="grid">
         <div class="card">Ajoute des pages et données dans <code>src/pages</code> et <code>src/data</code>.</div>
         <div class="card">Le déploiement GitHub Pages est automatique.</div>
@@ -58,5 +166,22 @@ const title = "Prix de la vie – Accueil";
         <a class="pill" href="/sitemap.xml">sitemap</a>
       </div>
     </footer>
+
+    <script>
+      const q = document.getElementById('q');
+      const go = document.getElementById('go');
+      function openBestMatch(){
+        const term = (q.value||"").toLowerCase().trim();
+        if(!term) return;
+        if(term.includes('-')){ const [a,b] = term.split('-'); location.href = `/country/${a}/${b}`; return; }
+        // Tentative simple : /country/<term> sinon /category/<term>
+        fetch(`/country/${term}/index.html`, {method:'HEAD'}).then(r=>{
+          if(r.ok) location.href = `/country/${term}`;
+          else location.href = `/category/${term}`;
+        }).catch(()=> location.href = `/category/${term}`);
+      }
+      go.addEventListener('click', (e)=>{ e.preventDefault(); openBestMatch(); });
+      q.addEventListener('keydown', (e)=>{ if(e.key==='Enter') openBestMatch(); });
+    </script>
   </body>
 </html>
