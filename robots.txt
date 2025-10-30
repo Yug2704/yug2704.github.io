@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-# Empêche l’indexation des fichiers techniques
-Disallow: /assets/
-
-Sitemap: https://yug2704.github.io/sitemap.xml
