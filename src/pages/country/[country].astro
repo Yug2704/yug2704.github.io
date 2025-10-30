@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// Charge tous les JSON pays à la compilation (SSG)
+const files = import.meta.glob("../../data/countries/*.json", { eager: true }) as Record<string, any>;
+const ALL = Object.values(files).map((m:any) => m.default ?? m);
+
+// Crée les routes statiques : /country/<slug>
+export function getStaticPaths() {
+  return ALL.map((c:any) => ({
+    params: { country: c.slug },
+    props: { country: c }
+  }));
+}
+
+const { country } = Astro.props;
+const FR = ALL.find((c:any) => c.slug === "france");
+const isFrance = country.slug === "france";
+
+function eur(n:number){ return n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+function diffLabel(val:number, ref:number){
+  if (isFrance) return { text: "référence France", color: "var(--muted)" };
+  const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
+  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
+  return pct < 0 ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+                 : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
+}
+
+const KPIS = [
+  { key:"restaurant",   label:"Repas au restaurant", icon:"🍽️",   fmt:eur },
+  { key:"salaireNet",   label:"Salaire mensuel net moyen", icon:"💰", fmt:eur },
+  { key:"loyer",        label:"Loyer mensuel (1 chambre, centre-ville)", icon:"🏠", fmt:eur },
+  { key:"essence",      label:"Essence (1 L)", icon:"⛽", fmt:eur },
+  { key:"cinema",       label:"Cinéma (1 place)", icon:"🎬", fmt:eur },
+  { key:"hotel",        label:"Hôtel (1 nuit)", icon:"🛎️", fmt:eur },
+  { key:"habiterIndex", label:"Indice “Habiter”", icon:"🏡", fmt:(n:number)=>String(n) }
+];
+
+// Titre + bannière (bannière personnalisée si fournie, sinon fallback)
+const title = isFrance
+  ? "Prix de la vie en France (référence)"
+  : `Prix de la vie en ${country.name} (comparé à la France)`;
+const bannerSrc = country.banner || `/banners/${country.slug}.jpg`;
+const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
+---
+<BaseLayout title={title}>
+  <style>:root{--red:#e03131;--green:#2f9e44}.kpi-title{display:flex;gap:.4rem;align-items:center}</style>
+
+  <!-- Bannière -->
+  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+    <img src={bannerSrc} alt={`Bannière ${country.name}`} style="width:100%;height:220px;object-fit:cover;" />
+  </div>
+
+  <!-- Intro -->
+  <div class="card" style="background:var(--accent-100);margin-top:20px;">
+    <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
+      {country.name} {isFrance ? "🇫🇷 — Référence" : "— Comparé à la France"}
+    </h1>
+    <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
+      {isFrance
+        ? "Cette page présente les valeurs de référence utilisées pour comparer les autres pays."
+        : "Aperçu des coûts moyens avec comparaison directe à la référence France. Les valeurs peuvent varier selon la ville."}
+    </p>
+  </div>
+
+  <!-- Chiffres clés encadrés -->
+  <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
+  <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
+    <div class="grid">
+      {KPIS.map(k => {
+        const val  = country.kpis[k.key];
+        const ref  = FR.kpis[k.key];
+        const diff = diffLabel(val, ref);
+        const value = k.fmt ? k.fmt(val) : String(val);
+        const refText = k.key === "habiterIndex" ? "France = 100" : (k.fmt ? k.fmt(ref) : String(ref));
+        return (
+          <div class="card">
+            <div class="kpi-title">{k.icon} {k.label}</div>
+            <div style="font-size:1.4rem;color:var(--accent);font-weight:600;">{value}</div>
+            <div style="color:var(--muted);margin-top:6px;">
+              {isFrance ? "France" : "En France"} : {refText}
+              {!isFrance && <> → <strong style={`color:${diff.color}`}>{diff.text}</strong></>}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- À propos / À savoir -->
+  <h2 style="margin-top:26px;">{aboutTitle}</h2>
+  <div class="card" style="margin-top:10px;">
+    {country.notes?.map((p:string, i:number) => (
+      <p style={`color:var(--muted);line-height:1.7;${i===0?"margin-top:0;":""}${i===country.notes.length-1?"margin-bottom:0;":""}`}>{p}</p>
+    ))}
+  </div>
+</BaseLayout>
