@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  output: 'static', // Génère un site 100% statique
-  site: 'https://tonpseudo.github.io', // 🔁 remplace par ton URL exacte
+  output: 'static',
+  site: 'https://yug2704.github.io', // ✅ ton URL exacte
 });
