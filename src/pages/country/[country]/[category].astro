@@ -1,14 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Charger tous les JSON pays (depuis src/data/countries) */
-const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
-
-/* 2) Liste des catégories (ex: ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]) */
-import cats from "../../../data/categories.json";
-
-/* 3) Mapping slug catégorie -> clé dans les JSON kpis */
-const keyByCategory: Record<string,string> = {
+/* 1) Slug → clé KPI */
+const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -18,21 +12,27 @@ const keyByCategory: Record<string,string> = {
   habiter: "habiterIndex",
 };
 
-/* 4) Routes statiques : toutes les combinaisons pays x catégorie existantes */
-export function getStaticPaths() {
-  // IMPORTANT : nom en MAJUSCULES partout
-  const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
-  const FR = COUNTRIES.find((c:any) => c.slug === "france");
+/* 2) Génération des routes (tout est calculé *dans* la fonction) */
+export async function getStaticPaths() {
+  // charge tous les pays
+  const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
+  const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
+
+  // charge la liste des catégories
+  const catsMod = await import("../../../data/categories.json");
+  const cats: string[] = (catsMod as any).default ?? (catsMod as any);
+
+  // France de référence
+  const FR = COUNTRIES.find((c: any) => c.slug === "france");
 
   const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
       const key = keyByCategory[cat];
-      // On ne génère la page que si la KPI existe
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props:  { country: c, category: cat, FR },
+          props: { country: c, category: cat, FR },
         });
       }
     }
@@ -40,81 +40,82 @@ export function getStaticPaths() {
   return paths;
 }
 
-/* 5) Données de la page (provenant de getStaticPaths) */
-const { country, category, FR } = Astro.props as { country:any; category:string; FR:any; };
-const isFrance = country.slug === "france";
-const key = keyByCategory[category];
-const val = country.kpis[key];
-const ref = FR?.kpis?.[key];
+/* 3) Props de page */
+const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
 
-/* Helpers d'affichage */
-function eur(n:number){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
-
-function diffLabel(val:number, ref?: number){
-  if (isFrance) return { text: "référence France", color: "var(--muted)" };
-  if (ref == null || val == null) return { text: "–", color: "var(--muted)" };
-
+/* 4) Helpers d'affichage */
+function eur(n?: number | null) {
+  if (n == null) return "";
+  return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+}
+function diffLabel(val?: number | null, ref?: number | null) {
+  if (country.slug === "france") return { text: "référence France", color: "var(--muted)" };
+  if (val == null || ref == null) return { text: "–", color: "var(--muted)" };
   const pct = ((val - ref) / ref) * 100;
   const abs = Math.abs(pct);
-
   if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-
   return pct < 0
     ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)"   };
+    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
 }
 
-/* Libellés simples */
-const labels: Record<string,string> = {
+/* 5) Libellés */
+const labels: Record<string, string> = {
   restaurant: "Repas au restaurant",
-  salaire:    "Salaire mensuel net moyen",
-  loyer:      "Loyer mensuel (1 chambre, centre-ville)",
-  essence:    "Essence (L)",
-  cinema:     "Cinéma (1 place)",
-  hotel:      "Hôtel (1 nuit)",
-  habiter:    "Indice « Habiter »",
+  salaire: "Salaire mensuel net moyen",
+  loyer: "Loyer mensuel (1 chambre, centre-ville)",
+  essence: "Essence (L 95)",
+  cinema: "Cinéma (1 place)",
+  hotel: "Hôtel (1 nuit)",
+  habiter: "Indice « Habiter »",
 };
 
+/* 6) Valeurs */
+const key = keyByCategory[category];
+const val = country.kpis?.[key];
+const ref = FR?.kpis?.[key];
+const d = diffLabel(val, ref);
 const title = `${labels[category]} – ${country.name}`;
-const dl = diffLabel(val, ref);
 ---
+
 <BaseLayout title={title}>
   <div class="wrap">
-    <h1 class="page-title">
-      {labels[category]} : <span class="country-name">{country.name}</span>
-    </h1>
+    <div class="page-title">
+      <h1>{labels[category]} : <span class="country-name">{country.name}</span></h1>
+    </div>
 
-    <div class="card">
-      <div class="value">{eur(val)}</div>
+    <div class="cards">
+      <div class="value">
+        <div class="val">{eur(val)}</div>
+      </div>
+
       <div class="meta">
-        {isFrance
-          ? <>Valeur de référence utilisée pour comparer les autres pays.</>
-          : <>Par rapport à la France : <strong style={`color:${dl.color}`}>{dl.text}</strong></>}
+        {country.slug === "france" ? (
+          <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
+        ) : (
+          <p class="muted">
+            ⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong>
+          </p>
+        )}
       </div>
 
-      <div class="ref">
-        {isFrance
-          ? null
-          : <>Réf. France : <span class="refv">{eur(ref)}</span></>}
-      </div>
+      {country.slug !== "france" && (
+        <div class="ref">
+          <span class="muted">⌀ réf. France :</span> <span class="refV">{eur(ref)}</span>
+        </div>
+      )}
     </div>
   </div>
 
   <style>
-    .wrap{max-width:920px;margin:0 auto;padding:24px}
-    .page-title{font-size:28px;margin:0 0 16px}
-    .country-name{color:var(--accent)}
-    .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 6px 18px rgba(0,0,0,.06);
-    }
-    .value{font-size:40px;font-weight:800;line-height:1;margin-bottom:8px}
-    .meta{color:var(--muted);margin-bottom:8px}
-    .ref{color:var(--muted)}
-    .refv{font-weight:600}
+    .wrap{max-width:980px;margin:0 auto;padding:24px;}
+    .page-title{margin:8px 0 16px}
+    .country-name{color:var(--accent);}
+    .cards{display:grid;gap:16px}
+    .value{font-size:48px;font-weight:800;line-height:1;margin-bottom:8px;}
+    .meta{color:var(--muted);margin-bottom:8px;}
+    .ref{color:var(--muted);}
+    .refV{font-weight:600}
   </style>
 </BaseLayout>
