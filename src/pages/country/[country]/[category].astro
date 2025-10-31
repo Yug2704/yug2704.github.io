@@ -1,8 +1,19 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Mapping slug -> key in the JSON */
-const keyByCategory: Record<string,string> = {
+/**
+ * 1) Charge les JSON pays (src/data/countries/*.json)
+ *    + la liste des catégories (src/data/categories.json)
+ */
+const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true });
+const COUNTRIES = Object.values(countryFiles).map((m) => m.default ?? m);
+import cats from "../../../data/categories.json";
+
+/**
+ * 2) Mapping slug catégorie -> clé KPI dans les JSON
+ *    (doit correspondre aux clés présentes dans chaque pays)
+ */
+const keyByCategory = {
   restaurant: "restaurant",
   salaire:    "salaireNet",
   loyer:      "loyer",
@@ -12,19 +23,18 @@ const keyByCategory: Record<string,string> = {
   habiter:    "habiterIndex",
 };
 
-/* 2) Generate all routes safely (everything local to this function) */
-export function getStaticPaths() {
-  // Load country JSONs
-  const files = import.meta.glob("../../../../data/countries/*.json", { eager: true }) as Record<string, any>;
-  const COUNTRIES = Object.values(files).map((m:any) => m.default ?? m);
-  const cats = Object.keys(keyByCategory); // ["restaurant", "salaire", …]
-  const FR = COUNTRIES.find((c:any) => c.slug === "france");
+/**
+ * 3) Routes statiques : on ne retourne que {country}/{category}
+ *    qui existent vraiment (clé KPI présente dans le JSON du pays)
+ */
+export async function getStaticPaths() {
+  const FR = COUNTRIES.find((c) => c.slug === "france");
+  const paths = [];
 
-  const paths:any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
       const key = keyByCategory[cat];
-      if (key && c.kpis && (key in c.kpis)) {
+      if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
           props:  { country: c, category: cat, FR },
@@ -35,58 +45,68 @@ export function getStaticPaths() {
   return paths;
 }
 
-/* 3) Page props */
-const { country, category, FR } = Astro.props as { country:any, category:string, FR:any };
+/* 4) Données pour le rendu */
+const { country, category, FR } = Astro.props;
 const isFrance = country.slug === "france";
 const key = keyByCategory[category];
-const value = country.kpis[key];
-const ref   = FR.kpis[key];
+const val = country.kpis[key];
+const ref = FR?.kpis?.[key];
 
-/* 4) Helpers */
-function eur(n:number){ return Number(n).toLocaleString("fr-FR", { style:"currency", currency:"EUR" }); }
-function diffLabel(val:number, ref:number){
-  if (isFrance) return { text:"référence France", color:"var(--muted)" };
-  const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text:"–", color:"var(--muted)" };
-  if (abs < 1)        return { text:"similaire", color:"var(--muted)" };
-  return pct < 0 ? { text:`${abs.toFixed(0)}% moins cher`, color:"var(--green)" }
-                 : { text:`${abs.toFixed(0)}% plus cher`,  color:"var(--red)" };
+/* Helpers d’affichage */
+function eur(n) {
+  return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+}
+function diffLabel(val, ref) {
+  if (isFrance) return { text: "référence France", color: "var(--muted)" };
+  const pct = ((val - ref) / ref) * 100;
+  const abs = Math.abs(pct);
+  if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
+  if (abs < 1)      return { text: "similaire", color: "var(--muted)" };
+  return pct < 0
+    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)"   };
 }
 
-/* 5) Labels */
-const labels: Record<string,string> = {
+/* Libellés simples pour le titre */
+const labelByCat = {
   restaurant: "Repas au restaurant",
   salaire:    "Salaire mensuel net moyen",
   loyer:      "Loyer mensuel (1 chambre, centre-ville)",
-  essence:    "Essence (1 L)",
+  essence:    "Essence (L)",
   cinema:     "Cinéma (1 place)",
   hotel:      "Hôtel (1 nuit)",
-  habiter:    "Indice « Habiter »",
+  habiter:    "Indice “Habiter”",
 };
-const title = `${labels[category]} — ${country.name}`;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={`${labelByCat[category]} – ${country.name}`}>
   <div class="card">
-    <h1 style="margin:0 0 8px 0">{labels[category]} — {country.name}</h1>
-    <p class="muted" style="margin:0">
+    <h1>{labelByCat[category]} – {country.name}</h1>
+
+    <p class="muted">
       {isFrance
-        ? "Valeur de référence utilisée pour comparer les autres pays."
-        : <>↗️ Par rapport à la France :
-            <strong style={`color:${diffLabel(value, ref).color}`}>
-              {diffLabel(value, ref).text}
+        ? "Valeur de référence pour comparer les autres pages."
+        : <>↗ Par rapport à la France :
+            <strong style={`color:${diffLabel(val, ref).color}`}>
+              {diffLabel(val, ref).text}
             </strong>
           </>}
     </p>
+
+    <div class="value">
+      {eur(val)}
+      {(!isFrance && ref != null) && (
+        <div class="ref">➜ France : {eur(ref)}</div>
+      )}
+    </div>
   </div>
 
-  <div class="value">{key==="habiterIndex" ? String(value) : eur(value)}</div>
-  {!isFrance && <div class="ref">France : {key==="habiterIndex" ? String(ref) : eur(ref)}</div>}
-
   <style>
-    .card{background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:18px;box-shadow:var(--shadow)}
-    .muted{color:var(--muted)}
-    .value{font-size:2rem;font-weight:700;color:var(--accent);margin-top:18px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;
+          box-shadow:0 1px 3px rgba(0,0,0,.04);max-width:720px}
+    h1{margin:0 0 8px}
+    .muted{color:var(--muted);margin:8px 0 20px}
+    .value{font-size:2rem;font-weight:700;color:var(--accent)}
     .ref{color:var(--muted);margin-top:6px}
   </style>
 </BaseLayout>
