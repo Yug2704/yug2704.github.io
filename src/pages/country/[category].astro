@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// ✅ Routes statiques (pas de variable externe)
+export function getStaticPaths() {
+  const cats = ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"];
+  return cats.map((slug) => ({ params: { category: slug } }));
+}
+
+const { category } = Astro.params;
+const country = Astro.url.searchParams.get("country") || null;
+
+// Charger tous les pays (JSON)
+const files = import.meta.glob("../../data/countries/*.json", { eager: true });
+const ALL = Object.values(files).map((m) => m.default ?? m);
+
+const FR = ALL.find((c) => c.slug === "france");
+const C  = country ? ALL.find((c) => c.slug === country) : null;
+
+function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+function fmt(cat, v){ return cat==="habiter" ? String(v) : eur(v); }
+
+const title = country ? `Catégorie ${category} — ${country}` : `Catégorie ${category}`;
+---
+<BaseLayout title={title}>
+  <div class="card" style="background:var(--accent-100);margin-top:20px;">
+    <h1 style="margin:0 0 10px 0;font-size:1.6rem;">
+      {category} {country && <>— {country}</>}
+    </h1>
+    <p style="color:var(--muted);margin:0;">
+      Page catégorie. Tu pourras afficher ici le prix du pays, la comparaison vs France,
+      puis (plus tard) un top des pays moins chers / plus chers.
+    </p>
+  </div>
+
+  {country && C && (
+    <div class="card" style="margin-top:14px;">
+      <h3 style="margin-top:0">Prix pour {C.name}</h3>
+      <p style="color:var(--muted);margin:0">
+        {(() => {
+          const key = category === "salaire" ? "salaireNet"
+                   : category === "habiter" ? "habiterIndex"
+                   : category;
+          const val = C.kpis[key];
+          const ref = FR.kpis[key];
+          if (val == null || ref == null) return "Donnée indisponible.";
+          const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
+          const label = !isFinite(pct) ? "—" : abs < 1 ? "similaire" : (pct < 0 ? `${abs.toFixed(0)}% moins cher` : `${abs.toFixed(0)}% plus cher`);
+          return `Prix/indice: ${fmt(category, val)} — En France: ${fmt(category, ref)} → ${label}`;
+        })()}
+      </p>
+    </div>
+  )}
+</BaseLayout>
