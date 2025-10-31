@@ -1,28 +1,27 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Préparer le glob des fichiers pays (au-dessus) */
+/* 1️⃣ Charger les fichiers pays */
 const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true });
+const COUNTRIES = Object.values(countryFiles).map((m: any) => m.default ?? m);
+const FR = COUNTRIES.find((c: any) => c.slug === "france");
 
-/* 2) Liste des catégories */
+/* 2️⃣ Charger la liste des catégories */
 import cats from "../../../data/categories.json";
 
-/* 3) Mapping slug catégorie → clé du JSON */
-const keyByCategory: Record<string,string> = {
+/* 3️⃣ Mapping slug catégorie → clé du JSON */
+const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
-  salaire:    "salaireNet",
-  loyer:      "loyer",
-  essence:    "essence",
-  cinema:     "cinema",
-  hotel:      "hotel",
-  habiter:    "habiterIndex",
+  salaire: "salaireNet",
+  loyer: "loyer",
+  essence: "essence",
+  cinema: "cinema",
+  hotel: "hotel",
+  habiter: "habiterIndex",
 };
 
-/* 4) Fonction getStaticPaths */
+/* 4️⃣ Générer toutes les routes statiques (pays × catégorie) */
 export function getStaticPaths() {
-  const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
-  const FR = COUNTRIES.find((c:any) => c.slug === "france");
-
   const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
@@ -30,7 +29,7 @@ export function getStaticPaths() {
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props:  { country: c, category: cat, FR },
+          props: { country: c, category: cat, FR },
         });
       }
     }
@@ -38,87 +37,85 @@ export function getStaticPaths() {
   return paths;
 }
 
-
-/* 5) Props de la page */
-const { country, category } = Astro.props;
+/* 5️⃣ Données de la page */
+const { country, category, FR: FRref } = Astro.props;
 const isFrance = country.slug === "france";
 const key = keyByCategory[category];
 const val = country.kpis[key];
-const ref = FR.kpis[key];
+const ref = (FRref ?? FR).kpis[key];
 
-/* 6) Helpers affichage */
-const TITLES: Record<string, string> = {
+/* 6️⃣ Fonctions utilitaires */
+function eur(n: number) {
+  return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+}
+function diffLabel(val: number, ref: number) {
+  if (isFrance) return { text: "référence France", color: "var(--muted)" };
+  const pct = ((val - ref) / ref) * 100;
+  const abs = Math.abs(pct);
+  if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
+  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
+  return pct < 0
+    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
+}
+const diff = diffLabel(val, ref);
+
+/* 7️⃣ Titres et descriptions */
+const titleMap: Record<string, string> = {
   restaurant: "Repas au restaurant",
-  salaire: "Salaire mensuel net moyen",
-  loyer: "Loyer (1 chambre, centre-ville)",
+  salaire: "Salaire net moyen",
+  loyer: "Loyer (1 ch, centre-ville)",
   essence: "Essence (1 L)",
   cinema: "Cinéma (1 place)",
   hotel: "Hôtel (1 nuit)",
   habiter: "Indice “Habiter”",
 };
-function eur(n:number){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
-function formatValue(cat:string, n:number){
-  if (cat==="habiter") return String(n);
-  if (["salaire","loyer","restaurant","cinema","hotel"].includes(cat)) return eur(n);
-  if (cat==="essence") return n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
-  return String(n);
-}
-function diffLabel(){
-  if (isFrance) return { text:"référence France", color:"var(--muted)" };
-  const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text:"—", color:"var(--muted)" };
-  if (abs < 1) return { text:"similaire", color:"var(--muted)" };
-  return pct < 0 ? { text:`${abs.toFixed(0)}% moins cher`, color:"var(--green)" }
-                 : { text:`${abs.toFixed(0)}% plus cher`,  color:"var(--red)" };
-}
-const bannerSrc = country.banner || `/banners/${country.slug}.jpg`;
-
-/* 7) Variables affichage */
-const pretty = TITLES[category] ?? category;
-const pageTitle = `${pretty} — ${country.name}${isFrance ? " (référence)" : " (vs France)"}`;
-const valueText = formatValue(category, val);
-const frText    = (category==="habiter") ? "France = 100" : formatValue(category, ref);
-const d = diffLabel();
+const pageTitle = `${titleMap[category]} – ${country.name}`;
+const pageDesc = isFrance
+  ? `Valeur de référence France pour ${titleMap[category]}.`
+  : `${titleMap[category]} en ${country.name}, comparé à la France.`;
 ---
-<BaseLayout title={pageTitle}>
-  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
-    <img src={bannerSrc} alt={`Bannière ${country.name}`} style="width:100%;height:220px;object-fit:cover;" />
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+  <div
+    class="banner"
+    style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);"
+  >
+    <img
+      src={country.banner || `/banners/${country.slug}.jpg`}
+      alt={`Bannière ${country.name}`}
+      style="width:100%;height:220px;object-fit:cover;"
+    />
   </div>
 
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
-      {pretty} — {country.name} {isFrance ? "🇫🇷" : ""}
+      {titleMap[category]} — {country.name} {isFrance ? "🇫🇷" : ""}
     </h1>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
-      Donnée détaillée pour {country.name}. Valeurs comparées à la référence France.
+      {isFrance
+        ? "Cette page présente la valeur de référence française utilisée pour comparer les autres pays."
+        : <>Comparé à la France : <strong style={`color:${diff.color}`}>{diff.text}</strong>.</>}
     </p>
   </div>
 
-  <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:16px;">
-    <div class="card">
-      <div style="font-size:1.05rem;color:var(--muted);margin-bottom:8px;">Valeur observée</div>
-      <div style="font-size:2rem;font-weight:800;color:var(--accent)">{valueText}</div>
-      <div style="margin-top:6px;color:var(--muted);">
-        En France : {frText}
-        {!isFrance && <Fragment set:html={` → <strong style="color:${d.color}">${d.text}</strong>`} />}
-      </div>
-
-      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-        <a class="pill" href={`/country/${country.slug}`}>← Retour {country.name}</a>
-        <!-- Raccourcis catégories -->
-        {cats.map((c) => (
-          <a class="pill" href={`/country/${country.slug}/${c}`}>{c.charAt(0).toUpperCase()+c.slice(1)}</a>
-        ))}
-      </div>
+  <div class="card" style="margin-top:14px;">
+    <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">
+      {key === "habiterIndex" ? String(val) : eur(val)}
     </div>
+    {!isFrance && (
+      <div style="color:var(--muted);margin-top:6px">
+        En France : {key === "habiterIndex" ? String(ref) : eur(ref)}
+      </div>
+    )}
+  </div>
 
-    <div class="card">
-      <h3 style="margin:0 0 8px 0;">Notes rapides</h3>
-      <ul style="margin:0;padding-left:1.1rem;color:var(--muted);line-height:1.6;">
-        <li>Comparaison directe avec les prix moyens en France.</li>
-        <li>Des écarts existent selon la ville et la saison.</li>
-        <li>Mises à jour automatisées via GitHub Actions.</li>
-      </ul>
-    </div>
+  <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
+    <a class="pill" href={`/country/${country.slug}`}>← Retour {country.name}</a>
+    {cats.map((c) => (
+      <a class="pill" href={`/country/${country.slug}/${c}`}>
+        {c.charAt(0).toUpperCase() + c.slice(1)}
+      </a>
+    ))}
   </div>
 </BaseLayout>
