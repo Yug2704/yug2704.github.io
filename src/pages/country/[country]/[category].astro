@@ -1,15 +1,13 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Charger les pays AVANT getStaticPaths */
+/* 1) Préparer le glob des fichiers pays (au-dessus) */
 const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true });
-const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
-const FR = COUNTRIES.find((c:any) => c.slug === "france");
 
-/* 2) Charger la liste des catégories AVANT getStaticPaths */
-import cats from "../../../data/categories.json"; // ex: ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]
+/* 2) Liste des catégories */
+import cats from "../../../data/categories.json";
 
-/* 3) Mapping slug catégorie -> clé dans le JSON kpis */
+/* 3) Mapping slug catégorie → clé du JSON */
 const keyByCategory: Record<string,string> = {
   restaurant: "restaurant",
   salaire:    "salaireNet",
@@ -20,8 +18,11 @@ const keyByCategory: Record<string,string> = {
   habiter:    "habiterIndex",
 };
 
-/* 4) Routes statiques (maintenant COUNTRIES est bien défini) */
+/* 4) Fonction getStaticPaths */
 export function getStaticPaths() {
+  const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
+  const FR = COUNTRIES.find((c:any) => c.slug === "france");
+
   const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
@@ -29,13 +30,14 @@ export function getStaticPaths() {
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props:  { country: c, category: cat },
+          props:  { country: c, category: cat, FR },
         });
       }
     }
   }
   return paths;
 }
+
 
 /* 5) Props de la page */
 const { country, category } = Astro.props;
