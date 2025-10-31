@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import cats from "../../../data/categories.json"; // ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]
 
-/* 1) Slug → clé KPI */
-const keyByCategory: Record<string, string> = {
+/** Slug de catégorie -> clé dans les JSON KPI */
+const KEY: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -12,24 +13,20 @@ const keyByCategory: Record<string, string> = {
   habiter: "habiterIndex",
 };
 
-/* 2) Génération des routes (tout est calculé *dans* la fonction) */
-export async function getStaticPaths() {
-  // charge tous les pays
+/** Génération des routes statiques */
+export function getStaticPaths() {
+  // Charge tous les pays (JSON) de façon synchrone
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
 
-  // charge la liste des catégories
-  const catsMod = await import("../../../data/categories.json");
-  const cats: string[] = (catsMod as any).default ?? (catsMod as any);
-
-  // France de référence
+  // Pays de référence
   const FR = COUNTRIES.find((c: any) => c.slug === "france");
 
   const paths: any[] = [];
   for (const c of COUNTRIES) {
-    for (const cat of cats) {
-      const key = keyByCategory[cat];
-      if (key && c.kpis && key in c.kpis) {
+    for (const cat of (cats as string[])) {
+      const k = KEY[cat];
+      if (k && c?.kpis && k in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
           props: { country: c, category: cat, FR },
@@ -40,10 +37,10 @@ export async function getStaticPaths() {
   return paths;
 }
 
-/* 3) Props de page */
+/** Props passées par getStaticPaths */
 const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
 
-/* 4) Helpers d'affichage */
+/** Helpers affichage */
 function eur(n?: number | null) {
   if (n == null) return "";
   return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
@@ -60,7 +57,7 @@ function diffLabel(val?: number | null, ref?: number | null) {
     : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
 }
 
-/* 5) Libellés */
+/** Libellés */
 const labels: Record<string, string> = {
   restaurant: "Repas au restaurant",
   salaire: "Salaire mensuel net moyen",
@@ -71,9 +68,9 @@ const labels: Record<string, string> = {
   habiter: "Indice « Habiter »",
 };
 
-/* 6) Valeurs */
-const key = keyByCategory[category];
-const val = country.kpis?.[key];
+/** Valeurs à afficher */
+const key = KEY[category];
+const val = country?.kpis?.[key];
 const ref = FR?.kpis?.[key];
 const d = diffLabel(val, ref);
 const title = `${labels[category]} – ${country.name}`;
@@ -86,18 +83,12 @@ const title = `${labels[category]} – ${country.name}`;
     </div>
 
     <div class="cards">
-      <div class="value">
-        <div class="val">{eur(val)}</div>
-      </div>
+      <div class="value"><div class="val">{eur(val)}</div></div>
 
       <div class="meta">
-        {country.slug === "france" ? (
-          <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
-        ) : (
-          <p class="muted">
-            ⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong>
-          </p>
-        )}
+        {country.slug === "france"
+          ? <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
+          : <p class="muted">⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong></p>}
       </div>
 
       {country.slug !== "france" && (
