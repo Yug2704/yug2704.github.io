@@ -1,17 +1,15 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* --------- DATA LOADING --------- */
-// Pays
+/* 1) Charger les pays AVANT getStaticPaths */
 const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true });
-const COUNTRIES = Object.values(countryFiles).map((m:any)=>m.default ?? m);
-// France de référence
-const FR = COUNTRIES.find((c:any)=>c.slug==="france");
+const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
+const FR = COUNTRIES.find((c:any) => c.slug === "france");
 
-// Catégories (slugs affichables)
-import cats from "../../../data/categories.json"; // ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]
+/* 2) Charger la liste des catégories AVANT getStaticPaths */
+import cats from "../../../data/categories.json"; // ex: ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]
 
-// mapping slug catégorie -> clé dans JSON kpis
+/* 3) Mapping slug catégorie -> clé dans le JSON kpis */
 const keyByCategory: Record<string,string> = {
   restaurant: "restaurant",
   salaire:    "salaireNet",
@@ -22,17 +20,16 @@ const keyByCategory: Record<string,string> = {
   habiter:    "habiterIndex",
 };
 
-// générer toutes les routes statiques
+/* 4) Routes statiques (maintenant COUNTRIES est bien défini) */
 export function getStaticPaths() {
-  const paths = [];
+  const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
-      // Only if the KPI exists in the country JSON
       const key = keyByCategory[cat];
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props: { country: c, category: cat },
+          props:  { country: c, category: cat },
         });
       }
     }
@@ -40,13 +37,14 @@ export function getStaticPaths() {
   return paths;
 }
 
+/* 5) Props de la page */
 const { country, category } = Astro.props;
 const isFrance = country.slug === "france";
 const key = keyByCategory[category];
 const val = country.kpis[key];
 const ref = FR.kpis[key];
 
-/* --------- HELPERS --------- */
+/* 6) Helpers affichage */
 const TITLES: Record<string, string> = {
   restaurant: "Repas au restaurant",
   salaire: "Salaire mensuel net moyen",
@@ -59,7 +57,7 @@ const TITLES: Record<string, string> = {
 function eur(n:number){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
 function formatValue(cat:string, n:number){
   if (cat==="habiter") return String(n);
-  if (cat==="salaire" || cat==="loyer" || cat==="restaurant" || cat==="cinema" || cat==="hotel") return eur(n);
+  if (["salaire","loyer","restaurant","cinema","hotel"].includes(cat)) return eur(n);
   if (cat==="essence") return n.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
   return String(n);
 }
@@ -73,7 +71,7 @@ function diffLabel(){
 }
 const bannerSrc = country.banner || `/banners/${country.slug}.jpg`;
 
-/* --------- PRESENTATION --------- */
+/* 7) Variables affichage */
 const pretty = TITLES[category] ?? category;
 const pageTitle = `${pretty} — ${country.name}${isFrance ? " (référence)" : " (vs France)"}`;
 const valueText = formatValue(category, val);
@@ -90,7 +88,7 @@ const d = diffLabel();
       {pretty} — {country.name} {isFrance ? "🇫🇷" : ""}
     </h1>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
-      Donnée détaillée pour {country.name}. Toutes les valeurs sont comparées à la référence France.
+      Donnée détaillée pour {country.name}. Valeurs comparées à la référence France.
     </p>
   </div>
 
@@ -104,14 +102,11 @@ const d = diffLabel();
       </div>
 
       <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-        <a class="pill" href={`/country/${country.slug}`} title="Revenir à la page pays">← Retour {country.name}</a>
-        <a class="pill" href={`/country/${country.slug}/restaurant`}>Restaurant</a>
-        <a class="pill" href={`/country/${country.slug}/salaire`}>Salaire</a>
-        <a class="pill" href={`/country/${country.slug}/loyer`}>Loyer</a>
-        <a class="pill" href={`/country/${country.slug}/essence`}>Essence</a>
-        <a class="pill" href={`/country/${country.slug}/cinema`}>Cinéma</a>
-        <a class="pill" href={`/country/${country.slug}/hotel`}>Hôtel</a>
-        <a class="pill" href={`/country/${country.slug}/habiter`}>Habiter</a>
+        <a class="pill" href={`/country/${country.slug}`}>← Retour {country.name}</a>
+        <!-- Raccourcis catégories -->
+        {cats.map((c) => (
+          <a class="pill" href={`/country/${country.slug}/${c}`}>{c.charAt(0).toUpperCase()+c.slice(1)}</a>
+        ))}
       </div>
     </div>
 
@@ -120,7 +115,7 @@ const d = diffLabel();
       <ul style="margin:0;padding-left:1.1rem;color:var(--muted);line-height:1.6;">
         <li>Comparaison directe avec les prix moyens en France.</li>
         <li>Des écarts existent selon la ville et la saison.</li>
-        <li>Données mises à jour automatiquement via GitHub Actions.</li>
+        <li>Mises à jour automatisées via GitHub Actions.</li>
       </ul>
     </div>
   </div>
