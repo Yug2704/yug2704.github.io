@@ -34,7 +34,7 @@ export function getStaticPaths() {
       }
     }
   }
-  return paths;            // <- unique return, à l’intérieur de la fonction
+  return paths; // ✅ seul return, dans la fonction
 }
 
 /* 5) Données pour la page */
@@ -45,17 +45,21 @@ const value = country.kpis[key];
 const ref   = FRprop.kpis[key];
 
 /* Helpers d’affichage */
-function eur(n:number){ return Number(n).toLocaleString("fr-FR",{ style:"currency", currency:"EUR" }); }
+function eur(n:number){ 
+  return Number(n).toLocaleString("fr-FR",{ style:"currency", currency:"EUR" }); 
+}
 function diffLabel(val:number, ref:number){
   if (isFrance) return { text:"référence France", color:"var(--muted)" };
   const pct = ((val - ref)/ref)*100;
   const abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text:"–",        color:"var(--muted)" };
+  if (!isFinite(pct)) return { text:"–", color:"var(--muted)" };
   if (abs < 1)        return { text:"similaire", color:"var(--muted)" };
   return pct < 0
     ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
     : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)"   };
 }
+
+/* Libellés par catégorie */
 const labelByCat: Record<string,string> = {
   restaurant: "Repas au restaurant",
   salaire:    "Salaire mensuel net moyen",
@@ -63,8 +67,9 @@ const labelByCat: Record<string,string> = {
   essence:    "Essence (1 L)",
   cinema:     "Cinéma (1 place)",
   hotel:      "Hôtel (1 nuit)",
-  habiter:    "Indice “Habiter”",
+  habiter:    "Indice « Habiter »",
 };
+
 const title = `${labelByCat[category]} — ${country.name}`;
 ---
 
