@@ -1,9 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import cats from "../../../data/categories.json"; // ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"]
 
-/** Slug de catégorie -> clé dans les JSON KPI */
-const KEY: Record<string, string> = {
+/* 1) Slug → clé KPI (gardez ce bloc AU-DESSUS de getStaticPaths) */
+const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -13,20 +12,25 @@ const KEY: Record<string, string> = {
   habiter: "habiterIndex",
 };
 
-/** Génération des routes statiques */
-export function getStaticPaths() {
-  // Charge tous les pays (JSON) de façon synchrone
+/* 2) Génération des routes */
+export async function getStaticPaths() {
+  // 2.1 Pays
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
 
-  // Pays de référence
-  const FR = COUNTRIES.find((c: any) => c.slug === "france");
+  // 2.2 Catégories (on extrait bien les slugs si ce sont des objets)
+  const catsMod = await import("../../../data/categories.json");
+  const catsRaw: any[] = (catsMod as any).default ?? (catsMod as any);
+  const cats: string[] = catsRaw.map((c: any) => (typeof c === "string" ? c : c?.slug)).filter(Boolean);
+
+  // 2.3 France de référence
+  const FR = COUNTRIES.find((c: any) => c?.slug === "france");
 
   const paths: any[] = [];
   for (const c of COUNTRIES) {
-    for (const cat of (cats as string[])) {
-      const k = KEY[cat];
-      if (k && c?.kpis && k in c.kpis) {
+    for (const cat of cats) {
+      const key = keyByCategory[cat];
+      if (key && c?.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
           props: { country: c, category: cat, FR },
@@ -37,10 +41,10 @@ export function getStaticPaths() {
   return paths;
 }
 
-/** Props passées par getStaticPaths */
+/* 3) Props de page */
 const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
 
-/** Helpers affichage */
+/* 4) Helpers d’affichage */
 function eur(n?: number | null) {
   if (n == null) return "";
   return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
@@ -54,10 +58,10 @@ function diffLabel(val?: number | null, ref?: number | null) {
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
   return pct < 0
     ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
+    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
-/** Libellés */
+/* 5) Libellés */
 const labels: Record<string, string> = {
   restaurant: "Repas au restaurant",
   salaire: "Salaire mensuel net moyen",
@@ -68,12 +72,12 @@ const labels: Record<string, string> = {
   habiter: "Indice « Habiter »",
 };
 
-/** Valeurs à afficher */
-const key = KEY[category];
+/* 6) Valeurs */
+const key = keyByCategory[category];
 const val = country?.kpis?.[key];
 const ref = FR?.kpis?.[key];
 const d = diffLabel(val, ref);
-const title = `${labels[category]} – ${country.name}`;
+const title = `${labels[category]} – ${country?.name ?? ""}`;
 ---
 
 <BaseLayout title={title}>
