@@ -4,39 +4,40 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 /* 1) Charger tous les JSON pays (depuis src/data/countries) */
 const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
 
-/* 2) Charger la liste des catégories */
+/* 2) Liste des catégories */
 import cats from "../../../data/categories.json";
 
-/* 3) Slug catégorie -> clé dans le JSON kpis */
-const keyByCategory: Record<string,string> = {
+/* 3) Slug catégorie -> clé dans les JSON kpis */
+const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
-  salaire:    "salaireNet",
-  loyer:      "loyer",
-  essence:    "essence",
-  cinema:     "cinema",
-  hotel:      "hotel",
-  habiter:    "habiterIndex",
+  salaire: "salaireNet",
+  loyer: "loyer",
+  essence: "essence",
+  cinema: "cinema",
+  hotel: "hotel",
+  habiter: "habiterIndex",
 };
 
 /* 4) Routes statiques : toutes les combinaisons pays×cat existantes */
 export function getStaticPaths() {
-  const COUNTRIES = Object.values(countryFiles).map((m:any) => m.default ?? m);
-  const FR = COUNTRIES.find((c:any) => c.slug === "france");
+  const COUNTRIES = Object.values(countryFiles).map((m: any) => m.default ?? m);
+  const FR = COUNTRIES.find((c: any) => c.slug === "france");
 
-  const paths:any[] = [];
+  const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
       const key = keyByCategory[cat];
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props:  { country: c, category: cat, FR },
+          props: { country: c, category: cat, FR },
         });
       }
     }
   }
   return paths;
 }
+---
 
 /* 5) Données de la page */
 const { country, category, FR } = Astro.props;
