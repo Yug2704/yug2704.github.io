@@ -1,7 +1,9 @@
 [
-  { "slug": "lait",        "name": "Lait" },
-  { "slug": "restaurant",  "name": "Restaurant" },
-  { "slug": "soda",        "name": "Soda" },
-  { "slug": "hotel",       "name": "Hôtel" },
-  { "slug": "pain",        "name": "Pain" }
+  "restaurant",
+  "salaire",
+  "loyer",
+  "essence",
+  "cinema",
+  "hotel",
+  "habiter"
 ]
