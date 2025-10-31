@@ -1,35 +1,34 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1️⃣ Charger les fichiers pays */
-const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true });
-const COUNTRIES = Object.values(countryFiles).map((m: any) => m.default ?? m);
-const FR = COUNTRIES.find((c: any) => c.slug === "france");
+/* ✅ 0) Prépare le glob (réutilisable) */
+const countryGlob = import.meta.glob("../../../data/countries/*.json", { eager: true });
 
-/* 2️⃣ Charger la liste des catégories */
-import cats from "../../../data/categories.json";
-
-/* 3️⃣ Mapping slug catégorie → clé du JSON */
-const keyByCategory: Record<string, string> = {
-  restaurant: "restaurant",
-  salaire: "salaireNet",
-  loyer: "loyer",
-  essence: "essence",
-  cinema: "cinema",
-  hotel: "hotel",
-  habiter: "habiterIndex",
-};
-
-/* 4️⃣ Générer toutes les routes statiques (pays × catégorie) */
+/* ✅ 1) Routes statiques — on recalcule TOUT ici (zéro dépendance externe) */
 export function getStaticPaths() {
+  // Recalc countries
+  const COUNTRIES = Object.values(countryGlob).map((m) => (m as any).default ?? m);
+  // Liste des catégories embarquée (pas d’import)
+  const CATS = ["restaurant","salaire","loyer","essence","cinema","hotel","habiter"];
+  // Mapping catégorie → clé KPI
+  const keyByCategory: Record<string,string> = {
+    restaurant: "restaurant",
+    salaire:    "salaireNet",
+    loyer:      "loyer",
+    essence:    "essence",
+    cinema:     "cinema",
+    hotel:      "hotel",
+    habiter:    "habiterIndex",
+  };
+
   const paths: any[] = [];
   for (const c of COUNTRIES) {
-    for (const cat of cats) {
+    for (const cat of CATS) {
       const key = keyByCategory[cat];
       if (key && c.kpis && key in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props: { country: c, category: cat, FR },
+          props:  { country: c, category: cat }, // on passera FR côté page
         });
       }
     }
@@ -37,31 +36,29 @@ export function getStaticPaths() {
   return paths;
 }
 
-/* 5️⃣ Données de la page */
-const { country, category, FR: FRref } = Astro.props;
-const isFrance = country.slug === "france";
-const key = keyByCategory[category];
-const val = country.kpis[key];
-const ref = (FRref ?? FR).kpis[key];
+/* ✅ 2) Données page — on recalcule aussi ici (indépendant du haut) */
+const COUNTRIES_PAGE = Object.values(countryGlob).map((m) => (m as any).default ?? m);
+const FR = COUNTRIES_PAGE.find((c:any) => c.slug === "france");
 
-/* 6️⃣ Fonctions utilitaires */
-function eur(n: number) {
-  return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
-}
-function diffLabel(val: number, ref: number) {
-  if (isFrance) return { text: "référence France", color: "var(--muted)" };
-  const pct = ((val - ref) / ref) * 100;
-  const abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
-  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-  return pct < 0
-    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
-}
-const diff = diffLabel(val, ref);
+// Récup props
+const { country, category } = Astro.props;
 
-/* 7️⃣ Titres et descriptions */
-const titleMap: Record<string, string> = {
+// Sécurité : si props manquants, on évite un crash
+if (!country || !category) {
+  throw new Error("Props manquants: country/category. Vérifie getStaticPaths et les JSON.");
+}
+
+// Mapping et titres
+const keyByCategory: Record<string,string> = {
+  restaurant: "restaurant",
+  salaire:    "salaireNet",
+  loyer:      "loyer",
+  essence:    "essence",
+  cinema:     "cinema",
+  hotel:      "hotel",
+  habiter:    "habiterIndex",
+};
+const titleMap: Record<string,string> = {
   restaurant: "Repas au restaurant",
   salaire: "Salaire net moyen",
   loyer: "Loyer (1 ch, centre-ville)",
@@ -70,27 +67,46 @@ const titleMap: Record<string, string> = {
   hotel: "Hôtel (1 nuit)",
   habiter: "Indice “Habiter”",
 };
-const pageTitle = `${titleMap[category]} – ${country.name}`;
-const pageDesc = isFrance
-  ? `Valeur de référence France pour ${titleMap[category]}.`
-  : `${titleMap[category]} en ${country.name}, comparé à la France.`;
----
 
+const isFrance = country.slug === "france";
+const key = keyByCategory[category];
+const val = country.kpis?.[key];
+const ref = FR?.kpis?.[key];
+
+function eur(n:number){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
+function formatValue(cat:string, n:number){
+  if (cat==="habiter") return String(n);
+  if (["salaire","loyer","restaurant","cinema","hotel"].includes(cat)) return eur(n);
+  if (cat==="essence") return Number(n).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+  return String(n);
+}
+function diffLabel(v:number, r:number){
+  if (isFrance) return { text:"référence France", color:"var(--muted)" };
+  const pct = ((v - r)/r)*100; const abs = Math.abs(pct);
+  if (!isFinite(pct)) return { text:"—", color:"var(--muted)" };
+  if (abs < 1) return { text:"similaire", color:"var(--muted)" };
+  return pct < 0 ? { text:`${abs.toFixed(0)}% moins cher`, color:"var(--green)" }
+                 : { text:`${abs.toFixed(0)}% plus cher`,  color:"var(--red)" };
+}
+
+const pretty = titleMap[category] ?? category;
+const pageTitle = `${pretty} – ${country.name}`;
+const pageDesc  = isFrance
+  ? `Valeur de référence France pour ${pretty}.`
+  : `${pretty} en ${country.name}, comparé à la France.`;
+
+// Sécurité: si val/ref manquent (JSON incomplet), on affiche un message propre
+const hasData = typeof val === "number" && typeof ref === "number";
+const diff = hasData ? diffLabel(val, ref) : { text:"donnée indisponible", color:"var(--muted)" };
+---
 <BaseLayout title={pageTitle} description={pageDesc}>
-  <div
-    class="banner"
-    style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);"
-  >
-    <img
-      src={country.banner || `/banners/${country.slug}.jpg`}
-      alt={`Bannière ${country.name}`}
-      style="width:100%;height:220px;object-fit:cover;"
-    />
+  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+    <img src={country.banner || `/banners/${country.slug}.jpg`} alt={`Bannière ${country.name}`} style="width:100%;height:220px;object-fit:cover;" />
   </div>
 
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
-      {titleMap[category]} — {country.name} {isFrance ? "🇫🇷" : ""}
+      {pretty} — {country.name} {isFrance ? "🇫🇷" : ""}
     </h1>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
       {isFrance
@@ -100,22 +116,26 @@ const pageDesc = isFrance
   </div>
 
   <div class="card" style="margin-top:14px;">
-    <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">
-      {key === "habiterIndex" ? String(val) : eur(val)}
-    </div>
-    {!isFrance && (
-      <div style="color:var(--muted);margin-top:6px">
-        En France : {key === "habiterIndex" ? String(ref) : eur(ref)}
-      </div>
+    {hasData ? (
+      <>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--accent)">
+          {key === "habiterIndex" ? String(val) : formatValue(category, val)}
+        </div>
+        {!isFrance && (
+          <div style="color:var(--muted);margin-top:6px">
+            En France : {key === "habiterIndex" ? String(ref) : formatValue(category, ref)}
+          </div>
+        )}
+      </>
+    ) : (
+      <div style="color:var(--muted)">Donnée indisponible pour {pretty}.</div>
     )}
   </div>
 
   <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
     <a class="pill" href={`/country/${country.slug}`}>← Retour {country.name}</a>
-    {cats.map((c) => (
-      <a class="pill" href={`/country/${country.slug}/${c}`}>
-        {c.charAt(0).toUpperCase() + c.slice(1)}
-      </a>
+    {["restaurant","salaire","loyer","essence","cinema","hotel","habiter"].map((c) => (
+      <a class="pill" href={`/country/${country.slug}/${c}`}>{c.charAt(0).toUpperCase()+c.slice(1)}</a>
     ))}
   </div>
 </BaseLayout>
