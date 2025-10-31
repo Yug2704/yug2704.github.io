@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Slug → clé KPI (gardez ce bloc AU-DESSUS de getStaticPaths) */
+// mapping minimal
 const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
@@ -12,105 +12,30 @@ const keyByCategory: Record<string, string> = {
   habiter: "habiterIndex",
 };
 
-/* 2) Génération des routes */
 export async function getStaticPaths() {
-  // 2.1 Pays
+  // charge uniquement FR
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
-
-  // 2.2 Catégories (on extrait bien les slugs si ce sont des objets)
-  const catsMod = await import("../../../data/categories.json");
-  const catsRaw: any[] = (catsMod as any).default ?? (catsMod as any);
-  const cats: string[] = catsRaw.map((c: any) => (typeof c === "string" ? c : c?.slug)).filter(Boolean);
-
-  // 2.3 France de référence
   const FR = COUNTRIES.find((c: any) => c?.slug === "france");
+  if (!FR) return [];
 
-  const paths: any[] = [];
-  for (const c of COUNTRIES) {
-    for (const cat of cats) {
-      const key = keyByCategory[cat];
-      if (key && c?.kpis && key in c.kpis) {
-        paths.push({
-          params: { country: c.slug, category: cat },
-          props: { country: c, category: cat, FR },
-        });
-      }
-    }
-  }
-  return paths;
+  // NE GÉNÈRE QU’UNE ROUTE POUR TESTER
+  return [{
+    params: { country: "france", category: "restaurant" },
+    props:  { country: FR, category: "restaurant", FR }
+  }];
 }
 
-/* 3) Props de page */
-const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
+const { country, category, FR } =
+  Astro.props as { country: any; category: string; FR: any };
 
-/* 4) Helpers d’affichage */
-function eur(n?: number | null) {
-  if (n == null) return "";
-  return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
-}
-function diffLabel(val?: number | null, ref?: number | null) {
-  if (country.slug === "france") return { text: "référence France", color: "var(--muted)" };
-  if (val == null || ref == null) return { text: "–", color: "var(--muted)" };
-  const pct = ((val - ref) / ref) * 100;
-  const abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
-  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-  return pct < 0
-    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
-}
-
-/* 5) Libellés */
-const labels: Record<string, string> = {
-  restaurant: "Repas au restaurant",
-  salaire: "Salaire mensuel net moyen",
-  loyer: "Loyer mensuel (1 chambre, centre-ville)",
-  essence: "Essence (L 95)",
-  cinema: "Cinéma (1 place)",
-  hotel: "Hôtel (1 nuit)",
-  habiter: "Indice « Habiter »",
-};
-
-/* 6) Valeurs */
-const key = keyByCategory[category];
-const val = country?.kpis?.[key];
-const ref = FR?.kpis?.[key];
-const d = diffLabel(val, ref);
-const title = `${labels[category]} – ${country?.name ?? ""}`;
+// affichage minimal
+const val = country?.kpis?.restaurant ?? null;
+const ref = FR?.kpis?.restaurant ?? null;
 ---
-
-<BaseLayout title={title}>
-  <div class="wrap">
-    <div class="page-title">
-      <h1>{labels[category]} : <span class="country-name">{country.name}</span></h1>
-    </div>
-
-    <div class="cards">
-      <div class="value"><div class="val">{eur(val)}</div></div>
-
-      <div class="meta">
-        {country.slug === "france"
-          ? <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
-          : <p class="muted">⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong></p>}
-      </div>
-
-      {country.slug !== "france" && (
-        <div class="ref">
-          <span class="muted">⌀ réf. France :</span> <span class="refV">{eur(ref)}</span>
-        </div>
-      )}
-    </div>
-  </div>
-
-  <style>
-    .wrap{max-width:980px;margin:0 auto;padding:24px;}
-    .page-title{margin:8px 0 16px}
-    .country-name{color:var(--accent);}
-    .cards{display:grid;gap:16px}
-    .value{font-size:48px;font-weight:800;line-height:1;margin-bottom:8px;}
-    .meta{color:var(--muted);margin-bottom:8px;}
-    .ref{color:var(--muted);}
-    .refV{font-weight:600}
-  </style>
+<BaseLayout title={`Test ${category} – ${country?.name}`}>
+  <pre>country: {country?.slug}</pre>
+  <pre>category: {category}</pre>
+  <pre>val: {String(val)}</pre>
+  <pre>ref: {String(ref)}</pre>
 </BaseLayout>
