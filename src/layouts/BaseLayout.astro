@@ -1,4 +1,7 @@
 ---
+import cities from "../data/_index_cities.json";
+import countries from "../data/_index_countries.json";
+
 const {
   title = "Prix de la vie",
   description = "Comparez les prix par pays et par catégories — toujours vs France."
@@ -18,13 +21,9 @@ const {
         --line:#e5e7eb;
         --card:#ffffff;
         --shadow:0 6px 18px rgba(17,24,39,.06);
-
-        /* Rose chaleureux (DA) */
         --accent:#ff4d8d;
         --accent-600:#ef437f;
         --accent-100:#fff1f6;
-
-        /* Footer */
         --footer-bg:#fff1f6;
         --footer-strong:#ff8db2;
         --footer-strong-2:#ff6a9c;
@@ -35,108 +34,49 @@ const {
       a{color:inherit;text-decoration:none}
       .container{max-width:1100px;margin:0 auto;padding:16px}
 
-      /* Header commun */
       header {
-        position: sticky;
-        top: 0;
+        position: sticky; top: 0;
         background: linear-gradient(90deg, #fff5f9 0%, #ffffff 50%, #fff5f9 100%);
         backdrop-filter: saturate(1.2) blur(8px);
         border-bottom: 2px solid #ffd0df;
         box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
         z-index: 10;
       }
+      header .container a:first-child { color: #a61b4d; font-weight: 700; }
 
-      header .container a:first-child {
-        color: #a61b4d;
-        font-weight: 700;
-      }
+      .pill { background:#fff;border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;color:#a61b4d;transition:all .15s }
+      .pill:hover { background:#ffe4ec;border-color:#ffb4c8 }
 
-      .pill {
-        background: #fff;
-        border: 1px solid #ffd0df;
-        border-radius: 999px;
-        padding: 6px 12px;
-        color: #a61b4d;
-        transition: all 0.15s ease;
-      }
-      .pill:hover {
-        background: #ffe4ec;
-        border-color: #ffb4c8;
-      }
+      .search { display:flex;align-items:center;gap:8px }
+      .search input { border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;outline:none }
+      .search input:focus { border-color:#ff8db2; box-shadow:0 0 0 2px #ffdee9 }
 
-      /* Barre de recherche */
-      .search {
-        display:flex;
-        align-items:center;
-        gap:8px;
-      }
-      .search input {
-        border:1px solid #ffd0df;
-        border-radius:999px;
-        padding:6px 12px;
-        outline:none;
-      }
-      .search input:focus {
-        border-color:#ff8db2;
-        box-shadow:0 0 0 2px #ffdee9;
-      }
-
-      /* Utilitaires */
       .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-      .card{
-        background:var(--card);border:1px solid var(--line);
-        border-radius:16px;padding:16px;box-shadow:var(--shadow);
-      }
-      .btn{
-        display:inline-block;padding:.65rem 1rem;border-radius:999px;
-        background:var(--accent);color:#fff;border:1px solid transparent;
-        box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
-      }
+      .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+      .btn{display:inline-block;padding:.65rem 1rem;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;box-shadow:0 2px 12px rgba(255,128,171,.1)}
       .btn:hover{background:var(--accent-600)}
       code{background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
 
-      /* Chips catégories */
       .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-      .chip{
-        display:inline-block;padding:8px 12px;border-radius:999px;
-        background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df;
-        font-size:.95rem;box-shadow:var(--shadow);transition:all .15s ease;
-      }
+      .chip{display:inline-block;padding:8px 12px;border-radius:999px;background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df;font-size:.95rem;box-shadow:var(--shadow);transition:all .15s}
       .chip:hover{filter:brightness(1.05);transform:translateY(-1px)}
 
-      /* Footer global */
-      .site-bottom{margin-top:36px;}
-      .site-bottom .info{
-        background:var(--footer-bg);
-        border-top:1px solid #ffd0df;
-        border-bottom:1px solid #ffd0df;
-      }
-      .info-inner{
-        display:grid;gap:22px;
-        grid-template-columns:1.2fr .8fr;
-        align-items:start;
-        padding:28px 16px;
-      }
-      .info h3{margin:0 0 8px 0}
+      .site-bottom{margin-top:36px}
+      .site-bottom .info{background:var(--footer-bg);border-top:1px solid #ffd0df;border-bottom:1px solid #ffd0df}
+      .info-inner{display:grid;gap:22px;grid-template-columns:1.2fr .8fr;align-items:start;padding:28px 16px}
+      .info h3{margin:0 0 8px}
       .info p{color:var(--muted);line-height:1.65;margin:0}
-      .links ul{list-style:none;margin:8px 0 0 0;padding:0}
+      .links ul{list-style:none;margin:8px 0 0;padding:0}
       .links li{margin:6px 0}
       .links a{color:#a61b4d}
       .links a:hover{text-decoration:underline}
 
-      .footer-strong{
-        background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2));
-        color:#fff;
-      }
-      .footer-strong-inner{
-        display:flex;justify-content:space-between;align-items:center;
-        gap:12px;padding:16px;
-      }
+      .footer-strong{background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2));color:#fff}
+      .footer-strong-inner{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px}
       .footer-strong a{color:#fff;background:rgba(255,255,255,.15)}
     </style>
   </head>
   <body>
-    <!-- Header commun -->
     <header>
       <div class="container" style="display:flex;justify-content:space-between;align-items:center;height:64px;gap:12px;">
         <a href="/" style="font-weight:700">Prix de la vie</a>
@@ -144,7 +84,7 @@ const {
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🔎 Recherche -->
+          <!-- 🔎 Recherche (fallback propre vers /search) -->
           <form id="site-search" class="search" role="search" action="/search" method="GET">
             <input name="q" placeholder="Pays ou ville…" autocomplete="off" />
             <button class="pill" type="submit">Chercher</button>
@@ -153,12 +93,10 @@ const {
       </div>
     </header>
 
-    <!-- Contenu principal -->
     <main class="container">
       <slot />
     </main>
 
-    <!-- Footer global -->
     <section class="site-bottom">
       <div class="info">
         <div class="container info-inner">
@@ -189,13 +127,10 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script recherche dynamique -->
-    <script type="module" is:inline>
-      import cities from "../data/_index_cities.json";
-      import countries from "../data/_index_countries.json";
-
-      const CITIES = cities;
-      const COUNTRIES = countries;
+    <!-- 🔧 Script recherche : JSON inliné (zéro import côté client) -->
+    <script is:inline>
+      const CITIES = {JSON.stringify(cities)};
+      const COUNTRIES = {JSON.stringify(countries)};
 
       const slugify = (s) =>
         String(s || "")
@@ -210,15 +145,15 @@ const {
         const q = new FormData(form).get("q");
         const s = slugify(q);
 
-        // 🔎 Villes
+        // 1) villes
         const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
         if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-        // 🌍 Pays
+        // 2) pays
         const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
         if (country) { window.location.href = `/country/${country.slug}`; return; }
 
-        // 🕵️‍♂️ Fallback si rien trouvé
+        // 3) fallback
         window.location.href = `/search?q=${encodeURIComponent(q)}`;
       });
     </script>
