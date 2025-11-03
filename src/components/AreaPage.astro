@@ -4,34 +4,51 @@ import frBase from "../data/countries/france.json"; // base de comparaison
 
 const { data } = Astro.props; // JSON de la zone (pays OU ville)
 
-// Petit helper pour le pourcentage vs France si la clé existe des deux côtés
-function compareLine(label, key, unit = data.currency || "") {
-  const v = data.prices?.[key];
-  const vf = frBase.prices?.[key];
+// Liste des lignes à afficher (label -> clé du JSON)
+const FIELDS = [
+  ["🍽️ Repas au restaurant", "repas"],
+  ["☕ Café", "café"],
+  ["🥖 Pain", "pain"],
+  ["🏠 Loyer (1 ch. centre-ville)", "loyer"],
+  ["🚌 Transport (ticket)", "transport"],
+  ["🎬 Cinéma (1 place)", "cinéma"],
+  ["🚬 Cigarettes (20)", "cigarettes"],
+];
+
+// Prépare les lignes (pas de JSX ici)
+function makeRow(label, key) {
+  const v = data?.prices?.[key];
   if (v == null) return null;
 
+  const vf = frBase?.prices?.[key];
   let deltaTxt = "";
   if (vf != null && Number(vf) !== 0) {
     const pct = ((Number(v) - Number(vf)) / Number(vf)) * 100;
-    const sens = pct === 0 ? "identique" : (pct > 0 ? `${Math.abs(pct).toFixed(0)}% plus cher` : `${Math.abs(pct).toFixed(0)}% moins cher`);
+    const sens =
+      pct === 0
+        ? "identique"
+        : pct > 0
+        ? `${Math.abs(pct).toFixed(0)}% plus cher`
+        : `${Math.abs(pct).toFixed(0)}% moins cher`;
     deltaTxt = `France : ${vf} ${frBase.currency || ""} — ${sens}`;
   }
 
-  return (
-    <tr>
-      <td style="padding:8px;border-bottom:1px solid #e5e7eb">{label}</td>
-      <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right">
-        {v} {unit}
-        {deltaTxt && <div style="font-size:.85rem;color:#6b7280">{deltaTxt}</div>}
-      </td>
-    </tr>
-  );
+  return {
+    label,
+    value: v,
+    unit: data.currency || "",
+  ,  // trailing comma ok
+    deltaTxt,
+  };
 }
+
+const rows = FIELDS.map(([label, key]) => makeRow(label, key)).filter(Boolean);
 ---
 
-<BaseLayout title={`Coût de la vie à ${data.name} (${data.country})`}
-            description={`Prix à ${data.name} : repas, logement, transport, etc. Comparaison avec la France.`}>
-  <!-- Bannière (identique pays/villes) -->
+<BaseLayout
+  title={`Coût de la vie à ${data.name} (${data.country})`}
+  description={`Prix à ${data.name} : repas, logement, transport, etc. Comparaison avec la France.`}
+>
   {data.banner && (
     <div style="margin:12px 0 20px 0;border-radius:14px;overflow:hidden;max-height:220px">
       <img src={data.banner} alt={`Bannière ${data.country}`} style="width:100%;height:auto;display:block" loading="lazy" />
@@ -49,13 +66,17 @@ function compareLine(label, key, unit = data.currency || "") {
       <h3 style="margin-top:0;">Chiffres clés (vs France)</h3>
       <table style="width:100%;border-collapse:collapse">
         <tbody>
-          {compareLine("🍽️ Repas au restaurant", "repas")}
-          {compareLine("☕ Café", "café")}
-          {compareLine("🥖 Pain", "pain")}
-          {compareLine("🏠 Loyer (1 ch. centre-ville)", "loyer")}
-          {compareLine("🚌 Transport (ticket)", "transport")}
-          {compareLine("🎬 Cinéma (1 place)", "cinéma")}
-          {compareLine("🚬 Cigarettes (20)", "cigarettes")}
+          {rows.map((r) => (
+            <tr>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb">{r.label}</td>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right">
+                {r.value} {r.unit}
+                {r.deltaTxt && (
+                  <div style="font-size:.85rem;color:#6b7280">{r.deltaTxt}</div>
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
