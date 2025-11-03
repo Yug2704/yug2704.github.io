@@ -3,7 +3,11 @@ const {
   title = "Prix de la vie",
   description = "Comparez les prix par pays et par catégories — toujours vs France."
 } = Astro.props;
+
+import cities from "../data/_index_cities.json";
+import countries from "../data/_index_countries.json";
 ---
+
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -25,8 +29,8 @@ const {
         --accent-100:#fff1f6;
 
         /* Footer */
-        --footer-bg:#fff1f6;         /* bande info douce */
-        --footer-strong:#ff8db2;     /* bande forte (dégradé) */
+        --footer-bg:#fff1f6;
+        --footer-strong:#ff8db2;
         --footer-strong-2:#ff6a9c;
       }
 
@@ -35,7 +39,7 @@ const {
       a{color:inherit;text-decoration:none}
       .container{max-width:1100px;margin:0 auto;padding:16px}
 
-            /* Header commun */
+      /* Header commun */
       header {
         position: sticky;
         top: 0;
@@ -45,12 +49,10 @@ const {
         box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
         z-index: 10;
       }
-
       header .container a:first-child {
         color: #a61b4d;
         font-weight: 700;
       }
-
       .pill {
         background: #fff;
         border: 1px solid #ffd0df;
@@ -59,66 +61,37 @@ const {
         color: #a61b4d;
         transition: all 0.15s ease;
       }
-      .pill:hover {
-        background: #ffe4ec;
-        border-color: #ffb4c8;
-      }
-
+      .pill:hover { background: #ffe4ec; border-color: #ffb4c8; }
 
       /* Utilitaires communs */
       .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-      .card{
-        background:var(--card);border:1px solid var(--line);
-        border-radius:16px;padding:16px;box-shadow:var(--shadow);
-      }
-      .btn{
-        display:inline-block;padding:.65rem 1rem;border-radius:999px;
-        background:var(--accent);color:#fff;border:1px solid transparent;
-        box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
-      }
+      .card{ background:var(--card);border:1px solid var(--line); border-radius:16px;padding:16px;box-shadow:var(--shadow); }
+      .btn{ display:inline-block;padding:.65rem 1rem;border-radius:999px; background:var(--accent);color:#fff;border:1px solid transparent; box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1); }
       .btn:hover{background:var(--accent-600)}
       code{background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
 
-      /* Chips catégories (réutilisable) */
+      /* Chips catégories */
       .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-      .chip{
-        display:inline-block;padding:8px 12px;border-radius:999px;
-        background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df;
-        font-size:.95rem;box-shadow:var(--shadow);transition:all .15s ease;
-      }
+      .chip{ display:inline-block;padding:8px 12px;border-radius:999px; background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df; font-size:.95rem;box-shadow:var(--shadow);transition:all .15s ease; }
       .chip:hover{filter:brightness(1.05);transform:translateY(-1px)}
 
-      /* Footer global (2 bandes) */
-      .site-bottom{
-        margin-top:36px;
-      }
-      .site-bottom .info{
-        background:var(--footer-bg);
-        border-top:1px solid #ffd0df;
-        border-bottom:1px solid #ffd0df;
-      }
-      .info-inner{
-        display:grid;gap:22px;
-        grid-template-columns:1.2fr .8fr;
-        align-items:start;
-        padding:28px 16px;
-      }
+      /* Footer */
+      .site-bottom{ margin-top:36px; }
+      .site-bottom .info{ background:var(--footer-bg); border-top:1px solid #ffd0df; border-bottom:1px solid #ffd0df; }
+      .info-inner{ display:grid;gap:22px; grid-template-columns:1.2fr .8fr; align-items:start; padding:28px 16px; }
       .info h3{margin:0 0 8px 0}
       .info p{color:var(--muted);line-height:1.65;margin:0}
       .links ul{list-style:none;margin:8px 0 0 0;padding:0}
       .links li{margin:6px 0}
       .links a{color:#a61b4d}
       .links a:hover{text-decoration:underline}
-
-      .footer-strong{
-        background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2));
-        color:#fff;
-      }
-      .footer-strong-inner{
-        display:flex;justify-content:space-between;align-items:center;
-        gap:12px;padding:16px;
-      }
+      .footer-strong{ background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2)); color:#fff; }
+      .footer-strong-inner{ display:flex;justify-content:space-between;align-items:center; gap:12px;padding:16px; }
       .footer-strong a{color:#fff;background:rgba(255,255,255,.15)}
+
+      /* Search */
+      .search { display:flex; gap:10px; align-items:center; }
+      .search input { width: 280px; border:1px solid #ffd0df; border-radius:999px; padding:8px 12px; }
     </style>
   </head>
   <body>
@@ -126,9 +99,16 @@ const {
     <header>
       <div class="container" style="display:flex;justify-content:space-between;align-items:center;height:64px;">
         <a href="/" style="font-weight:700">Prix de la vie</a>
-        <nav style="display:flex;gap:12px">
+
+        <nav style="display:flex;gap:12px;align-items:center">
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
+
+          <!-- 🔎 Barre de recherche -->
+          <form id="site-search" class="search" role="search">
+            <input name="q" placeholder="Pays ou ville…" autocomplete="off" />
+            <button class="pill" type="submit">Chercher</button>
+          </form>
         </nav>
       </div>
     </header>
@@ -140,7 +120,6 @@ const {
 
     <!-- Footer global -->
     <section class="site-bottom">
-      <!-- Bande info douce -->
       <div class="info">
         <div class="container info-inner">
           <div>
@@ -157,13 +136,11 @@ const {
               <li><a href="/">Accueil</a></li>
               <li><a href="/country/france">France</a></li>
               <li><a href="/sitemap.xml">Sitemap</a></li>
-              <!-- Tu pourras ajouter Contact / Mentions légales ici -->
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- Bande forte (copyright + lien sitemap) -->
       <div class="footer-strong">
         <div class="container footer-strong-inner">
           <span>© {new Date().getFullYear()} Prix de la vie</span>
@@ -171,5 +148,42 @@ const {
         </div>
       </div>
     </section>
+
+    <!-- ⚙️ Logique de recherche (Astro, côté client) -->
+    <script is:inline>
+      const CITIES = {JSON.stringify(cities)};
+      const COUNTRIES = {JSON.stringify(countries)};
+
+      const slugify = (s) =>
+        String(s || "")
+          .toLowerCase()
+          .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+
+      const form = document.getElementById("site-search");
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = new FormData(form).get("q");
+        const s = slugify(q);
+
+        // 1) villes
+        const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
+        if (city) {
+          window.location.href = `/city/${city.slug}`;
+          return;
+        }
+
+        // 2) pays
+        const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
+        if (country) {
+          window.location.href = `/country/${country.slug}`;
+          return;
+        }
+
+        // 3) fallback
+        window.location.href = `/search?q=${encodeURIComponent(q)}`;
+      });
+    </script>
   </body>
 </html>
