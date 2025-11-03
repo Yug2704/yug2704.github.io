@@ -3,11 +3,7 @@ const {
   title = "Prix de la vie",
   description = "Comparez les prix par pays et par catégories — toujours vs France."
 } = Astro.props;
-
-import cities from "../data/_index_cities.json";
-import countries from "../data/_index_countries.json";
 ---
-
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -49,10 +45,12 @@ import countries from "../data/_index_countries.json";
         box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
         z-index: 10;
       }
+
       header .container a:first-child {
         color: #a61b4d;
         font-weight: 700;
       }
+
       .pill {
         background: #fff;
         border: 1px solid #ffd0df;
@@ -61,51 +59,93 @@ import countries from "../data/_index_countries.json";
         color: #a61b4d;
         transition: all 0.15s ease;
       }
-      .pill:hover { background: #ffe4ec; border-color: #ffb4c8; }
+      .pill:hover {
+        background: #ffe4ec;
+        border-color: #ffb4c8;
+      }
 
-      /* Utilitaires communs */
+      /* Barre de recherche */
+      .search {
+        display:flex;
+        align-items:center;
+        gap:8px;
+      }
+      .search input {
+        border:1px solid #ffd0df;
+        border-radius:999px;
+        padding:6px 12px;
+        outline:none;
+      }
+      .search input:focus {
+        border-color:#ff8db2;
+        box-shadow:0 0 0 2px #ffdee9;
+      }
+
+      /* Utilitaires */
       .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-      .card{ background:var(--card);border:1px solid var(--line); border-radius:16px;padding:16px;box-shadow:var(--shadow); }
-      .btn{ display:inline-block;padding:.65rem 1rem;border-radius:999px; background:var(--accent);color:#fff;border:1px solid transparent; box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1); }
+      .card{
+        background:var(--card);border:1px solid var(--line);
+        border-radius:16px;padding:16px;box-shadow:var(--shadow);
+      }
+      .btn{
+        display:inline-block;padding:.65rem 1rem;border-radius:999px;
+        background:var(--accent);color:#fff;border:1px solid transparent;
+        box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
+      }
       .btn:hover{background:var(--accent-600)}
       code{background:#f8fafc;border:1px solid var(--line);border-radius:6px;padding:2px 6px}
 
       /* Chips catégories */
       .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-      .chip{ display:inline-block;padding:8px 12px;border-radius:999px; background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df; font-size:.95rem;box-shadow:var(--shadow);transition:all .15s ease; }
+      .chip{
+        display:inline-block;padding:8px 12px;border-radius:999px;
+        background:var(--accent-100);color:#a61b4d;border:1px solid #ffd0df;
+        font-size:.95rem;box-shadow:var(--shadow);transition:all .15s ease;
+      }
       .chip:hover{filter:brightness(1.05);transform:translateY(-1px)}
 
-      /* Footer */
-      .site-bottom{ margin-top:36px; }
-      .site-bottom .info{ background:var(--footer-bg); border-top:1px solid #ffd0df; border-bottom:1px solid #ffd0df; }
-      .info-inner{ display:grid;gap:22px; grid-template-columns:1.2fr .8fr; align-items:start; padding:28px 16px; }
+      /* Footer global */
+      .site-bottom{margin-top:36px;}
+      .site-bottom .info{
+        background:var(--footer-bg);
+        border-top:1px solid #ffd0df;
+        border-bottom:1px solid #ffd0df;
+      }
+      .info-inner{
+        display:grid;gap:22px;
+        grid-template-columns:1.2fr .8fr;
+        align-items:start;
+        padding:28px 16px;
+      }
       .info h3{margin:0 0 8px 0}
       .info p{color:var(--muted);line-height:1.65;margin:0}
       .links ul{list-style:none;margin:8px 0 0 0;padding:0}
       .links li{margin:6px 0}
       .links a{color:#a61b4d}
       .links a:hover{text-decoration:underline}
-      .footer-strong{ background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2)); color:#fff; }
-      .footer-strong-inner{ display:flex;justify-content:space-between;align-items:center; gap:12px;padding:16px; }
-      .footer-strong a{color:#fff;background:rgba(255,255,255,.15)}
 
-      /* Search */
-      .search { display:flex; gap:10px; align-items:center; }
-      .search input { width: 280px; border:1px solid #ffd0df; border-radius:999px; padding:8px 12px; }
+      .footer-strong{
+        background:linear-gradient(0deg,var(--footer-strong),var(--footer-strong-2));
+        color:#fff;
+      }
+      .footer-strong-inner{
+        display:flex;justify-content:space-between;align-items:center;
+        gap:12px;padding:16px;
+      }
+      .footer-strong a{color:#fff;background:rgba(255,255,255,.15)}
     </style>
   </head>
   <body>
     <!-- Header commun -->
     <header>
-      <div class="container" style="display:flex;justify-content:space-between;align-items:center;height:64px;">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;height:64px;gap:12px;">
         <a href="/" style="font-weight:700">Prix de la vie</a>
-
-        <nav style="display:flex;gap:12px;align-items:center">
+        <nav style="display:flex;gap:12px;align-items:center;">
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🔎 Barre de recherche -->
-          <form id="site-search" class="search" role="search">
+          <!-- 🔎 Recherche -->
+          <form id="site-search" class="search" role="search" action="/search" method="GET">
             <input name="q" placeholder="Pays ou ville…" autocomplete="off" />
             <button class="pill" type="submit">Chercher</button>
           </form>
@@ -113,7 +153,7 @@ import countries from "../data/_index_countries.json";
       </div>
     </header>
 
-    <!-- Contenu page -->
+    <!-- Contenu principal -->
     <main class="container">
       <slot />
     </main>
@@ -149,10 +189,13 @@ import countries from "../data/_index_countries.json";
       </div>
     </section>
 
-    <!-- ⚙️ Logique de recherche (Astro, côté client) -->
-    <script is:inline>
-      const CITIES = {JSON.stringify(cities)};
-      const COUNTRIES = {JSON.stringify(countries)};
+    <!-- 🔧 Script recherche dynamique -->
+    <script type="module" is:inline>
+      import cities from "../data/_index_cities.json";
+      import countries from "../data/_index_countries.json";
+
+      const CITIES = cities;
+      const COUNTRIES = countries;
 
       const slugify = (s) =>
         String(s || "")
@@ -167,21 +210,15 @@ import countries from "../data/_index_countries.json";
         const q = new FormData(form).get("q");
         const s = slugify(q);
 
-        // 1) villes
+        // 🔎 Villes
         const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (city) {
-          window.location.href = `/city/${city.slug}`;
-          return;
-        }
+        if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-        // 2) pays
+        // 🌍 Pays
         const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (country) {
-          window.location.href = `/country/${country.slug}`;
-          return;
-        }
+        if (country) { window.location.href = `/country/${country.slug}`; return; }
 
-        // 3) fallback
+        // 🕵️‍♂️ Fallback si rien trouvé
         window.location.href = `/search?q=${encodeURIComponent(q)}`;
       });
     </script>
