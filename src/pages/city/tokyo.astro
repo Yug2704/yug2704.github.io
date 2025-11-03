@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import data from "../../data/cities/tokyo.json";
+---
+
+<BaseLayout
+  title={`Coût de la vie à ${data.name} (${data.country})`}
+  description={`Prix à ${data.name} : repas, logement, transport, etc. Comparaison avec la France.`}
+>
+  <section>
+    <h1 style="margin:0 0 12px 0;">Prix de la vie à {data.name}</h1>
+    {data.summary && <p style="color:#4b5563;margin:0 0 16px 0;">{data.summary}</p>}
+
+    <div class="card" style="margin:16px 0;">
+      <h3 style="margin-top:0;">Panier de prix</h3>
+      <table style="width:100%;border-collapse:collapse">
+        <tbody>
+          {Object.entries(data.prices).map(([k, v]) => (
+            <tr>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-transform:capitalize">{k}</td>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right">
+                {v} {data.currency}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p style="color:#6b7280;font-size:.9rem">
+      Dernière mise à jour : {data.last_update}
+    </p>
+  </section>
+</BaseLayout>
