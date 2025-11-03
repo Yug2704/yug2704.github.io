@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Slug -> clé KPI (doit être AU-DESSUS de getStaticPaths) */
-const keyByCategory: Record<string, string> = {
+/* 1) Map CAT → clé KPI (uniquement pour le RENDU de la page) */
+const keyByCategoryPage: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -12,28 +12,40 @@ const keyByCategory: Record<string, string> = {
   habiter: "habiterIndex",
 };
 
-/* 2) Génération des routes (tout est calculé dans la fonction) */
+/* 2) Génération des routes — tout ce qui est utilisé ici est LOCAL à la fonction */
 export async function getStaticPaths() {
-  // 2.1 Tous les pays
+  // 2.1 Map CAT → KPI locale (pour éviter toute histoire de scope/treeshake)
+  const CAT2KPI: Record<string, string> = {
+    restaurant: "restaurant",
+    salaire: "salaireNet",
+    loyer: "loyer",
+    essence: "essence",
+    cinema: "cinema",
+    hotel: "hotel",
+    habiter: "habiterIndex",
+  };
+
+  // 2.2 Pays
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
 
-  // 2.2 Catégories (on prend les slugs)
+  // 2.3 Catégories (ton JSON est un tableau d’objets { slug, name })
   const catsMod = await import("../../../data/categories.json");
   const catsRaw: any[] = (catsMod as any).default ?? (catsMod as any);
   const cats: string[] = catsRaw.map((c: any) => (typeof c === "string" ? c : c?.slug)).filter(Boolean);
 
-  // 2.3 France de référence
+  // 2.4 France de référence
   const FR = COUNTRIES.find((c: any) => c?.slug === "france");
 
+  // 2.5 Construit les routes existantes
   const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
-      const k = keyByCategory[cat];
+      const k = CAT2KPI[cat];
       if (k && c?.kpis && k in c.kpis) {
         paths.push({
           params: { country: c.slug, category: cat },
-          props: { country: c, category: cat, FR },
+          props:  { country: c, category: cat, FR },
         });
       }
     }
@@ -41,7 +53,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-/* 3) Props */
+/* 3) Props de page */
 const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
 
 /* 4) Helpers d’affichage */
@@ -58,7 +70,7 @@ function diffLabel(val?: number | null, ref?: number | null) {
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
   return pct < 0
     ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
+    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
 /* 5) Libellés */
@@ -73,10 +85,10 @@ const labels: Record<string, string> = {
 };
 
 /* 6) Valeurs */
-const key = keyByCategory[category];
-const val = country?.kpis?.[key];
-const ref = FR?.kpis?.[key];
-const d = diffLabel(val, ref);
+const key   = keyByCategoryPage[category];
+const val   = country?.kpis?.[key];
+const ref   = FR?.kpis?.[key];
+const d     = diffLabel(val, ref);
 const title = `${labels[category]} – ${country?.name ?? ""}`;
 ---
 
@@ -92,7 +104,9 @@ const title = `${labels[category]} – ${country?.name ?? ""}`;
       <div class="meta">
         {country.slug === "france"
           ? <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
-          : <p class="muted">⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong></p>}
+          : <p class="muted">⌀ par rapport à la France :
+              <strong style={`color:${d.color}`}>{d.text}</strong>
+            </p>}
       </div>
 
       {country.slug !== "france" && (
