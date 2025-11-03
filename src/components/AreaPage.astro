@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import frBase from "../data/countries/france.json"; // base de comparaison
+import frBase from "../data/countries/france.json"; // base de comparaison (France)
 
 const { data } = Astro.props; // JSON de la zone (pays OU ville)
 
-// Liste des lignes à afficher (label -> clé du JSON)
+// Libellés -> clés JSON
 const FIELDS = [
   ["🍽️ Repas au restaurant", "repas"],
   ["☕ Café", "café"],
@@ -15,7 +15,7 @@ const FIELDS = [
   ["🚬 Cigarettes (20)", "cigarettes"],
 ];
 
-// Prépare les lignes (pas de JSX ici)
+// Prépare les lignes (aucun JSX ici)
 function makeRow(label, key) {
   const v = data?.prices?.[key];
   if (v == null) return null;
@@ -37,8 +37,7 @@ function makeRow(label, key) {
     label,
     value: v,
     unit: data.currency || "",
-  ,  // trailing comma ok
-    deltaTxt,
+    deltaTxt
   };
 }
 
