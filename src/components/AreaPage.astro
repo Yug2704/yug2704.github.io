@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import frBase from "../data/countries/france.json"; // base de comparaison
+
+const { data } = Astro.props; // JSON de la zone (pays OU ville)
+
+// Petit helper pour le pourcentage vs France si la clé existe des deux côtés
+function compareLine(label, key, unit = data.currency || "") {
+  const v = data.prices?.[key];
+  const vf = frBase.prices?.[key];
+  if (v == null) return null;
+
+  let deltaTxt = "";
+  if (vf != null && Number(vf) !== 0) {
+    const pct = ((Number(v) - Number(vf)) / Number(vf)) * 100;
+    const sens = pct === 0 ? "identique" : (pct > 0 ? `${Math.abs(pct).toFixed(0)}% plus cher` : `${Math.abs(pct).toFixed(0)}% moins cher`);
+    deltaTxt = `France : ${vf} ${frBase.currency || ""} — ${sens}`;
+  }
+
+  return (
+    <tr>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb">{label}</td>
+      <td style="padding:8px;border-bottom:1px solid #e5e7eb;text-align:right">
+        {v} {unit}
+        {deltaTxt && <div style="font-size:.85rem;color:#6b7280">{deltaTxt}</div>}
+      </td>
+    </tr>
+  );
+}
+---
+
+<BaseLayout title={`Coût de la vie à ${data.name} (${data.country})`}
+            description={`Prix à ${data.name} : repas, logement, transport, etc. Comparaison avec la France.`}>
+  <!-- Bannière (identique pays/villes) -->
+  {data.banner && (
+    <div style="margin:12px 0 20px 0;border-radius:14px;overflow:hidden;max-height:220px">
+      <img src={data.banner} alt={`Bannière ${data.country}`} style="width:100%;height:auto;display:block" loading="lazy" />
+    </div>
+  )}
+
+  <section>
+    <h1 style="margin:0 0 12px 0;">{data.name} — Comparé à la France</h1>
+    <p style="background:#fff1f6;border:1px solid #ffd0df;border-radius:12px;padding:12px;margin:0 0 16px 0">
+      Aperçu des coûts moyens avec comparaison directe à la référence France.
+      Les valeurs peuvent varier selon la zone.
+    </p>
+
+    <div class="card" style="margin:16px 0;">
+      <h3 style="margin-top:0;">Chiffres clés (vs France)</h3>
+      <table style="width:100%;border-collapse:collapse">
+        <tbody>
+          {compareLine("🍽️ Repas au restaurant", "repas")}
+          {compareLine("☕ Café", "café")}
+          {compareLine("🥖 Pain", "pain")}
+          {compareLine("🏠 Loyer (1 ch. centre-ville)", "loyer")}
+          {compareLine("🚌 Transport (ticket)", "transport")}
+          {compareLine("🎬 Cinéma (1 place)", "cinéma")}
+          {compareLine("🚬 Cigarettes (20)", "cigarettes")}
+        </tbody>
+      </table>
+    </div>
+
+    {data.summary && (
+      <div class="card" style="margin:16px 0;">
+        <h3 style="margin-top:0;">À savoir sur {data.name}</h3>
+        <p style="color:#4b5563;margin:0">{data.summary}</p>
+      </div>
+    )}
+
+    <p style="color:#6b7280;font-size:.9rem">Dernière mise à jour : {data.last_update}</p>
+  </section>
+</BaseLayout>
