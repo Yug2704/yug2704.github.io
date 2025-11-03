@@ -1,0 +1,7 @@
+---
+import AreaPage from "../../components/AreaPage.astro";
+const { slug } = Astro.params;
+const data = (await import(`../../data/cities/${slug}.json`)).default;
+---
+<AreaPage data={data} />
+
