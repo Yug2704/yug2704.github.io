@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-/* 1) Map CAT → clé KPI (pour le rendu de la page) */
-const keyByCategoryPage: Record<string, string> = {
+/* 1) KPI key per category */
+const keyByCategory: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -12,32 +12,28 @@ const keyByCategoryPage: Record<string, string> = {
   habiter: "habiterIndex",
 };
 
-/* 2) Génération des routes — TOUT ce qui est utilisé ici doit être local à la fonction */
-export async function getStaticPaths() {
-  // 2.1 Map CAT → clé KPI (copie locale pour éviter tout souci de scope/treeshaking)
-  const keyByCategory: Record<string, string> = {
-    restaurant: "restaurant",
-    salaire: "salaireNet",
-    loyer: "loyer",
-    essence: "essence",
-    cinema: "cinema",
-    hotel: "hotel",
-    habiter: "habiterIndex",
-  };
+/* 2) Intro copy par catégorie (très court, éditable) */
+const introByCat: Record<string, (countryName: string)=>string> = {
+  restaurant: (n)=> `Au ${n}, le coût d’un repas au restaurant dépend beaucoup du type d’établissement et du quartier. Les petites chaînes et cantines locales permettent souvent de bien manger pour moins cher qu’en France, tandis que les restaurants touristiques ou haut de gamme s’alignent davantage sur les prix européens.`,
+  salaire:    (n)=> `Le salaire net mensuel au ${n} reflète le niveau de vie local et les charges sociales en vigueur. Les écarts restent sensibles selon la ville, le secteur d’activité et l’expérience.`,
+  loyer:      (n)=> `Les loyers au ${n} varient fortement selon l’emplacement. Les centres très denses et bien desservis sont plus onéreux, tandis que les zones suburbaines restent plus abordables.`,
+  essence:    (n)=> `Le prix de l’essence au ${n} évolue avec la fiscalité locale et le marché international. Il peut changer rapidement : pensez à vérifier les prix récents avant un long trajet.`,
+  cinema:     (n)=> `Le tarif d’une place de cinéma au ${n} dépend de la ville, de la salle et des éventuels suppléments (IMAX, 3D, VO/VF).`,
+  hotel:      (n)=> `Une nuit d’hôtel au ${n} peut coûter plus cher dans les secteurs centraux et très touristiques. Réserver en avance et hors haute saison aide souvent à réduire la note.`,
+  habiter:    (n)=> `L’indice « Habiter » synthétise plusieurs postes (loyers, biens courants, services…) pour situer globalement le coût de la vie au ${n} par rapport à la France (réf. 100).`,
+};
 
-  // 2.2 Pays
+/* 3) Static paths */
+export async function getStaticPaths() {
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
 
-  // 2.3 Catégories (ton JSON contient des objets {slug,name})
   const catsMod = await import("../../../data/categories.json");
   const catsRaw: any[] = (catsMod as any).default ?? (catsMod as any);
   const cats: string[] = catsRaw.map((c: any) => (typeof c === "string" ? c : c?.slug)).filter(Boolean);
 
-  // 2.4 France de référence
   const FR = COUNTRIES.find((c: any) => c?.slug === "france");
 
-  // 2.5 Routes
   const paths: any[] = [];
   for (const c of COUNTRIES) {
     for (const cat of cats) {
@@ -53,10 +49,10 @@ export async function getStaticPaths() {
   return paths;
 }
 
-/* 3) Props de page */
+/* 4) Props */
 const { country, category, FR } = Astro.props as { country: any; category: string; FR: any };
 
-/* 4) Helpers d’affichage */
+/* 5) Helpers */
 function eur(n?: number | null) {
   if (n == null) return "";
   return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
@@ -73,7 +69,7 @@ function diffLabel(val?: number | null, ref?: number | null) {
     : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
-/* 5) Libellés affichage */
+/* 6) Libellés courts pour le titre */
 const labels: Record<string, string> = {
   restaurant: "Repas au restaurant",
   salaire: "Salaire mensuel net moyen",
@@ -84,47 +80,108 @@ const labels: Record<string, string> = {
   habiter: "Indice « Habiter »",
 };
 
-/* 6) Valeurs */
-const key = keyByCategoryPage[category];
+/* 7) Données KPI + estimations min/max (par défaut ±30 %, ajustez si besoin) */
+const key = keyByCategory[category];
 const val = country?.kpis?.[key];
 const ref = FR?.kpis?.[key];
 const d = diffLabel(val, ref);
-const title = `${labels[category]} – ${country?.name ?? ""}`;
+const min = val != null ? Math.max(0, val * 0.70) : null;
+const max = val != null ? val * 1.30 : null;
+
+/* 8) Bannière catégorie (fallback sur bannière pays) */
+const catBanner = `/banners/categories/${category}.jpg`;
+const hasCatBanner = true; // on l’affiche directement; s’il n’existe pas en prod GitHub Pages, le fallback pays est dessous
+const countryBanner = country.banner || `/banners/${country.slug}.jpg`;
+const bannerSrc = hasCatBanner ? catBanner : countryBanner;
+
+/* 9) Contenus */
+const title = `${labels[category]} : ${country?.name ?? ""}`;
+const intro = (introByCat[category] || (()=> ""))(country.name);
 ---
 
 <BaseLayout title={title}>
-  <div class="wrap">
-    <div class="page-title">
-      <h1>{labels[category]} : <span class="country-name">{country.name}</span></h1>
-    </div>
-
-    <div class="cards">
-      <div class="value"><div class="val">{eur(val)}</div></div>
-
-      <div class="meta">
-        {country.slug === "france"
-          ? <p class="muted">Valeur de référence utilisée pour comparer les autres pays.</p>
-          : <p class="muted">⌀ par rapport à la France :
-              <strong style={`color:${d.color}`}>{d.text}</strong>
-            </p>}
-      </div>
-
-      {country.slug !== "france" && (
-        <div class="ref">
-          <span class="muted">⌀ réf. France :</span> <span class="refV">{eur(ref)}</span>
-        </div>
-      )}
-    </div>
+  <!-- Bannière -->
+  <div class="banner">
+    <img src={bannerSrc} alt={`Bannière ${labels[category]}`} onerror={`this.src='${countryBanner}'`} />
   </div>
 
+  <!-- Titre -->
+  <div class="page-title">
+    <h1>{labels[category]} : <span class="country-name">{country.name}</span></h1>
+  </div>
+
+  <!-- Card de prix -->
+  <section class="price-card">
+    <div class="price-main">
+      <div class="price-value">{eur(val)}</div>
+      <div class="price-sub">
+        {country.slug === "france"
+          ? <span class="muted">Valeur de référence (France)</span>
+          : <span>⌀ par rapport à la France : <strong style={`color:${d.color}`}>{d.text}</strong></span>}
+      </div>
+    </div>
+    <div class="price-side">
+      <div class="row">
+        <span class="label">Min estimé</span>
+        <span class="val">{min != null ? eur(min) : "—"}</span>
+      </div>
+      <div class="row">
+        <span class="label">Max estimé</span>
+        <span class="val">{max != null ? eur(max) : "—"}</span>
+      </div>
+      <div class="row sep">
+        <span class="label muted">Réf. France</span>
+        <span class="val muted">{eur(ref)}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro courte -->
+  {intro && (
+    <section class="intro card">
+      <p class="muted">{intro}</p>
+    </section>
+  )}
+
   <style>
-    .wrap{max-width:980px;margin:0 auto;padding:24px;}
-    .page-title{margin:8px 0 16px}
-    .country-name{color:var(--accent);}
-    .cards{display:grid;gap:16px}
-    .value{font-size:48px;font-weight:800;line-height:1;margin-bottom:8px;}
-    .meta{color:var(--muted);margin-bottom:8px;}
-    .ref{color:var(--muted);}
-    .refV{font-weight:600}
+    :root{ --red:#e03131; --green:#2f9e44; }
+
+    .banner{
+      margin:16px 0 18px;
+      border:1px solid var(--line);
+      border-radius:18px; overflow:hidden; box-shadow:var(--shadow);
+      background:#fff;
+    }
+    .banner img{ width:100%; height:220px; object-fit:cover; display:block; }
+
+    .page-title{ margin:8px 0 14px }
+    .country-name{ color:var(--accent); }
+
+    .price-card{
+      display:grid; grid-template-columns:1.2fr .8fr; gap:16px;
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      padding:18px; box-shadow:var(--shadow);
+    }
+    @media (max-width:780px){ .price-card{ grid-template-columns:1fr; } }
+
+    .price-main .price-value{
+      font-size:48px; font-weight:800; line-height:1; margin-bottom:8px;
+    }
+    .price-sub{ color:var(--muted); }
+
+    .price-side{
+      background:var(--accent-100); border:1px solid #ffd0df; border-radius:14px;
+      padding:14px;
+    }
+    .row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; }
+    .row.sep{ border-top:1px dashed #ffc2d5; margin-top:4px; padding-top:10px; }
+    .label{ font-weight:600; }
+    .val{ font-variant-numeric:tabular-nums; }
+
+    .card{
+      background:var(--card); border:1px solid var(--line);
+      border-radius:16px; padding:16px; box-shadow:var(--shadow);
+      margin-top:16px;
+    }
   </style>
 </BaseLayout>
