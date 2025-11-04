@@ -1,9 +1,0 @@
-[
-  { "slug": "restaurant", "name": "Repas au restaurant" },
-  { "slug": "salaire",    "name": "Salaire net"         },
-  { "slug": "loyer",      "name": "Loyer"               },
-  { "slug": "essence",    "name": "Essence"             },
-  { "slug": "cinema",     "name": "Cinéma"              },
-  { "slug": "hotel",      "name": "Hôtel"               },
-  { "slug": "habiter",    "name": "Indice « Habiter »"  }
-]
