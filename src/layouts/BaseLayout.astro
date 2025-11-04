@@ -127,7 +127,7 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script recherche : capte TOUTES les barres de recherche -->
+    <!-- 🔧 Script recherche ultra-robuste (capture tous les formulaires) -->
     <script is:inline>
       const CITIES = {JSON.stringify(cities)};
       const COUNTRIES = {JSON.stringify(countries)};
@@ -139,30 +139,46 @@ const {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
 
-      // 🧲 accroche tous les formulaires role="search" (si d'autres pages en ont)
-      const forms = Array.from(document.querySelectorAll('form[role="search"]'));
-      forms.forEach((form) => {
-        // fallback propre si JS off
-        if (!form.getAttribute('action')) form.setAttribute('action', '/search');
-        if (!form.getAttribute('method')) form.setAttribute('method', 'GET');
+      function handleSearchSubmit(e) {
+        try {
+          // Intercepte toute soumission, même si l'action est /category
+          const form = e.target;
+          if (!(form instanceof HTMLFormElement)) return;
 
-        form.addEventListener('submit', (e) => {
+          // On cible uniquement les formulaires de recherche visibles (header/mini-bars)
+          const isSearchRole = form.getAttribute("role") === "search";
+          const looksLikeSearch = !!form.querySelector('input[type="search"], input[name="q"]');
+          if (!isSearchRole && !looksLikeSearch) return;
+
           e.preventDefault();
-          const q = new FormData(form).get('q');
-          const s = slugify(q);
 
-          // 1) villes
+          // Récupère la query: name="q" sinon 1er input texte
+          let q = (new FormData(form).get("q")) || "";
+          if (!q) {
+            const input =
+              form.querySelector('input[name="q"]') ||
+              form.querySelector('input[type="search"]') ||
+              form.querySelector('input[type="text"]');
+            if (input) q = input.value || "";
+          }
+
+          const s = slugify(q);
+          if (!s) { window.location.href = `/search?q=${encodeURIComponent(q)}`; return; }
+
           const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
           if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-          // 2) pays
           const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
           if (country) { window.location.href = `/country/${country.slug}`; return; }
 
-          // 3) fallback résultats
           window.location.href = `/search?q=${encodeURIComponent(q)}`;
-        });
-      });
+        } catch (_err) {
+          // En cas d'erreur, on laisse le fallback /search
+        }
+      }
+
+      // Écoute TOUTES les soumissions en phase de capture (prend la main avant l'action /category)
+      document.addEventListener("submit", handleSearchSubmit, true);
     </script>
   </body>
 </html>
