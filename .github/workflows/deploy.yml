@@ -1,14 +1,19 @@
 name: Deploy Astro to GitHub Pages
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
 on:
   push:
-    branches: [ main ]
+    branches:
+      - restore-03nov
+  workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -23,7 +28,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
