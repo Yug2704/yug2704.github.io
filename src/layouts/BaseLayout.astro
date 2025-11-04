@@ -127,7 +127,7 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script recherche : JSON inliné (zéro import côté client) -->
+    <!-- 🔧 Script recherche : capte TOUTES les barres de recherche -->
     <script is:inline>
       const CITIES = {JSON.stringify(cities)};
       const COUNTRIES = {JSON.stringify(countries)};
@@ -139,22 +139,29 @@ const {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
 
-      const form = document.getElementById("site-search");
-      form?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const q = new FormData(form).get("q");
-        const s = slugify(q);
+      // 🧲 accroche tous les formulaires role="search" (si d'autres pages en ont)
+      const forms = Array.from(document.querySelectorAll('form[role="search"]'));
+      forms.forEach((form) => {
+        // fallback propre si JS off
+        if (!form.getAttribute('action')) form.setAttribute('action', '/search');
+        if (!form.getAttribute('method')) form.setAttribute('method', 'GET');
 
-        // 1) villes
-        const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (city) { window.location.href = `/city/${city.slug}`; return; }
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const q = new FormData(form).get('q');
+          const s = slugify(q);
 
-        // 2) pays
-        const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (country) { window.location.href = `/country/${country.slug}`; return; }
+          // 1) villes
+          const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-        // 3) fallback
-        window.location.href = `/search?q=${encodeURIComponent(q)}`;
+          // 2) pays
+          const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (country) { window.location.href = `/country/${country.slug}`; return; }
+
+          // 3) fallback résultats
+          window.location.href = `/search?q=${encodeURIComponent(q)}`;
+        });
       });
     </script>
   </body>
