@@ -16,7 +16,7 @@ const title = "Prix de la vie – Accueil";
       border-radius:999px;filter:blur(10px) saturate(1.1);opacity:.7;z-index:0;"></div>
 
     <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 12px;box-shadow:var(--shadow);">
-      <input id="q" placeholder="Rechercher (ex: Japon, Tokyo, Lait, Japon-lait)" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);" />
+      <input id="q" placeholder="Rechercher (ex: Japon, Tokyo)" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);" />
       <a class="btn" id="go" href="#">Rechercher</a>
     </div>
   </div>
@@ -25,30 +25,51 @@ const title = "Prix de la vie – Accueil";
   <div class="card" style="background:var(--accent-100);margin-top:20px;">
     <h2 style="margin:0 0 10px 0;">Bienvenue sur Prix de la vie</h2>
     <p style="color:var(--muted);font-size:1.02rem;line-height:1.65;margin:0;">
-      Découvrez les prix de la vie dans des dizaines de pays et de villes à travers le monde.
-      Chaque donnée est comparée à la France pour vous aider à visualiser les différences
-      de coût de la vie, que ce soit pour les repas, logements, transports ou produits du quotidien.
+      Découvrez les prix de la vie dans des pays et des villes du monde entier, toujours comparés à la France.
     </p>
   </div>
 
   <div class="grid" style="margin-top:20px;">
-    <div class="card">Ajoute des pages et données dans <code>src/pages</code> et <code>src/data</code>.</div>
-    <div class="card">Le déploiement GitHub Pages est automatique.</div>
+    <a class="card" href="/country/france"><strong>🇫🇷 France</strong><br/><span style="color:#6b7280">Base de comparaison</span></a>
+    <a class="card" href="/country/japon"><strong>🇯🇵 Japon</strong><br/><span style="color:#6b7280">Pays</span></a>
+    <a class="card" href="/country/tokyo"><strong>🏙️ Tokyo</strong><br/><span style="color:#6b7280">Ville</span></a>
   </div>
 
-  <script>
-    const q = document.getElementById('q');
+  <!-- Script recherche : route toujours vers /country/<slug> -->
+  <script type="module" is:inline>
+    import cities from "../data/_index_cities.json";
+    import countries from "../data/_index_countries.json";
+    const CITIES = cities;
+    const COUNTRIES = countries;
+
+    const q  = document.getElementById('q');
     const go = document.getElementById('go');
-    function openBestMatch(){
-      const term = (q.value||"").toLowerCase().trim();
-      if(!term) return;
-      if(term.includes('-')){ const [a,b] = term.split('-'); location.href = `/country/${a}/${b}`; return; }
-      fetch(`/country/${term}/index.html`, {method:'HEAD'}).then(r=>{
-        if(r.ok) location.href = `/country/${term}`;
-        else location.href = `/category/${term}`;
-      }).catch(()=> location.href = `/category/${term}`);
+
+    const slugify = (s) =>
+      String(s || "")
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
+    function openBestMatch() {
+      const term = (q.value || "").trim();
+      if (!term) return;
+      const s = slugify(term);
+
+      // 1) Ville connue → /country/<slug>
+      const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
+      if (city) { location.href = `/country/${city.slug}`; return; }
+
+      // 2) Pays connu → /country/<slug>
+      const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
+      if (country) { location.href = `/country/${country.slug}`; return; }
+
+      // 3) Fallback résultats (plus jamais /category/<term>)
+      location.href = `/search?q=${encodeURIComponent(term)}`;
     }
-    go.addEventListener('click', e=>{e.preventDefault();openBestMatch();});
-    q.addEventListener('keydown', e=>{if(e.key==='Enter')openBestMatch();});
+
+    go.addEventListener('click', e => { e.preventDefault(); openBestMatch(); });
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') openBestMatch(); });
   </script>
 </BaseLayout>
