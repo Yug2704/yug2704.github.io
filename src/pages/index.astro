@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Prix de la vie – Accueil";
+---
+<BaseLayout title={title}>
+  <!-- Bannière -->
+  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+    <img src="/banners/france.jpg" alt="Bannière" style="width:100%;height:220px;object-fit:cover;" />
+  </div>
+
+  <!-- Banderole rose + recherche (FORMULAIRE !) -->
+  <div style="position:relative;margin-top:-22px;padding:10px 0;">
+    <div aria-hidden="true" style="
+      position:absolute;inset:0;height:64px;margin:auto;left:8px;right:8px;
+      background:linear-gradient(90deg,#ffc2d5,#ff8db2,#ffc2d5);
+      border-radius:999px;filter:blur(10px) saturate(1.1);opacity:.7;z-index:0;"></div>
+
+    <form id="home-search" role="search" action="/search" method="GET"
+          style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 12px;box-shadow:var(--shadow);">
+      <input name="q" id="home-q" placeholder="Rechercher (ex: Japon, Tokyo)"
+             style="flex:1;background:transparent;border:none;outline:none;color:var(--text);" />
+      <button class="btn" type="submit">Rechercher</button>
+    </form>
+  </div>
+
+  <!-- Bloc intro -->
+  <div class="card" style="background:var(--accent-100);margin-top:20px;">
+    <h2 style="margin:0 0 10px 0;">Bienvenue sur Prix de la vie</h2>
+    <p style="color:#4b5563;margin:0;">
+      Découvrez les prix de la vie dans des pays et des villes du monde entier, toujours comparés à la France.
+    </p>
+  </div>
+
+  <div class="grid" style="margin-top:20px;">
+    <a class="card" href="/country/france"><strong>🇫🇷 France</strong><br/><span style="color:#6b7280">Base de comparaison</span></a>
+    <a class="card" href="/country/japon"><strong>🇯🇵 Japon</strong><br/><span style="color:#6b7280">Pays</span></a>
+    <a class="card" href="/country/tokyo"><strong>🏙️ Tokyo</strong><br/><span style="color:#6b7280">Ville</span></a>
+  </div>
+
+  <!-- Script local qui route toujours vers /country/<slug> -->
+  <script type="module" is:inline>
+    import cities from "../data/_index_cities.json";
+    import countries from "../data/_index_countries.json";
+
+    const form = document.getElementById("home-search");
+    const input = document.getElementById("home-q");
+
+    const slugify = (s) =>
+      String(s || "").toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+    form.addEventListener("submit", (e) => {
+      try {
+        e.preventDefault();
+        const term = (input.value || "").trim();
+        if (!term) return;
+        const s = slugify(term);
+
+        const city = cities.find(c => c.slug === s || slugify(c.name) === s);
+        if (city) { location.href = `/country/${city.slug}`; return; }
+
+        const country = countries.find(c => c.slug === s || slugify(c.name) === s);
+        if (country) { location.href = `/country/${country.slug}`; return; }
+
+        // fallback résultat (si inconnu)
+        location.href = `/search?q=${encodeURIComponent(term)}`;
+      } catch (_err) {
+        // en cas d'erreur improbable : fallback
+        location.href = `/search?q=${encodeURIComponent(input.value || "")}`;
+      }
+    });
+  </script>
+</BaseLayout>
