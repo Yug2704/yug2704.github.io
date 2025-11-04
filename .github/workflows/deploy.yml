@@ -6,7 +6,8 @@ concurrency:
 
 on:
   push:
-    branches: [ restore-03nov ]
+    branches:
+      - restore-03nov
 
 permissions:
   contents: read
