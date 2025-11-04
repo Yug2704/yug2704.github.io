@@ -1,17 +1,27 @@
 ---
 import AreaPage from "../../components/AreaPage.astro";
 
-// 🔧 Liste tous les pays à pré-générer depuis /data/countries/*.json
+// 🧭 On pré-génère TOUT : les slugs des pays ET des villes
 export async function getStaticPaths() {
-  const modules = import.meta.glob("../../data/countries/*.json");
-  return Object.keys(modules).map((p) => {
-    const slug = p.split("/").pop().replace(".json", "");
-    return { params: { slug } };
-  });
+  const countryMods = import.meta.glob("../../data/countries/*.json");
+  const cityMods = import.meta.glob("../../data/cities/*.json");
+
+  const countrySlugs = Object.keys(countryMods).map((p) => p.split("/").pop().replace(".json", ""));
+  const citySlugs = Object.keys(cityMods).map((p) => p.split("/").pop().replace(".json", ""));
+  const all = Array.from(new Set([...countrySlugs, ...citySlugs]));
+
+  return all.map((slug) => ({ params: { slug } }));
 }
 
-// Charge le JSON du pays correspondant au slug
+// 🚦 Charge d’abord le JSON pays ; sinon bascule sur le JSON ville
 const { slug } = Astro.params;
-const data = (await import(`../../data/countries/${slug}.json`)).default;
+
+let data;
+try {
+  data = (await import(`../../data/countries/${slug}.json`)).default;
+} catch {
+  data = (await import(`../../data/cities/${slug}.json`)).default;
+}
+
 ---
 <AreaPage data={data} />
