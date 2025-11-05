@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import KpiCard from "../../components/KpiCard.astro";
 
-/* 1) ROUTES STATIQUES — tout est déclaré DANS la fonction */
+/* 1) ROUTES STATIQUES */
 export function getStaticPaths() {
   const files = import.meta.glob("../../data/countries/*.json", { eager: true });
   const ALL = Object.values(files).map((m) => m.default ?? m);
@@ -13,7 +13,7 @@ export function getStaticPaths() {
   }));
 }
 
-/* 2) DONNÉES DE PAGE — on redéclare un files ici (scope différent) */
+/* 2) DONNÉES DE PAGE */
 const filesPage = import.meta.glob("../../data/countries/*.json", { eager: true });
 const ALL_PAGE = Object.values(filesPage).map((m) => m.default ?? m);
 
@@ -38,16 +38,19 @@ const KPIS = [
   { key:"salaireNet",   label:"Salaire mensuel net moyen",               icon:"💰",  fmt:eur },
   { key:"loyer",        label:"Loyer mensuel (1 chambre, centre-ville)", icon:"🏠",  fmt:eur },
   { key:"essence",      label:"Essence (1 L)",                            icon:"⛽",  fmt:eur },
+
+  { key:"cigarettes",   label:"Cigarettes (paquet)",                      icon:"🚬",  fmt:eur },
+
   { key:"cinema",       label:"Cinéma (1 place)",                         icon:"🎬",  fmt:eur },
   { key:"hotel",        label:"Hôtel (1 nuit)",                           icon:"🛎️", fmt:eur },
-  { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) },
+  { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) }
 ];
 
 /* map clef KPI -> slug catégorie */
 function keyToCategorySlug(key){
   if (key === "salaireNet")   return "salaire";
   if (key === "habiterIndex") return "habiter";
-  return key; // restaurant, loyer, essence, cinema, hotel
+  return key; // restaurant, loyer, essence, cigarettes, cinema, hotel
 }
 
 /* Titre + bannière */
@@ -80,7 +83,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     </p>
   </div>
 
-  <!-- Chiffres clés encadrés -->
+  <!-- Chiffres clés -->
   <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
   <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
     <div class="grid">
