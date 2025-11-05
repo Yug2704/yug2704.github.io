@@ -1,4 +1,5 @@
 ---
+// (imports conservés si tu en as besoin autre part ; ils ne cassent rien même si non utilisés)
 import cities from "../data/_index_cities.json";
 import countries from "../data/_index_countries.json";
 
@@ -84,17 +85,17 @@ const {
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🔎 Recherche (header) -->
-          <form id="site-search" class="search" role="search" action="/search" method="GET" autocomplete="off">
+          <!-- 🔎 Recherche header – même logique que la grande barre -->
+          <div class="search" role="search" aria-label="Recherche">
             <input
-              name="q"
+              id="hdr-q"
               type="search"
               placeholder="Pays ou ville…"
-              aria-label="Rechercher un pays ou une ville"
-              required
+              autocomplete="off"
+              aria-label="Rechercher un pays, une ville ou pays-catégorie"
             />
-            <button class="pill" type="submit">Chercher</button>
-          </form>
+            <button class="pill" type="button" id="hdr-go">Chercher</button>
+          </div>
         </nav>
       </div>
     </header>
@@ -133,39 +134,36 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script recherche du header (autonome, n'affecte pas la grande barre) -->
+    <!-- 🔧 Script : copie fidèle de la logique de index.astro -->
     <script is:inline>
-      // Données embarquées (aucune requête client)
-      const CITIES = {JSON.stringify(cities)};
-      const COUNTRIES = {JSON.stringify(countries)};
+      const hdrQ  = document.getElementById('hdr-q');
+      const hdrGo = document.getElementById('hdr-go');
 
-      const slugify = (s) =>
-        String(s || "")
-          .toLowerCase()
-          .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
+      function openBestMatchHeader(){
+        const termRaw = (hdrQ?.value || "").trim();
+        if (!termRaw) return;
+        const term = termRaw.toLowerCase();
 
-      const form = document.getElementById("site-search");
-      if (form) {
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const q = (new FormData(form).get("q") || "").toString().trim();
-          if (!q) { form.submit(); return; } // garde un fallback propre
-          const s = slugify(q);
+        // pays-catégorie (ex: japon-restaurants)
+        if (term.includes('-')) {
+          const [a,b] = term.split('-');
+          window.location.href = `/country/${a}/${b}`;
+          return;
+        }
 
-          // 1) villes
-          const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
-          if (city) { window.location.href = `/city/${city.slug}`; return; }
-
-          // 2) pays
-          const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
-          if (country) { window.location.href = `/country/${country.slug}`; return; }
-
-          // 3) fallback vers /search
-          window.location.href = `/search?q=${encodeURIComponent(q)}`;
-        });
+        // test si une page pays existe, sinon on bascule en /category/{term}
+        fetch(`/country/${term}/index.html`, { method: 'HEAD' })
+          .then(r => {
+            if (r.ok) window.location.href = `/country/${term}`;
+            else      window.location.href = `/category/${term}`;
+          })
+          .catch(() => window.location.href = `/category/${term}`);
       }
+
+      hdrGo?.addEventListener('click', (e) => { e.preventDefault(); openBestMatchHeader(); });
+      hdrQ?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); openBestMatchHeader(); }
+      });
     </script>
   </body>
 </html>
