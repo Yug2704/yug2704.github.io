@@ -38,11 +38,9 @@ const KPIS = [
   { key:"salaireNet",   label:"Salaire mensuel net moyen",               icon:"💰",  fmt:eur },
   { key:"loyer",        label:"Loyer mensuel (1 chambre, centre-ville)", icon:"🏠",  fmt:eur },
   { key:"essence",      label:"Essence (1 L)",                            icon:"⛽",  fmt:eur },
-
   { key:"cigarettes",   label:"Cigarettes (paquet)",                      icon:"🚬",  fmt:eur },
-
   { key:"cinema",       label:"Cinéma (1 place)",                         icon:"🎬",  fmt:eur },
-  { key:"hotel",        label:"Hôtel (1 nuit)",                           icon:"🛎️", fmt:eur },
+  { key:"hotel",        label:"Hôtel (1 nuit)",                           icon:"🛎️",  fmt:eur },
   { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) }
 ];
 
@@ -60,10 +58,27 @@ const title = isFrance
 const bannerSrc  = country.banner     || `/banners/${country.slug}.jpg`;
 const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
 ---
+
 <BaseLayout title={title}>
   <style>
     :root{ --red:#e03131; --green:#2f9e44; }
     .kpi-title{display:flex;gap:.4rem;align-items:center}
+    .about-box {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px 22px;
+      margin-top: 10px;
+    }
+    .about-box p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0 0 12px 0;
+    }
+    .about-box p:last-child {
+      margin-bottom: 0;
+    }
   </style>
 
   <!-- Bannière -->
@@ -112,9 +127,9 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
 
   <!-- À propos -->
   <h2 style="margin-top:26px;">{aboutTitle}</h2>
-  <div class="card" style="margin-top:10px;">
+  <div class="about-box">
     {country.notes?.map((p, i) => (
-      <p style={`color:var(--muted);line-height:1.7;${i===0?"margin-top:0;":""}${i===country.notes.length-1?"margin-bottom:0;":""}`}>{p}</p>
+      <p>{p}</p>
     ))}
   </div>
 </BaseLayout>
