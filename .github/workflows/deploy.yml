@@ -1,14 +1,20 @@
 name: Deploy Astro to GitHub Pages
+
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:  # permet de lancer manuellement un déploiement sur main
+
+# Empêche deux déploiements concurrents
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+# Permissions requises par deploy-pages
 permissions:
   contents: read
   pages: write
   id-token: write
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -22,6 +28,7 @@ jobs:
         with:
           node-version: 20
 
+      # Si tu as un package-lock.json, tu peux mettre "npm ci" (plus fiable)
       - name: Install dependencies
         run: npm install
 
