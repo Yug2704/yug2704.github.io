@@ -5,12 +5,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Évite les déploiements concurrents
 concurrency:
   group: github-pages
   cancel-in-progress: true
 
-# Permissions minimales requises par deploy-pages
 permissions:
   contents: read
   pages: write
