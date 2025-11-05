@@ -7,6 +7,9 @@ const keyByCategoryPage: Record<string, string> = {
   salaire: "salaireNet",
   loyer: "loyer",
   essence: "essence",
+
+  cigarettes: "cigarettes",
+
   cinema: "cinema",
   hotel: "hotel",
   habiter: "habiterIndex",
@@ -20,6 +23,9 @@ export async function getStaticPaths() {
     salaire: "salaireNet",
     loyer: "loyer",
     essence: "essence",
+
+    cigarettes: "cigarettes",
+
     cinema: "cinema",
     hotel: "hotel",
     habiter: "habiterIndex",
@@ -57,6 +63,9 @@ const labels: Record<string, string> = {
   salaire: "Salaire mensuel net moyen",
   loyer: "Loyer mensuel (1 chambre, centre-ville)",
   essence: "Essence (L 95)",
+
+  cigarettes: "Cigarettes (paquet)",
+
   cinema: "Cinéma (1 place)",
   hotel: "Hôtel (1 nuit)",
   habiter: "Indice « Habiter »",
@@ -67,6 +76,9 @@ const pluralNames: Record<string, string> = {
   salaire: "salaires",
   loyer: "loyers",
   essence: "essence",
+
+  cigarettes: "paquets de cigarettes",
+
   cinema: "cinéma",
   hotel: "hôtels",
   habiter: "coût global du logement",
@@ -101,8 +113,8 @@ const title = `${labels[category]} – ${country?.name ?? ""}`;
 
 /* Bannière de catégorie (fallback si absente) */
 const catBanner = `/banners/categories/${category}.jpg`;
-const defaultBanner = `/banners/${country.slug}.jpg`; // secours si tu n’as pas encore créé la bannière de catégorie
-const bannerSrc = catBanner; // tu peux passer à defaultBanner si tu veux le fallback automatique côté code
+const defaultBanner = `/banners/${country.slug}.jpg`;
+const bannerSrc = catBanner;
 ---
 
 <BaseLayout title={title}>
@@ -116,7 +128,7 @@ const bannerSrc = catBanner; // tu peux passer à defaultBanner si tu veux le fa
     {labels[category]} : <span class="country">{country.name}</span>
   </h1>
 
-  <!-- Encadré résumé (style “Combien-Coûte”) -->
+  <!-- Encadré résumé -->
   <section class="summary">
     <div class="tile">
       <div class="t-label">Prix moyen</div>
