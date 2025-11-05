@@ -84,9 +84,15 @@ const {
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🔎 Recherche (fallback propre vers /search) -->
-          <form id="site-search" class="search" role="search" action="/search" method="GET">
-            <input name="q" placeholder="Pays ou ville…" autocomplete="off" />
+          <!-- 🔎 Recherche (header) -->
+          <form id="site-search" class="search" role="search" action="/search" method="GET" autocomplete="off">
+            <input
+              name="q"
+              type="search"
+              placeholder="Pays ou ville…"
+              aria-label="Rechercher un pays ou une ville"
+              required
+            />
             <button class="pill" type="submit">Chercher</button>
           </form>
         </nav>
@@ -127,8 +133,9 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script recherche : JSON inliné (zéro import côté client) -->
+    <!-- 🔧 Script recherche du header (autonome, n'affecte pas la grande barre) -->
     <script is:inline>
+      // Données embarquées (aucune requête client)
       const CITIES = {JSON.stringify(cities)};
       const COUNTRIES = {JSON.stringify(countries)};
 
@@ -140,22 +147,25 @@ const {
           .replace(/(^-|-$)/g, "");
 
       const form = document.getElementById("site-search");
-      form?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const q = new FormData(form).get("q");
-        const s = slugify(q);
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const q = (new FormData(form).get("q") || "").toString().trim();
+          if (!q) { form.submit(); return; } // garde un fallback propre
+          const s = slugify(q);
 
-        // 1) villes
-        const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (city) { window.location.href = `/city/${city.slug}`; return; }
+          // 1) villes
+          const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-        // 2) pays
-        const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (country) { window.location.href = `/country/${country.slug}`; return; }
+          // 2) pays
+          const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (country) { window.location.href = `/country/${country.slug}`; return; }
 
-        // 3) fallback
-        window.location.href = `/search?q=${encodeURIComponent(q)}`;
-      });
+          // 3) fallback vers /search
+          window.location.href = `/search?q=${encodeURIComponent(q)}`;
+        });
+      }
     </script>
   </body>
 </html>
