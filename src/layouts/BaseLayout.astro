@@ -15,23 +15,41 @@ const {
     <meta name="description" content={description} />
     <style>
       :root{
-        --bg:#ffffff; --text:#111827; --muted:#4b5563; --line:#e5e7eb; --card:#ffffff;
-        --shadow:0 6px 18px rgba(17,24,39,.06); --accent:#ff4d8d; --accent-600:#ef437f;
-        --accent-100:#fff1f6; --footer-bg:#fff1f6; --footer-strong:#ff8db2; --footer-strong-2:#ff6a9c;
+        --bg:#ffffff;
+        --text:#111827;
+        --muted:#4b5563;
+        --line:#e5e7eb;
+        --card:#ffffff;
+        --shadow:0 6px 18px rgba(17,24,39,.06);
+        --accent:#ff4d8d;
+        --accent-600:#ef437f;
+        --accent-100:#fff1f6;
+        --footer-bg:#fff1f6;
+        --footer-strong:#ff8db2;
+        --footer-strong-2:#ff6a9c;
       }
+
       *{box-sizing:border-box}
       html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
       a{color:inherit;text-decoration:none}
       .container{max-width:1100px;margin:0 auto;padding:16px}
 
-      header{position:sticky;top:0;background:linear-gradient(90deg,#fff5f9 0%,#ffffff 50%,#fff5f9 100%);
-        backdrop-filter:saturate(1.2) blur(8px);border-bottom:2px solid #ffd0df;box-shadow:0 2px 12px rgba(255,128,171,.1);z-index:10}
-      header .container a:first-child{color:#a61b4d;font-weight:700}
-      .pill{background:#fff;border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;color:#a61b4d;transition:all .15s}
-      .pill:hover{background:#ffe4ec;border-color:#ffb4c8}
-      .search{display:flex;align-items:center;gap:8px}
-      .search input{border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;outline:none}
-      .search input:focus{border-color:#ff8db2;box-shadow:0 0 0 2px #ffdee9}
+      header {
+        position: sticky; top: 0;
+        background: linear-gradient(90deg, #fff5f9 0%, #ffffff 50%, #fff5f9 100%);
+        backdrop-filter: saturate(1.2) blur(8px);
+        border-bottom: 2px solid #ffd0df;
+        box-shadow: 0 2px 12px rgba(255, 128, 171, 0.1);
+        z-index: 10;
+      }
+      header .container a:first-child { color: #a61b4d; font-weight: 700; }
+
+      .pill { background:#fff;border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;color:#a61b4d;transition:all .15s }
+      .pill:hover { background:#ffe4ec;border-color:#ffb4c8 }
+
+      .search { display:flex;align-items:center;gap:8px }
+      .search input { border:1px solid #ffd0df;border-radius:999px;padding:6px 12px;outline:none }
+      .search input:focus { border-color:#ff8db2; box-shadow:0 0 0 2px #ffdee9 }
 
       .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
       .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
@@ -66,9 +84,15 @@ const {
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🟣 Petite barre (ID unique) -->
-          <form id="header-search" class="search" role="search">
-            <input name="q" placeholder="Pays ou ville…" autocomplete="off" />
+          <!-- 🔎 Recherche (header) -->
+          <form id="site-search" class="search" role="search" action="/search" method="GET" autocomplete="off">
+            <input
+              name="q"
+              type="search"
+              placeholder="Pays ou ville…"
+              aria-label="Rechercher un pays ou une ville"
+              required
+            />
             <button class="pill" type="submit">Chercher</button>
           </form>
         </nav>
@@ -85,9 +109,9 @@ const {
           <div>
             <h3>À propos</h3>
             <p>
-              Prix de la vie compare des prix de biens et services dans différents pays et villes, avec une
-              référence claire : la France. Parcourez nos pages pour obtenir des repères concrets et préparer
-              un voyage, une expatriation ou un budget.
+              Prix de la vie compare des prix de biens et services dans différents pays et villes,
+              avec une référence claire : la France. Parcourez nos pages pour obtenir des repères concrets
+              (repas, loyers, transports, produits du quotidien) et préparer un voyage, une expatriation ou un budget.
             </p>
           </div>
           <div class="links">
@@ -109,14 +133,11 @@ const {
       </div>
     </section>
 
-    <!-- Données JSON inlinées (safe) -->
-    <script type="application/json" id="data-cities">{JSON.stringify(cities)}</script>
-    <script type="application/json" id="data-countries">{JSON.stringify(countries)}</script>
-
-    <!-- 🟣 Script : même logique que la grande barre, redirection directe -->
-    <script>
-      const CITIES    = JSON.parse(document.getElementById('data-cities').textContent || '[]');
-      const COUNTRIES = JSON.parse(document.getElementById('data-countries').textContent || '[]');
+    <!-- 🔧 Script recherche du header (autonome, n'affecte pas la grande barre) -->
+    <script is:inline>
+      // Données embarquées (aucune requête client)
+      const CITIES = {JSON.stringify(cities)};
+      const COUNTRIES = {JSON.stringify(countries)};
 
       const slugify = (s) =>
         String(s || "")
@@ -125,23 +146,26 @@ const {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
 
-      const headerForm = document.getElementById("header-search");
-      headerForm?.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const q = new FormData(headerForm).get("q");
-        const s = slugify(q);
+      const form = document.getElementById("site-search");
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const q = (new FormData(form).get("q") || "").toString().trim();
+          if (!q) { form.submit(); return; } // garde un fallback propre
+          const s = slugify(q);
 
-        // 1) ville
-        const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (city) { location.href = `/city/${city.slug}`; return; }
+          // 1) villes
+          const city = CITIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (city) { window.location.href = `/city/${city.slug}`; return; }
 
-        // 2) pays
-        const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
-        if (country) { location.href = `/country/${country.slug}`; return; }
+          // 2) pays
+          const country = COUNTRIES.find(c => c.slug === s || slugify(c.name) === s);
+          if (country) { window.location.href = `/country/${country.slug}`; return; }
 
-        // 3) pas trouvé → on reste simple : retour accueil (tu peux pointer vers /search si tu crées la page)
-        alert(`Aucun résultat pour « ${q} ». Essayez un pays (ex. "France") ou une ville (ex. "Tokyo").`);
-      });
+          // 3) fallback vers /search
+          window.location.href = `/search?q=${encodeURIComponent(q)}`;
+        });
+      }
     </script>
   </body>
 </html>
