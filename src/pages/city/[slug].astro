@@ -1,0 +1,17 @@
+---
+import AreaPage from "../../components/AreaPage.astro";
+
+// 🔧 Liste toutes les villes à pré-générer depuis /data/cities/*.json
+export async function getStaticPaths() {
+  const modules = import.meta.glob("../../data/cities/*.json");
+  return Object.keys(modules).map((p) => {
+    const slug = p.split("/").pop().replace(".json", "");
+    return { params: { slug } };
+  });
+}
+
+// Charge le JSON de la ville correspondant au slug
+const { slug } = Astro.params;
+const data = (await import(`../../data/cities/${slug}.json`)).default;
+---
+<AreaPage data={data} />

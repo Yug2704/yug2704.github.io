@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Prix de la vie – Accueil";
+---
+<BaseLayout title={title}>
+  <!-- Bannière -->
+  <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+    <img src="/banners/france.jpg" alt="Bannière" style="width:100%;height:220px;object-fit:cover;" />
+  </div>
+
+  <!-- Banderole rose + recherche -->
+  <div style="position:relative;margin-top:-22px;padding:10px 0;">
+    <div aria-hidden="true" style="
+      position:absolute;inset:0;height:64px;margin:auto;left:8px;right:8px;
+      background:linear-gradient(90deg,#ffc2d5,#ff8db2,#ffc2d5);
+      border-radius:999px;filter:blur(10px) saturate(1.1);opacity:.7;z-index:0;"></div>
+
+    <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 12px;box-shadow:var(--shadow);">
+      <input id="q" placeholder="Rechercher (ex: Japon, Tokyo, Lait, Japon-lait)" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);" />
+      <a class="btn" id="go" href="#">Rechercher</a>
+    </div>
+  </div>
+
+  <!-- Bloc intro -->
+  <div class="card" style="background:var(--accent-100);margin-top:20px;">
+    <h2 style="margin:0 0 10px 0;">Bienvenue sur Prix de la vie</h2>
+    <p style="color:var(--muted);font-size:1.02rem;line-height:1.65;margin:0;">
+      Découvrez les prix de la vie dans des dizaines de pays et de villes à travers le monde.
+      Chaque donnée est comparée à la France pour vous aider à visualiser les différences
+      de coût de la vie, que ce soit pour les repas, logements, transports ou produits du quotidien.
+    </p>
+  </div>
+
+  <div class="grid" style="margin-top:20px;">
+    <div class="card">Ajoute des pages et données dans <code>src/pages</code> et <code>src/data</code>.</div>
+    <div class="card">Le déploiement GitHub Pages est automatique.</div>
+  </div>
+
+  <script>
+    const q = document.getElementById('q');
+    const go = document.getElementById('go');
+    function openBestMatch(){
+      const term = (q.value||"").toLowerCase().trim();
+      if(!term) return;
+      if(term.includes('-')){ const [a,b] = term.split('-'); location.href = `/country/${a}/${b}`; return; }
+      fetch(`/country/${term}/index.html`, {method:'HEAD'}).then(r=>{
+        if(r.ok) location.href = `/country/${term}`;
+        else location.href = `/category/${term}`;
+      }).catch(()=> location.href = `/category/${term}`);
+    }
+    go.addEventListener('click', e=>{e.preventDefault();openBestMatch();});
+    q.addEventListener('keydown', e=>{if(e.key==='Enter')openBestMatch();});
+  </script>
+</BaseLayout>
