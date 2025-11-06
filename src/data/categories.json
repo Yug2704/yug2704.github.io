@@ -1,16 +1,16 @@
 [
-  { "slug": "restaurant", "name": "Repas au restaurant" },
-  { "slug": "salaire",    "name": "Salaire net" },
-  { "slug": "loyer",      "name": "Loyer" },
-  { "slug": "essence",    "name": "Essence" },
-  { "slug": "cigarettes", "name": "Cigarettes (paquet)" },
-  { "slug": "cinema",     "name": "Cinéma" },
-  { "slug": "hotel",      "name": "Hôtel" },
-  { "slug": "habiter",    "name": "Indice « Habiter »" },
+  { "slug": "restaurant",      "name": "Repas au restaurant" },
+  { "slug": "salaire",         "name": "Salaire net" },
+  { "slug": "loyer",           "name": "Loyer (centre-ville, 1 ch.)" },
+  { "slug": "essence",         "name": "Essence (1 L)" },
+  { "slug": "cigarettes",      "name": "Cigarettes (paquet)" },
+  { "slug": "cinema",          "name": "Cinéma (1 place)" },
+  { "slug": "hotel",           "name": "Hôtel (1 nuit)" },
+  { "slug": "habiter",         "name": "Indice « Habiter »" },
 
-  { "slug": "eau",        "name": "Bouteille d’eau (1 L)" },
-  { "slug": "transports", "name": "Transports en commun" },
-  { "slug": "avion",      "name": "Billet d’avion" },
-  { "slug": "train",      "name": "Train" },
-  { "slug": "forfait",    "name": "Forfait téléphone" }
+  { "slug": "eau1l",           "name": "Bouteille d’eau (1 L)" },
+  { "slug": "transportLocal",  "name": "Transports en commun (ticket)" },
+  { "slug": "billetAvion",     "name": "Billet d’avion A/R depuis la France" },
+  { "slug": "train",           "name": "Train (trajet interurbain)" },
+  { "slug": "forfaitMobile",   "name": "Forfait mobile (mensuel)" }
 ]
