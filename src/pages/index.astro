@@ -1,135 +1,138 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import KpiCard from "../../components/KpiCard.astro";
-
-/* 1) ROUTES STATIQUES */
-export function getStaticPaths() {
-  const files = import.meta.glob("../../data/countries/*.json", { eager: true });
-  const ALL = Object.values(files).map((m) => m.default ?? m);
-
-  return ALL.map((c) => ({
-    params: { country: c.slug },
-    props: { country: c },
-  }));
-}
-
-/* 2) DONNÉES DE PAGE */
-const filesPage = import.meta.glob("../../data/countries/*.json", { eager: true });
-const ALL_PAGE = Object.values(filesPage).map((m) => m.default ?? m);
-
-const { country } = Astro.props;
-const FR = ALL_PAGE.find((c) => c.slug === "france");
-const isFrance = country.slug === "france";
-
-/* Helpers */
-function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
-function diffLabel(val, ref){
-  if (isFrance) return { text: "référence France", color: "var(--muted)" };
-  const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
-  if (!isFinite(pct)) return { text: "—", color: "var(--muted)" };
-  if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-  return pct < 0 ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-                 : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
-}
-
-/* KPI à afficher */
-const KPIS = [
-  { key:"restaurant",     label:"Repas au restaurant",                     icon:"🍽️", fmt:eur },
-  { key:"salaireNet",     label:"Salaire mensuel net moyen",               icon:"💰",  fmt:eur },
-  { key:"loyer",          label:"Loyer mensuel (1 chambre, centre-ville)", icon:"🏠",  fmt:eur },
-  { key:"essence",        label:"Essence (1 L)",                            icon:"⛽",  fmt:eur },
-  { key:"cigarettes",     label:"Cigarettes (paquet)",                      icon:"🚬",  fmt:eur },
-  { key:"cinema",         label:"Cinéma (1 place)",                         icon:"🎬",  fmt:eur },
-  { key:"hotel",          label:"Hôtel (1 nuit)",                           icon:"🛎️",  fmt:eur },
-  { key:"habiterIndex",   label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) },
-
-  // ✅ Nouveaux
-  { key:"eau1L",          label:"Bouteille d’eau (1 L)",                    icon:"💧",  fmt:eur },
-  { key:"transportLocal", label:"Transports en commun (trajet)",            icon:"🚌",  fmt:eur },
-  { key:"billetAvion",    label:"Billet d’avion (A/R)",                     icon:"✈️",  fmt:eur },
-  { key:"train",          label:"Train (trajet)",                           icon:"🚆",  fmt:eur },
-  { key:"forfaitMobile",  label:"Forfait téléphone (mensuel)",              icon:"📱",  fmt:eur }
-];
-
-/* map clef KPI -> slug catégorie */
-function keyToCategorySlug(key){
-  if (key === "salaireNet")   return "salaire";
-  if (key === "habiterIndex") return "habiter";
-  if (key === "eau1L")        return "eau";
-  if (key === "transportLocal") return "transports";
-  if (key === "billetAvion")  return "avion";
-  if (key === "forfaitMobile")return "forfait";
-  return key; // restaurant, loyer, essence, cigarettes, cinema, hotel, train
-}
-
-/* Titre + bannière */
-const title = isFrance
-  ? "Prix de la vie en France (référence)"
-  : `Prix de la vie en ${country.name} (comparé à la France)`;
-const bannerSrc  = country.banner     || `/banners/${country.slug}.jpg`;
-const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
+import BaseLayout from "../layouts/BaseLayout.astro";
+const title = "Prix de la vie – Accueil";
 ---
-
 <BaseLayout title={title}>
-  <style>
-    :root{ --red:#e03131; --green:#2f9e44; }
-    .kpi-title{display:flex;gap:.4rem;align-items:center}
-    .about-box {
-      background:#fff; border:1px solid var(--line); border-radius:18px;
-      box-shadow:var(--shadow); padding:20px 22px; margin-top:10px;
-    }
-    .about-box p { color:var(--muted); line-height:1.7; margin:0 0 12px 0; }
-    .about-box p:last-child { margin-bottom:0; }
-  </style>
-
   <!-- Bannière -->
   <div class="banner" style="margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
-    <img src={bannerSrc} alt={`Bannière ${country.name}`} style="width:100%;height:220px;object-fit:cover;" />
+    <img src="/banners/monde.jpg" alt="Bannière" style="width:100%;height:220px;object-fit:cover;" />
   </div>
 
-  <!-- Intro -->
-  <div class="card" style="background:var(--accent-100);border-radius:18px;margin-top:20px;">
-    <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
-      {country.name} {isFrance ? "🇫🇷 — Référence" : "— Comparé à la France"}
-    </h1>
-    <p style="color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;">
-      {isFrance
-        ? "Cette page présente les valeurs de référence utilisées pour comparer les autres pays."
-        : "Aperçu des coûts moyens avec comparaison directe à la référence France. Les valeurs peuvent varier selon la ville."}
-    </p>
-  </div>
+  <!-- Banderole rose + recherche -->
+  <div style="position:relative;margin-top:-22px;padding:10px 0;">
+    <div aria-hidden="true" style="
+      position:absolute;inset:0;height:64px;margin:auto;left:8px;right:8px;
+      background:linear-gradient(90deg,#ffc2d5,#ff8db2,#ffc2d5);
+      border-radius:999px;filter:blur(10px) saturate(1.1);opacity:.7;z-index:0;"></div>
 
-  <!-- Chiffres clés -->
-  <h2 style="margin-top:26px;">Chiffres clés {isFrance ? "(référence France)" : "(vs France)"}</h2>
-  <div style="background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:24px;margin-top:14px;box-shadow:var(--shadow);">
-    <div class="grid">
-      {KPIS.map((k) => {
-        const val   = country.kpis[k.key];
-        if (val == null) return null; // cache les KPI non renseignés
-        const ref   = FR.kpis[k.key];
-        const diff  = diffLabel(val, ref);
-        const value = k.fmt ? k.fmt(val) : String(val);
-        const frVal = k.key === "habiterIndex" ? "France = 100" : (k.fmt ? k.fmt(ref) : String(ref));
-        const diffHtml = isFrance ? null : `<strong style="color:${diff.color}">${diff.text}</strong>`;
-        const categorySlug = keyToCategorySlug(k.key);
-        return (
-          <KpiCard
-            icon={k.icon}
-            label={k.label}
-            value={value}
-            frValue={frVal}
-            diffHtml={diffHtml}
-            countrySlug={country.slug}
-            categorySlug={categorySlug}
-          />
-        );
-      })}
+    <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 12px;box-shadow:var(--shadow);">
+      <input id="q" placeholder="Rechercher (ex: Japon, Tokyo, Lait, Japon-lait)" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);" />
+      <a class="btn" id="go" href="#">Rechercher</a>
     </div>
   </div>
 
-  <!-- À propos -->
-  <h2 style="margin-top:26px;">{aboutTitle}</h2>
-  <div class="about-box">
-    {country.notes?.map((p, i) => (<p>{p}</p>))}
-  </div>
+  <!-- Bloc intro amélioré -->
+  <section class="intro-card">
+    <div class="intro-head">
+      <h2>Bienvenue sur <span>Prix de la vie</span></h2>
+      <button class="info-badge" id="homeInfoBtn" aria-expanded="false" aria-controls="homeInfo">
+        En savoir +
+      </button>
+    </div>
+
+    <p class="lead">
+      Compare les coûts du quotidien dans des dizaines de pays et de villes, avec une référence
+      commune : <strong>la France</strong>. En un coup d’œil, tu vois comment évoluent les
+      <em>repas</em>, <em>loyers</em>, <em>transports</em>, <em>loisirs</em> ou encore l’
+      <em>hébergement</em> selon les destinations.
+    </p>
+
+    <p class="micro">
+      Les montants affichés sont des <strong>moyennes indicatives</strong> : ils aident à se situer rapidement,
+      à préparer un voyage, une expatriation ou un budget. Les valeurs peuvent varier selon la ville et la saison.
+    </p>
+
+    <!-- Fiche contextuelle -->
+    <div class="popover" id="homeInfo" role="dialog" aria-label="À propos de Prix de la vie">
+      <div class="pop-inner">
+        <h3>Ce que tu trouveras ici</h3>
+        <ul>
+          <li><strong>Comparaison directe</strong> des prix vs France pour mieux se repérer.</li>
+          <li><strong>Indicateurs clairs</strong> : repas, loyer centre-ville, essence, cinéma, hôtel, etc.</li>
+          <li><strong>Pages pays & villes</strong> pour des repères concrets et rapides.</li>
+          <li><strong>Mises à jour</strong> centralisées via des données structurées.</li>
+        </ul>
+        <p class="hint">
+          Astuce : utilise la recherche pour accéder directement à un pays (<em>Japon</em>) ou une ville (<em>Tokyo</em>).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catégories (ajout avec les nouvelles) -->
+  <section style="margin-top:16px;">
+    <h3 style="margin:0 0 10px 0;">Parcourir par catégorie</h3>
+    <div class="chips">
+      <a class="chip" href="/category/restaurant">🍽️ Repas</a>
+      <a class="chip" href="/category/salaire">💰 Salaire net</a>
+      <a class="chip" href="/category/loyer">🏠 Loyer</a>
+      <a class="chip" href="/category/essence">⛽ Essence</a>
+      <a class="chip" href="/category/cigarettes">🚬 Cigarettes</a>
+      <a class="chip" href="/category/cinema">🎬 Cinéma</a>
+      <a class="chip" href="/category/hotel">🛎️ Hôtel</a>
+      <a class="chip" href="/category/habiter">🏡 Indice “Habiter”</a>
+      <!-- nouvelles catégories -->
+      <a class="chip" href="/category/eau1l">💧 Eau (1 L)</a>
+      <a class="chip" href="/category/transportLocal">🚍 Transports locaux</a>
+      <a class="chip" href="/category/billetAvion">✈️ Billet d’avion A/R</a>
+      <a class="chip" href="/category/train">🚆 Train interurbain</a>
+      <a class="chip" href="/category/forfaitMobile">📱 Forfait mobile</a>
+    </div>
+  </section>
+
+  <style>
+    .intro-card{
+      position:relative;background:#fff;border:1px solid #ffd0df;border-radius:18px;
+      padding:18px 18px 20px;margin:18px 0 6px;box-shadow:0 10px 28px rgba(17,24,39,.06), 0 2px 10px rgba(255,77,141,.06)
+    }
+    .intro-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+    .intro-card h2{margin:0;font-size:1.45rem}
+    .intro-card h2 span{color:#a61b4d}
+    .lead{margin:.35rem 0 .4rem 0;line-height:1.65}
+    .micro{color:var(--muted);line-height:1.65;margin:.25rem 0 0 0}
+    .info-badge{border:1px solid #ffd0df;background:#fff;border-radius:999px;padding:.42rem .75rem;font-size:.95rem;color:#a61b4d;box-shadow:var(--shadow);cursor:pointer}
+    .info-badge:hover{background:#fff1f6}
+    .popover{
+      position:absolute;right:12px;top:100%;transform:translateY(10px);
+      width:min(680px,calc(100% - 24px));background:#fff;border:1px solid #ffd0df;border-radius:16px;
+      box-shadow:0 12px 24px rgba(17,24,39,.10);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:5
+    }
+    .intro-card:hover .popover,.info-badge:focus + .popover,.popover.open{opacity:1;pointer-events:auto;transform:translateY(6px)}
+    .pop-inner{padding:14px 16px}
+    .pop-inner h3{margin:.2rem 0 .35rem 0;font-size:1.05rem}
+    .pop-inner ul{margin:.25rem 0 .5rem 1.15rem}
+    .pop-inner li{margin:.25rem 0;line-height:1.5}
+    .hint{color:var(--muted);margin:0}
+  </style>
+
+  <script>
+    const q = document.getElementById('q');
+    const go = document.getElementById('go');
+    function openBestMatch(){
+      const term = (q.value||"").toLowerCase().trim();
+      if(!term) return;
+      if(term.includes('-')){ const [a,b] = term.split('-'); location.href = `/country/${a}/${b}`; return; }
+      fetch(`/country/${term}/index.html`, {method:'HEAD'}).then(r=>{
+        if(r.ok) location.href = `/country/${term}`;
+        else location.href = `/category/${term}`;
+      }).catch(()=> location.href = `/category/${term}`);
+    }
+    go.addEventListener('click', e=>{e.preventDefault();openBestMatch();});
+    q.addEventListener('keydown', e=>{if(e.key==='Enter')openBestMatch();});
+
+    const btn = document.getElementById('homeInfoBtn');
+    const pop = document.getElementById('homeInfo');
+    if (btn && pop){
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const opened = pop.classList.toggle('open');
+        btn.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      });
+      document.addEventListener('click', (evt)=>{
+        if (!pop.classList.contains('open')) return;
+        const t = evt.target;
+        if (!pop.contains(t) && t !== btn){ pop.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+      });
+    }
+  </script>
 </BaseLayout>
