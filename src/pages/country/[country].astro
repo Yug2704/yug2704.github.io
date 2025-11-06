@@ -25,6 +25,7 @@ const isFrance = country.slug === "france";
 function eur(n){ return Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}); }
 function diffLabel(val, ref){
   if (isFrance) return { text: "référence France", color: "var(--muted)" };
+  if (val == null || ref == null) return { text: "—", color: "var(--muted)" };
   const pct = ((val - ref)/ref)*100, abs = Math.abs(pct);
   if (!isFinite(pct)) return { text: "—", color: "var(--muted)" };
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
@@ -41,20 +42,21 @@ const KPIS = [
   { key:"cigarettes",   label:"Cigarettes (paquet)",                      icon:"🚬",  fmt:eur },
   { key:"cinema",       label:"Cinéma (1 place)",                         icon:"🎬",  fmt:eur },
   { key:"hotel",        label:"Hôtel (1 nuit)",                           icon:"🛎️",  fmt:eur },
-  { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) }
-  // 🔥 nouvelles catégories
-  { key:"eau1l",          label:"Bouteille d’eau (1 L)",                      icon:"💧", fmt:eur },
-  { key:"transportLocal", label:"Transports en commun (ticket)",              icon:"🚍", fmt:eur },
-  { key:"billetAvion",    label:"Billet d’avion A/R depuis la France",        icon:"✈️", fmt:eur },
-  { key:"train",          label:"Train (trajet interurbain)",                 icon:"🚆", fmt:eur },
-  { key:"forfaitMobile",  label:"Forfait mobile (mensuel)",                   icon:"📱", fmt:eur }
+  { key:"habiterIndex", label:"Indice “Habiter”",                         icon:"🏡",  fmt:(n)=>String(n) }, // ← COMMA HERE
+
+  // nouvelles catégories
+  { key:"eau1l",          label:"Bouteille d’eau (1 L)",               icon:"💧", fmt:eur },
+  { key:"transportLocal", label:"Transports en commun (ticket)",       icon:"🚍", fmt:eur },
+  { key:"billetAvion",    label:"Billet d’avion A/R depuis la France", icon:"✈️", fmt:eur },
+  { key:"train",          label:"Train (trajet interurbain)",          icon:"🚆", fmt:eur },
+  { key:"forfaitMobile",  label:"Forfait mobile (mensuel)",            icon:"📱", fmt:eur },
 ];
 
 /* map clef KPI -> slug catégorie */
 function keyToCategorySlug(key){
   if (key === "salaireNet")   return "salaire";
   if (key === "habiterIndex") return "habiter";
-  return key; // restaurant, loyer, essence, cigarettes, cinema, hotel
+  return key; // restaurant, loyer, essence, cigarettes, cinema, hotel, eau1l, transportLocal, billetAvion, train, forfaitMobile
 }
 
 /* Titre + bannière */
@@ -69,30 +71,23 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
   <style>
     :root{ --red:#e03131; --green:#2f9e44; }
 
-    .kpi-title{display:flex;gap:.4rem;align-items:center}
-
-    /* Bandeau d’intro (rose) avec coins arrondis et fin liseré */
     .intro {
       background: var(--accent-100);
       border: 1px solid #ffd0df;
       border-radius: 18px;
       padding: 18px;
       box-shadow: 0 4px 12px rgba(255, 128, 171, 0.08);
+      margin-top: 20px;
     }
 
-    /* Boîte “À savoir” plus saillante */
     .about-box {
       position: relative;
       background: #fff;
       border: 1px solid #e9edf3;
       border-radius: 18px;
       padding: 20px 22px 20px 26px;
-      box-shadow:
-        0 10px 28px rgba(17,24,39,.06),
-        0 2px 10px rgba(255, 77, 141, .06);
+      box-shadow: 0 10px 28px rgba(17,24,39,.06), 0 2px 10px rgba(255, 77, 141, .06);
     }
-
-    /* Liseré vertical discret (rose) */
     .about-box::before{
       content:"";
       position:absolute; inset:14px auto 14px 12px;
@@ -100,12 +95,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
       background: linear-gradient(180deg,#ff8db2,#ffd0df);
       opacity:.9;
     }
-
-    .about-box p {
-      color: var(--muted);
-      line-height: 1.7;
-      margin: 0 0 12px 0;
-    }
+    .about-box p { color: var(--muted); line-height: 1.7; margin: 0 0 12px 0; }
     .about-box p:last-child { margin-bottom: 0; }
   </style>
 
@@ -115,7 +105,7 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
   </div>
 
   <!-- Intro -->
-  <div class="intro" style="margin-top:20px;">
+  <div class="intro">
     <h1 style="margin:0 0 10px 0;font-size:1.8rem;">
       {country.name} {isFrance ? "🇫🇷 — Référence" : "— Comparé à la France"}
     </h1>
@@ -134,10 +124,16 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
         const val   = country.kpis[k.key];
         const ref   = FR.kpis[k.key];
         const diff  = diffLabel(val, ref);
-        const value = k.fmt ? k.fmt(val) : String(val);
-        const frVal = k.key === "habiterIndex" ? "France = 100" : (k.fmt ? k.fmt(ref) : String(ref));
+
+        const value = (val == null) ? "—" : (k.fmt ? k.fmt(val) : String(val));
+        const frRaw = ref;
+        const frVal = k.key === "habiterIndex"
+          ? "France = 100"
+          : (frRaw == null ? "—" : (k.fmt ? k.fmt(frRaw) : String(frRaw)));
+
         const diffHtml = isFrance ? null : `<strong style="color:${diff.color}">${diff.text}</strong>`;
         const categorySlug = keyToCategorySlug(k.key);
+
         return (
           <KpiCard
             icon={k.icon}
@@ -156,8 +152,6 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
   <!-- À propos -->
   <h2 style="margin-top:26px;">{aboutTitle}</h2>
   <div class="about-box">
-    {country.notes?.map((p, i) => (
-      <p>{p}</p>
-    ))}
+    {country.notes?.map((p) => <p>{p}</p>)}
   </div>
 </BaseLayout>
