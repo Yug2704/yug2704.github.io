@@ -2,7 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
 /* 1) Map CAT → clé KPI (utilisé pour le rendu) */
-const keyByCategoryPage = {
+const keyByCategoryPage: Record<string, string> = {
   restaurant: "restaurant",
   salaire: "salaireNet",
   loyer: "loyer",
@@ -12,17 +12,35 @@ const keyByCategoryPage = {
   hotel: "hotel",
   habiter: "habiterIndex",
 
-  // ✅ nouveaux slugs
-  eau: "eau1L",
-  transports: "transportLocal",
-  avion: "billetAvion",
+  // 🔥 nouvelles catégories
+  eau1l: "eau1l",
+  transportLocal: "transportLocal",
+  billetAvion: "billetAvion",
   train: "train",
-  forfait: "forfaitMobile"
+  forfaitMobile: "forfaitMobile",
 };
 
 /* 2) Routes statiques — tout doit être local à la fonction */
 export async function getStaticPaths() {
-  const keyByCategory = { ...keyByCategoryPage };
+  // Copie locale (évite les soucis de scope/tree-shaking)
+  const keyByCategory: Record<string, string> = {
+    restaurant: "restaurant",
+    salaire: "salaireNet",
+    loyer: "loyer",
+    essence: "essence",
+    cigarettes: "cigarettes",
+    cinema: "cinema",
+    hotel: "hotel",
+    habiter: "habiterIndex",
+
+    // 🔥 nouvelles catégories
+    eau1l: "eau1l",
+    transportLocal: "transportLocal",
+    billetAvion: "billetAvion",
+    train: "train",
+    forfaitMobile: "forfaitMobile",
+  };
+
   const countryFiles = import.meta.glob("../../../data/countries/*.json", { eager: true }) as Record<string, any>;
   const COUNTRIES = Object.values(countryFiles).map((m: any) => m?.default ?? m);
 
@@ -37,7 +55,10 @@ export async function getStaticPaths() {
     for (const cat of cats) {
       const key = keyByCategory[cat];
       if (key && c?.kpis && key in c.kpis) {
-        paths.push({ params: { country: c.slug, category: cat }, props: { country: c, category: cat, FR } });
+        paths.push({
+          params: { country: c.slug, category: cat },
+          props: { country: c, category: cat, FR },
+        });
       }
     }
   }
@@ -57,11 +78,12 @@ const labels: Record<string, string> = {
   hotel: "Hôtel (1 nuit)",
   habiter: "Indice « Habiter »",
 
-  eau: "Bouteille d’eau (1 L)",
-  transports: "Transports en commun (trajet)",
-  avion: "Billet d’avion (A/R)",
-  train: "Train (trajet)",
-  forfait: "Forfait téléphone (mensuel)"
+  // 🔥 nouvelles catégories
+  eau1l: "Bouteille d’eau (1 L)",
+  transportLocal: "Transports en commun (ticket)",
+  billetAvion: "Billet d’avion A/R depuis la France",
+  train: "Train (trajet interurbain)",
+  forfaitMobile: "Forfait mobile (mensuel)",
 };
 
 const pluralNames: Record<string, string> = {
@@ -69,22 +91,24 @@ const pluralNames: Record<string, string> = {
   salaire: "salaires",
   loyer: "loyers",
   essence: "essence",
-  cigarettes: "cigarettes",
-  cinema: "cinémas",
+  cigarettes: "paquets de cigarettes",
+  cinema: "cinéma",
   hotel: "hôtels",
   habiter: "coût global du logement",
 
-  eau: "bouteilles d’eau",
-  transports: "trajets en transport",
-  avion: "billets d’avion",
+  // 🔥 nouvelles catégories
+  eau1l: "bouteilles d’eau de 1 L",
+  transportLocal: "tickets de transports",
+  billetAvion: "billets d’avion",
   train: "trajets en train",
-  forfait: "forfaits téléphoniques"
+  forfaitMobile: "forfaits mobiles",
 };
 
 function eur(n?: number | null) {
   if (n == null) return "";
   return Number(n).toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
 }
+
 function diffLabel(val?: number | null, ref?: number | null) {
   if (country.slug === "france") return { text: "référence France", color: "var(--muted)" };
   if (val == null || ref == null) return { text: "–", color: "var(--muted)" };
@@ -92,50 +116,71 @@ function diffLabel(val?: number | null, ref?: number | null) {
   const abs = Math.abs(pct);
   if (!isFinite(pct)) return { text: "–", color: "var(--muted)" };
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
-  return pct < 0 ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-                 : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
+  return pct < 0
+    ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
+    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
 }
 
-/* 4) Données calculées */
+/* 4) Données calculées pour l’affichage enrichi */
 const key = keyByCategoryPage[category];
 const val = country?.kpis?.[key];
 const ref = FR?.kpis?.[key];
 const d = diffLabel(val, ref);
-const pctNum = val != null && ref != null && isFinite((val - ref) / ref)
-  ? Math.round(((val - ref) / ref) * 100) : null;
+const pctNum =
+  val != null && ref != null && isFinite((val - ref) / ref) ? Math.round(((val - ref) / ref) * 100) : null;
 
 const title = `${labels[category]} – ${country?.name ?? ""}`;
+
+/* Bannière de catégorie (fallback si absente) */
 const catBanner = `/banners/categories/${category}.jpg`;
+const defaultBanner = `/banners/${country.slug}.jpg`;
 const bannerSrc = catBanner;
 ---
 
 <BaseLayout title={title}>
+  <!-- Bannière catégorie -->
   <div class="banner">
     <img src={bannerSrc} alt={`Bannière ${labels[category]}`} />
   </div>
 
+  <!-- Titre -->
   <h1 class="h1">
     {labels[category]} : <span class="country">{country.name}</span>
   </h1>
 
+  <!-- Encadré résumé -->
   <section class="summary">
-    <div class="tile"><div class="t-label">Prix moyen</div><div class="t-value">{eur(val)}</div></div>
-    <div class="tile"><div class="t-label">Écart vs France</div><div class="t-value" style={`color:${d.color}`}>{country.slug==="france"?"Référence":d.text}</div></div>
-    <div class="tile"><div class="t-label">Référence France</div><div class="t-value">{eur(ref)}</div></div>
+    <div class="tile">
+      <div class="t-label">Prix moyen</div>
+      <div class="t-value">{eur(val)}</div>
+    </div>
+    <div class="tile">
+      <div class="t-label">Écart vs France</div>
+      <div class="t-value" style={`color:${d.color}`}>{country.slug === "france" ? "Référence" : d.text}</div>
+    </div>
+    <div class="tile">
+      <div class="t-label">Référence France</div>
+      <div class="t-value">{eur(ref)}</div>
+    </div>
   </section>
 
+  <!-- Texte court auto -->
   <section class="card">
     <h2 style="margin:0 0 .5rem 0;">À retenir</h2>
     <p class="muted" style="margin:0">
       Au {country.name.toLowerCase()}, les {pluralNames[category]} affichent en moyenne
-      {pctNum == null ? " un niveau comparable à la France."
-        : pctNum === 0 ? " un niveau similaire à la France."
-        : pctNum < 0 ? ` un coût inférieur d’environ ${Math.abs(pctNum)} % par rapport à la France.`
-                     : ` un coût supérieur d’environ ${pctNum} % par rapport à la France.`}
+      {pctNum === null
+        ? " un niveau comparable à la France."
+        : pctNum === 0
+          ? " un niveau similaire à la France."
+          : pctNum < 0
+            ? ` un coût inférieur d’environ ${Math.abs(pctNum)} % par rapport à la France.`
+            : ` un coût supérieur d’environ ${pctNum} % par rapport à la France.`}
       Les montants peuvent varier selon la ville et la saison.
     </p>
   </section>
 
+  <!-- Détail -->
   <section class="detail-grid">
     <div class="card">
       <h3>Comment lire ces chiffres ?</h3>
@@ -147,13 +192,16 @@ const bannerSrc = catBanner;
     </div>
     <div class="card">
       <h3>Astuce budget</h3>
-      <p class="muted" style="margin:0">Compare des villes avant de te décider.</p>
+      <p class="muted" style="margin:0">
+        Compare des villes avant de te décider. Par exemple, dans les grandes métropoles, les prix
+        peuvent être sensiblement plus élevés que la moyenne nationale.
+      </p>
     </div>
   </section>
 
   <style>
     :root{ --green:#2f9e44; --red:#e03131; }
-    .banner{margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+    .banner{margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);}
     .banner img{width:100%;height:220px;object-fit:cover}
     .h1{font-size:1.8rem;margin:16px 0 10px 0}
     .country{color:var(--accent)}
