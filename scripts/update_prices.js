@@ -1,5 +1,8 @@
 // scripts/update_prices.js
-// Lit src/data/master_prices.csv et met à jour src/data/countries/*.json
+// Met à jour src/data/countries/*.json depuis src/data/master_prices.csv
+// - Tolérant aux cellules vides (n'écrase pas les valeurs existantes avec null)
+// - Crée le JSON pays s'il manque, à partir d'un gabarit
+// - Estampille meta.lastUpdated
 
 import fs from "fs";
 import path from "path";
@@ -8,10 +11,11 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-const CSV_PATH      = path.resolve(__dirname, "../src/data/master_prices.csv");
-const COUNTRIES_DIR = path.resolve(__dirname, "../src/data/countries");
+const CSV_PATH       = path.resolve(__dirname, "../src/data/master_prices.csv");
+const COUNTRIES_DIR  = path.resolve(__dirname, "../src/data/countries");
+const CATEGORIES_FP  = path.resolve(__dirname, "../src/data/categories.json");
 
-// Parse nombre "européen" -> number (1 234,56 -> 1234.56)
+// Parse “européen” -> number (1 234,56 -> 1234.56)
 function parseEU(n) {
   if (n === "" || n == null) return null;
   const s = String(n).trim().replace(/\s/g, "").replace(",", ".");
@@ -19,96 +23,139 @@ function parseEU(n) {
   return Number.isFinite(val) ? val : null;
 }
 
-// Lecture CSV -> Map<slug, {kpis}>
 function readCSV(fp) {
   const raw = fs.readFileSync(fp, "utf8").trim();
-  const lines = raw.split(/\r?\n/);
-  if (lines.length === 0) throw new Error("CSV vide");
+  if (!raw) throw new Error("CSV vide");
+  const lines = raw.split(/\r?\n/).filter(Boolean);
 
   const header = lines[0].split(",").map(s => s.trim());
-  const idx = Object.fromEntries(header.map((h, i) => [h, i]));
-  const has = (col) => Object.prototype.hasOwnProperty.call(idx, col);
+  const idx    = Object.fromEntries(header.map((h,i)=>[h,i]));
 
-  const map = new Map();
+  if (!("slug" in idx)) throw new Error("Colonne 'slug' absente du CSV");
 
+  const rows = [];
   for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line || !line.trim()) continue;
-
-    const cells = line.split(",").map(s => s.trim());
+    const cells = lines[i].split(",").map(s=>s.trim());
     const slug = (cells[idx.slug] || "").toLowerCase();
     if (!slug) continue;
-
-    const kpis = {
-      restaurant:    has("restaurant")    ? parseEU(cells[idx.restaurant])    : null,
-      salaireNet:    has("salaireNet")    ? parseEU(cells[idx.salaireNet])    : null,
-      loyer:         has("loyer")         ? parseEU(cells[idx.loyer])         : null,
-      essence:       has("essence")       ? parseEU(cells[idx.essence])       : null,
-      cigarettes:    has("cigarettes")    ? parseEU(cells[idx.cigarettes])    : null,
-      cinema:        has("cinema")        ? parseEU(cells[idx.cinema])        : null,
-      hotel:         has("hotel")         ? parseEU(cells[idx.hotel])         : null,
-      habiterIndex:  has("habiterIndex")  ? parseEU(cells[idx.habiterIndex])  : null,
-      eau1L:         has("eau1L")         ? parseEU(cells[idx.eau1L])         : null,
-      transportLocal:has("transportLocal")? parseEU(cells[idx.transportLocal]): null,
-      billetAvion:   has("billetAvion")   ? parseEU(cells[idx.billetAvion])   : null,
-      train:         has("train")         ? parseEU(cells[idx.train])         : null,
-      forfaitMobile: has("forfaitMobile") ? parseEU(cells[idx.forfaitMobile]) : null,
-    };
-
-    map.set(slug, kpis);
+    const rowObj = { slug };
+    for (const h of header) {
+      if (h === "slug") continue;
+      rowObj[h] = parseEU(cells[idx[h]]);
+    }
+    rows.push(rowObj);
   }
-
-  return map;
+  return rows;
 }
 
-// Met à jour un country.json (sans écraser si la cellule CSV est vide)
-function updateJsonFile(fp, newKpis) {
-  const json = JSON.parse(fs.readFileSync(fp, "utf8"));
+function ensureDir(d) {
+  if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+}
+
+function loadCategories() {
+  try {
+    const raw = fs.readFileSync(CATEGORIES_FP, "utf8");
+    const arr = JSON.parse(raw);
+    // On accepte soit des slugs directs, soit des objets {slug: "..."}
+    return arr.map(x => (typeof x === "string" ? x : x.slug)).filter(Boolean);
+  } catch {
+    // fallback si le fichier n'existe pas
+    return ["restaurant","salaire","loyer","essence","cigarettes","cinema","hotel","habiter","eau1l","transportLocal","billetAvion","train","forfaitMobile"];
+  }
+}
+
+function countryTemplate(slug) {
+  const name = slug.charAt(0).toUpperCase() + slug.slice(1);
+  return {
+    slug,
+    name,
+    banner: `/banners/${slug}.jpg`,
+    aboutTitle: `À savoir sur ${name}`,
+    kpis: {
+      restaurant: null,
+      salaireNet: null,
+      loyer: null,
+      essence: null,
+      cigarettes: null,
+      cinema: null,
+      hotel: null,
+      habiterIndex: null,
+      eau1l: null,
+      transportLocal: null,
+      billetAvion: null,
+      train: null,
+      forfaitMobile: null
+    },
+    notes: [
+      `Quelques repères de prix pour ${name}. Les valeurs peuvent varier selon la ville et la saison.`,
+      `Ajoute ou ajuste les informations au besoin.`
+    ]
+  };
+}
+
+function updateJson(json, incoming, categoryKeys) {
   if (!json.kpis) json.kpis = {};
   let changed = false;
 
-  for (const [key, val] of Object.entries(newKpis)) {
-    if (val == null) continue; // garde la valeur existante si CSV vide
+  for (const key of Object.keys(incoming)) {
+    if (key === "slug") continue;
+    // On n'écrit que si la valeur est non nulle ET si c'est une clé connue (ou déjà présente)
+    const val = incoming[key];
+    const isKnownKpi = categoryKeys.includes(key) || key === "salaireNet" || key === "habiterIndex";
+    if (val == null || !isKnownKpi) continue;
+
     if (json.kpis[key] !== val) {
       json.kpis[key] = val;
       changed = true;
     }
   }
 
-  // estampille
   json.meta = { ...(json.meta || {}), lastUpdated: new Date().toISOString() };
-
-  if (changed) {
-    fs.writeFileSync(fp, JSON.stringify(json, null, 2) + "\n", "utf8");
-  }
   return changed;
 }
 
-// Programme principal
 function main() {
   console.log("Lecture CSV:", CSV_PATH);
-  const map = readCSV(CSV_PATH);
+  ensureDir(COUNTRIES_DIR);
 
-  const files = fs.readdirSync(COUNTRIES_DIR).filter(f => f.endsWith(".json"));
+  const categoryKeys = loadCategories()
+    // catégories “métier” → clés kpi attendues côté JSON
+    .map(c => c === "salaire" ? "salaireNet"
+           : c === "habiter" ? "habiterIndex"
+           : c);
+
+  const rows = readCSV(CSV_PATH);
   let totalChanged = 0;
+  let totalCreated = 0;
 
-  for (const f of files) {
-    const fp = path.join(COUNTRIES_DIR, f);
-    const current = JSON.parse(fs.readFileSync(fp, "utf8"));
-    const slug = (current.slug || path.basename(f, ".json")).toLowerCase();
+  for (const row of rows) {
+    const slug = row.slug;
+    const fp   = path.join(COUNTRIES_DIR, `${slug}.json`);
 
-    const fromCsv = map.get(slug);
-    if (!fromCsv) {
-      console.log(`- ${slug}: pas de ligne CSV → ignoré`);
-      continue;
+    let json;
+    if (!fs.existsSync(fp)) {
+      json = countryTemplate(slug);
+      totalCreated++;
+    } else {
+      json = JSON.parse(fs.readFileSync(fp, "utf8"));
     }
 
-    const changed = updateJsonFile(fp, fromCsv);
-    console.log(`- ${slug}: ${changed ? "MISE À JOUR" : "aucun changement"}`);
-    if (changed) totalChanged++;
+    const changed = updateJson(json, row, categoryKeys);
+
+    if (changed || !fs.existsSync(fp)) {
+      fs.writeFileSync(fp, JSON.stringify(json, null, 2) + "\n", "utf8");
+      if (changed) totalChanged++;
+      console.log(`- ${slug}: ${fs.existsSync(fp) ? "MISE À JOUR" : "CRÉÉ"}`);
+    } else {
+      console.log(`- ${slug}: aucun changement`);
+    }
   }
 
-  console.log(totalChanged === 0 ? "Aucun fichier modifié." : `${totalChanged} fichier(s) mis à jour.`);
+  console.log(
+    totalCreated || totalChanged
+      ? `${totalCreated} créé(s), ${totalChanged} mis à jour.`
+      : "Aucune modification."
+  );
 }
 
 main();
