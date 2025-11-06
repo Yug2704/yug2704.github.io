@@ -11,7 +11,7 @@ const __dirname  = path.dirname(__filename);
 const CSV_PATH      = path.resolve(__dirname, "../src/data/master_prices.csv");
 const COUNTRIES_DIR = path.resolve(__dirname, "../src/data/countries");
 
-// Util : parse "européen" -> number (1 234,56 -> 1234.56)
+// Parse nombre "européen" -> number (1 234,56 -> 1234.56)
 function parseEU(n) {
   if (n === "" || n == null) return null;
   const s = String(n).trim().replace(/\s/g, "").replace(",", ".");
@@ -27,8 +27,6 @@ function readCSV(fp) {
 
   const header = lines[0].split(",").map(s => s.trim());
   const idx = Object.fromEntries(header.map((h, i) => [h, i]));
-
-  // Permet d'être tolérant si certaines colonnes manquent
   const has = (col) => Object.prototype.hasOwnProperty.call(idx, col);
 
   const map = new Map();
@@ -42,17 +40,19 @@ function readCSV(fp) {
     if (!slug) continue;
 
     const kpis = {
-      restaurant:   has("restaurant")   ? parseEU(cells[idx.restaurant])   : null,
-      salaireNet:   has("salaireNet")   ? parseEU(cells[idx.salaireNet])   : null,
-      loyer:        has("loyer")        ? parseEU(cells[idx.loyer])        : null,
-      essence:      has("essence")      ? parseEU(cells[idx.essence])      : null,
-
-      // ✅ nouvelle KPI
-      cigarettes:   has("cigarettes")   ? parseEU(cells[idx.cigarettes])   : null,
-
-      cinema:       has("cinema")       ? parseEU(cells[idx.cinema])       : null,
-      hotel:        has("hotel")        ? parseEU(cells[idx.hotel])        : null,
-      habiterIndex: has("habiterIndex") ? parseEU(cells[idx.habiterIndex]) : null,
+      restaurant:    has("restaurant")    ? parseEU(cells[idx.restaurant])    : null,
+      salaireNet:    has("salaireNet")    ? parseEU(cells[idx.salaireNet])    : null,
+      loyer:         has("loyer")         ? parseEU(cells[idx.loyer])         : null,
+      essence:       has("essence")       ? parseEU(cells[idx.essence])       : null,
+      cigarettes:    has("cigarettes")    ? parseEU(cells[idx.cigarettes])    : null,
+      cinema:        has("cinema")        ? parseEU(cells[idx.cinema])        : null,
+      hotel:         has("hotel")         ? parseEU(cells[idx.hotel])         : null,
+      habiterIndex:  has("habiterIndex")  ? parseEU(cells[idx.habiterIndex])  : null,
+      eau1L:         has("eau1L")         ? parseEU(cells[idx.eau1L])         : null,
+      transportLocal:has("transportLocal")? parseEU(cells[idx.transportLocal]): null,
+      billetAvion:   has("billetAvion")   ? parseEU(cells[idx.billetAvion])   : null,
+      train:         has("train")         ? parseEU(cells[idx.train])         : null,
+      forfaitMobile: has("forfaitMobile") ? parseEU(cells[idx.forfaitMobile]) : null,
     };
 
     map.set(slug, kpis);
@@ -61,21 +61,21 @@ function readCSV(fp) {
   return map;
 }
 
-// Met à jour un fichier country.json avec les nouvelles valeurs (sans écraser les null)
+// Met à jour un country.json (sans écraser si la cellule CSV est vide)
 function updateJsonFile(fp, newKpis) {
   const json = JSON.parse(fs.readFileSync(fp, "utf8"));
   if (!json.kpis) json.kpis = {};
   let changed = false;
 
   for (const [key, val] of Object.entries(newKpis)) {
-    if (val == null) continue; // ignore cellules vides
+    if (val == null) continue; // garde la valeur existante si CSV vide
     if (json.kpis[key] !== val) {
       json.kpis[key] = val;
       changed = true;
     }
   }
 
-  // estampille (optionnel)
+  // estampille
   json.meta = { ...(json.meta || {}), lastUpdated: new Date().toISOString() };
 
   if (changed) {
