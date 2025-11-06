@@ -3,10 +3,14 @@
   { "slug": "salaire",    "name": "Salaire net" },
   { "slug": "loyer",      "name": "Loyer" },
   { "slug": "essence",    "name": "Essence" },
-
   { "slug": "cigarettes", "name": "Cigarettes (paquet)" },
-
   { "slug": "cinema",     "name": "Cinéma" },
   { "slug": "hotel",      "name": "Hôtel" },
-  { "slug": "habiter",    "name": "Indice « Habiter »" }
+  { "slug": "habiter",    "name": "Indice « Habiter »" },
+
+  { "slug": "eau",        "name": "Bouteille d’eau (1 L)" },
+  { "slug": "transports", "name": "Transports en commun" },
+  { "slug": "avion",      "name": "Billet d’avion" },
+  { "slug": "train",      "name": "Train" },
+  { "slug": "forfait",    "name": "Forfait téléphone" }
 ]
