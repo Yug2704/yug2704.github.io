@@ -1,0 +1,28 @@
+{
+  "slug": "tokyo",
+  "name": "Tokyo",
+  "banner": "/banners/tokyo.jpg",
+  "aboutTitle": "À savoir sur Tokyo",
+  "kpis": {
+    "restaurant": null,
+    "salaireNet": null,
+    "loyer": null,
+    "essence": null,
+    "cigarettes": null,
+    "cinema": null,
+    "hotel": null,
+    "habiterIndex": null,
+    "eau1l": null,
+    "transportLocal": null,
+    "billetAvion": null,
+    "train": null,
+    "forfaitMobile": null
+  },
+  "notes": [
+    "Quelques repères de prix pour Tokyo. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-10T07:33:14.583Z"
+  }
+}

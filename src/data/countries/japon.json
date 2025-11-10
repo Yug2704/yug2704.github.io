@@ -12,16 +12,18 @@
     "cinema": 10.7,
     "hotel": 113,
     "habiterIndex": 82,
-
     "eau1l": 0.85,
     "transportLocal": 1.45,
-    "billetAvion": 900.00,
-    "train": 25.00,
-    "forfaitMobile": 20.00
+    "billetAvion": 900,
+    "train": 25,
+    "forfaitMobile": 21
   },
   "notes": [
     "Manger à l’extérieur est souvent abordable grâce aux nombreuses petites chaînes, restaurants familiaux et bentos à emporter, particulièrement en dehors des centres ultra-urbains.",
     "Les loyers varient considérablement selon la préfecture : Tokyo et Osaka affichent des tarifs élevés, tandis que les villes régionales offrent des options bien plus accessibles. Les transports, eux, sont réputés pour leur ponctualité et leur fiabilité.",
     "Les pourboires ne font pas partie de la culture japonaise, et la plupart des prix affichés incluent déjà les taxes. La transparence des tarifs et la qualité du service contribuent à une expérience de consommation sereine et prévisible."
-  ]
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-10T07:33:14.583Z"
+  }
 }
