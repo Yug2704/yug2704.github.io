@@ -1,15 +1,15 @@
 name: Mise à jour automatique des prix
 
 on:
-  schedule:
-    - cron: "0 7 * * 1"   # chaque LUNDI 07:00 UTC (~08:00 Paris en hiver)
-  workflow_dispatch: {}    # bouton "Run workflow"
+  # 👉 Lancement manuel uniquement depuis l’onglet "Actions"
+  workflow_dispatch: {}
 
 jobs:
   update-prices:
     runs-on: ubuntu-latest
     permissions:
       contents: write      # autorise le push avec le GITHUB_TOKEN
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
