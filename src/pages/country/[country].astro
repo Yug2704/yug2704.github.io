@@ -65,6 +65,13 @@ const title = isFrance
   : `Prix de la vie en ${country.name} (comparé à la France)`;
 const bannerSrc  = country.banner     || `/banners/${country.slug}.jpg`;
 const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
+
+/* Date de mise à jour */
+const lastUpdatedRaw = country.meta?.lastUpdated;
+const lastUpdated = lastUpdatedRaw ? new Date(lastUpdatedRaw) : null;
+const lastUpdatedStr = lastUpdated
+  ? lastUpdated.toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" })
+  : null;
 ---
 
 <BaseLayout title={title}>
@@ -97,6 +104,12 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
     }
     .about-box p { color: var(--muted); line-height: 1.7; margin: 0 0 12px 0; }
     .about-box p:last-child { margin-bottom: 0; }
+
+    .last-updated {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
   </style>
 
   <!-- Bannière -->
@@ -114,6 +127,11 @@ const aboutTitle = country.aboutTitle || `À savoir sur ${country.name}`;
         ? "Cette page présente les valeurs de référence utilisées pour comparer les autres pays."
         : "Aperçu des coûts moyens avec comparaison directe à la référence France. Les valeurs peuvent varier selon la ville."}
     </p>
+    {lastUpdatedStr && (
+      <p class="last-updated">
+        Données mises à jour le {lastUpdatedStr}.
+      </p>
+    )}
   </div>
 
   <!-- Chiffres clés -->
