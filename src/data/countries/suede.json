@@ -1,0 +1,30 @@
+{
+  "slug": "suede",
+  "name": "Suede",
+  "banner": "/banners/suede.jpg",
+  "aboutTitle": "À savoir sur Suede",
+  "kpis": {
+    "restaurant": 19.0,
+    "salaireNet": 2500,
+    "loyer": 1050,
+    "essence": 2.0,
+    "cigarettes": 8.5,
+    "cinema": 13.5,
+    "hotel": 145,
+    "habiterIndex": 120.0,
+    "eau1l": 1.0,
+    "transportLocal": 3.3,
+    "billetAvion": 150,
+    "train": 38,
+    "forfaitMobile": 28
+  },
+  "notes": [
+    "Suede présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Suede affichent souvent des loyers plus élevés...",
+    "Les transports dans Suede influencent fortement le budget...",
+    "Le quotidien dans Suede permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.137595Z"
+  }
+}

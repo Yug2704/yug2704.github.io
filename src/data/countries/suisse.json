@@ -1,0 +1,30 @@
+{
+  "slug": "suisse",
+  "name": "Suisse",
+  "banner": "/banners/suisse.jpg",
+  "aboutTitle": "À savoir sur Suisse",
+  "kpis": {
+    "restaurant": 25.0,
+    "salaireNet": 4200,
+    "loyer": 1800,
+    "essence": 2.1,
+    "cigarettes": 9.5,
+    "cinema": 19.0,
+    "hotel": 190,
+    "habiterIndex": 150.0,
+    "eau1l": 1.0,
+    "transportLocal": 4.0,
+    "billetAvion": 120,
+    "train": 45,
+    "forfaitMobile": 35
+  },
+  "notes": [
+    "Suisse présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Suisse affichent souvent des loyers plus élevés...",
+    "Les transports dans Suisse influencent fortement le budget...",
+    "Le quotidien dans Suisse permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.138010Z"
+  }
+}

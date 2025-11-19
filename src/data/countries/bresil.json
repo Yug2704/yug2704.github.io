@@ -1,0 +1,30 @@
+{
+  "slug": "bresil",
+  "name": "Bresil",
+  "banner": "/banners/bresil.jpg",
+  "aboutTitle": "À savoir sur Bresil",
+  "kpis": {
+    "restaurant": 7.5,
+    "salaireNet": 700,
+    "loyer": 350,
+    "essence": 1.2,
+    "cigarettes": 2.6,
+    "cinema": 5.5,
+    "hotel": 60,
+    "habiterIndex": 60.0,
+    "eau1l": 0.5,
+    "transportLocal": 0.9,
+    "billetAvion": 650,
+    "train": 12,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Bresil présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Bresil affichent souvent des loyers plus élevés...",
+    "Les transports dans Bresil influencent fortement le budget...",
+    "Le quotidien dans Bresil permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.130730Z"
+  }
+}

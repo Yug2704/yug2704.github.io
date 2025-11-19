@@ -1,0 +1,30 @@
+{
+  "slug": "irlande",
+  "name": "Irlande",
+  "banner": "/banners/irlande.jpg",
+  "aboutTitle": "À savoir sur Irlande",
+  "kpis": {
+    "restaurant": 17.0,
+    "salaireNet": 2600,
+    "loyer": 1300,
+    "essence": 1.95,
+    "cigarettes": 13.5,
+    "cinema": 13.0,
+    "hotel": 140,
+    "habiterIndex": 118.0,
+    "eau1l": 1.0,
+    "transportLocal": 2.5,
+    "billetAvion": 120,
+    "train": 35,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Irlande présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Irlande affichent souvent des loyers plus élevés...",
+    "Les transports dans Irlande influencent fortement le budget...",
+    "Le quotidien dans Irlande permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.134411Z"
+  }
+}

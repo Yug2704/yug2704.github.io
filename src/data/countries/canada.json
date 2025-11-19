@@ -1,0 +1,30 @@
+{
+  "slug": "canada",
+  "name": "Canada",
+  "banner": "/banners/canada.jpg",
+  "aboutTitle": "À savoir sur Canada",
+  "kpis": {
+    "restaurant": 15.0,
+    "salaireNet": 2400,
+    "loyer": 950,
+    "essence": 1.5,
+    "cigarettes": 11.0,
+    "cinema": 12.5,
+    "hotel": 120,
+    "habiterIndex": 110.0,
+    "eau1l": 1.0,
+    "transportLocal": 2.6,
+    "billetAvion": 550,
+    "train": 35,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Canada présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Canada affichent souvent des loyers plus élevés...",
+    "Les transports dans Canada influencent fortement le budget...",
+    "Le quotidien dans Canada permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.131470Z"
+  }
+}

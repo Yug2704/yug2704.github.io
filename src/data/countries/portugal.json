@@ -1,0 +1,30 @@
+{
+  "slug": "portugal",
+  "name": "Portugal",
+  "banner": "/banners/portugal.jpg",
+  "aboutTitle": "À savoir sur Portugal",
+  "kpis": {
+    "restaurant": 11.0,
+    "salaireNet": 1300,
+    "loyer": 650,
+    "essence": 1.85,
+    "cigarettes": 5.5,
+    "cinema": 7.5,
+    "hotel": 90,
+    "habiterIndex": 85.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.7,
+    "billetAvion": 70,
+    "train": 22,
+    "forfaitMobile": 17
+  },
+  "notes": [
+    "Portugal présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Portugal affichent souvent des loyers plus élevés...",
+    "Les transports dans Portugal influencent fortement le budget...",
+    "Le quotidien dans Portugal permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.136885Z"
+  }
+}

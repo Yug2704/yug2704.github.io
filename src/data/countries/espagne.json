@@ -1,0 +1,30 @@
+{
+  "slug": "espagne",
+  "name": "Espagne",
+  "banner": "/banners/espagne.jpg",
+  "aboutTitle": "À savoir sur Espagne",
+  "kpis": {
+    "restaurant": 12.0,
+    "salaireNet": 1600,
+    "loyer": 700,
+    "essence": 1.7,
+    "cigarettes": 5.0,
+    "cinema": 8.5,
+    "hotel": 95,
+    "habiterIndex": 90.0,
+    "eau1l": 0.6,
+    "transportLocal": 1.5,
+    "billetAvion": 80,
+    "train": 25,
+    "forfaitMobile": 20
+  },
+  "notes": [
+    "Espagne présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Espagne affichent souvent des loyers plus élevés...",
+    "Les transports dans Espagne influencent fortement le budget...",
+    "Le quotidien dans Espagne permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.132979Z"
+  }
+}

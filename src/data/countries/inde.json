@@ -1,0 +1,30 @@
+{
+  "slug": "inde",
+  "name": "Inde",
+  "banner": "/banners/inde.jpg",
+  "aboutTitle": "À savoir sur Inde",
+  "kpis": {
+    "restaurant": 3.0,
+    "salaireNet": 450,
+    "loyer": 200,
+    "essence": 1.1,
+    "cigarettes": 3.0,
+    "cinema": 3.0,
+    "hotel": 40,
+    "habiterIndex": 40.0,
+    "eau1l": 0.25,
+    "transportLocal": 0.3,
+    "billetAvion": 600,
+    "train": 6,
+    "forfaitMobile": 5
+  },
+  "notes": [
+    "Inde présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Inde affichent souvent des loyers plus élevés...",
+    "Les transports dans Inde influencent fortement le budget...",
+    "Le quotidien dans Inde permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.133804Z"
+  }
+}

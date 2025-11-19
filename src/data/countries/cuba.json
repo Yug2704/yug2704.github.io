@@ -1,0 +1,30 @@
+{
+  "slug": "cuba",
+  "name": "Cuba",
+  "banner": "/banners/cuba.jpg",
+  "aboutTitle": "À savoir sur Cuba",
+  "kpis": {
+    "restaurant": 6.0,
+    "salaireNet": 350,
+    "loyer": 250,
+    "essence": 1.4,
+    "cigarettes": 3.5,
+    "cinema": 4.0,
+    "hotel": 80,
+    "habiterIndex": 50.0,
+    "eau1l": 0.7,
+    "transportLocal": 0.3,
+    "billetAvion": 750,
+    "train": 10,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Cuba présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Cuba affichent souvent des loyers plus élevés...",
+    "Les transports dans Cuba influencent fortement le budget...",
+    "Le quotidien dans Cuba permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.132130Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "belgique",
+  "name": "Belgique",
+  "banner": "/banners/belgique.jpg",
+  "aboutTitle": "À savoir sur Belgique",
+  "kpis": {
+    "restaurant": 16.0,
+    "salaireNet": 2300,
+    "loyer": 850,
+    "essence": 1.9,
+    "cigarettes": 9.5,
+    "cinema": 11.5,
+    "hotel": 105,
+    "habiterIndex": 103.0,
+    "eau1l": 0.75,
+    "transportLocal": 2.5,
+    "billetAvion": 90,
+    "train": 30,
+    "forfaitMobile": 22
+  },
+  "notes": [
+    "Belgique présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Belgique affichent souvent des loyers plus élevés...",
+    "Les transports dans Belgique influencent fortement le budget...",
+    "Le quotidien dans Belgique permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.130157Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "russie",
+  "name": "Russie",
+  "banner": "/banners/russie.jpg",
+  "aboutTitle": "À savoir sur Russie",
+  "kpis": {
+    "restaurant": 7.5,
+    "salaireNet": 800,
+    "loyer": 400,
+    "essence": 0.9,
+    "cigarettes": 2.0,
+    "cinema": 4.5,
+    "hotel": 70,
+    "habiterIndex": 60.0,
+    "eau1l": 0.3,
+    "transportLocal": 0.6,
+    "billetAvion": 400,
+    "train": 15,
+    "forfaitMobile": 10
+  },
+  "notes": [
+    "Russie présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Russie affichent souvent des loyers plus élevés...",
+    "Les transports dans Russie influencent fortement le budget...",
+    "Le quotidien dans Russie permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.137266Z"
+  }
+}

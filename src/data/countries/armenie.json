@@ -1,0 +1,30 @@
+{
+  "slug": "armenie",
+  "name": "Armenie",
+  "banner": "/banners/armenie.jpg",
+  "aboutTitle": "À savoir sur Armenie",
+  "kpis": {
+    "restaurant": 8.0,
+    "salaireNet": 600,
+    "loyer": 300,
+    "essence": 1.2,
+    "cigarettes": 2.5,
+    "cinema": 5.0,
+    "hotel": 55,
+    "habiterIndex": 55.0,
+    "eau1l": 0.4,
+    "transportLocal": 0.4,
+    "billetAvion": 350,
+    "train": 8,
+    "forfaitMobile": 10
+  },
+  "notes": [
+    "Armenie présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Armenie affichent souvent des loyers plus élevés...",
+    "Les transports dans Armenie influencent fortement le budget...",
+    "Le quotidien dans Armenie permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.128963Z"
+  }
+}

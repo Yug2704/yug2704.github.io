@@ -1,0 +1,30 @@
+{
+  "slug": "allemagne",
+  "name": "Allemagne",
+  "banner": "/banners/allemagne.jpg",
+  "aboutTitle": "À savoir sur Allemagne",
+  "kpis": {
+    "restaurant": 14.0,
+    "salaireNet": 2300,
+    "loyer": 850,
+    "essence": 1.85,
+    "cigarettes": 8.0,
+    "cinema": 12.0,
+    "hotel": 110,
+    "habiterIndex": 105.0,
+    "eau1l": 0.6,
+    "transportLocal": 3.0,
+    "billetAvion": 150,
+    "train": 40,
+    "forfaitMobile": 25
+  },
+  "notes": [
+    "Allemagne présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Allemagne affichent souvent des loyers plus élevés...",
+    "Les transports dans Allemagne influencent fortement le budget...",
+    "Le quotidien dans Allemagne permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.125825Z"
+  }
+}

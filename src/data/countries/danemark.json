@@ -1,0 +1,30 @@
+{
+  "slug": "danemark",
+  "name": "Danemark",
+  "banner": "/banners/danemark.jpg",
+  "aboutTitle": "À savoir sur Danemark",
+  "kpis": {
+    "restaurant": 20.0,
+    "salaireNet": 2600,
+    "loyer": 1100,
+    "essence": 2.1,
+    "cigarettes": 9.0,
+    "cinema": 15.0,
+    "hotel": 150,
+    "habiterIndex": 125.0,
+    "eau1l": 1.0,
+    "transportLocal": 3.5,
+    "billetAvion": 160,
+    "train": 40,
+    "forfaitMobile": 28
+  },
+  "notes": [
+    "Danemark présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Danemark affichent souvent des loyers plus élevés...",
+    "Les transports dans Danemark influencent fortement le budget...",
+    "Le quotidien dans Danemark permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.132500Z"
+  }
+}

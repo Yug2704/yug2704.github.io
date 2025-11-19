@@ -1,0 +1,30 @@
+{
+  "slug": "chine",
+  "name": "Chine",
+  "banner": "/banners/chine.jpg",
+  "aboutTitle": "À savoir sur Chine",
+  "kpis": {
+    "restaurant": 4.5,
+    "salaireNet": 900,
+    "loyer": 500,
+    "essence": 1.1,
+    "cigarettes": 3.0,
+    "cinema": 7.0,
+    "hotel": 75,
+    "habiterIndex": 65.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.6,
+    "billetAvion": 750,
+    "train": 18,
+    "forfaitMobile": 12
+  },
+  "notes": [
+    "Chine présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Chine affichent souvent des loyers plus élevés...",
+    "Les transports dans Chine influencent fortement le budget...",
+    "Le quotidien dans Chine permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.131771Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "pays-bas",
+  "name": "Pays Bas",
+  "banner": "/banners/pays-bas.jpg",
+  "aboutTitle": "À savoir sur Pays Bas",
+  "kpis": {
+    "restaurant": 16.0,
+    "salaireNet": 2300,
+    "loyer": 1000,
+    "essence": 2.0,
+    "cigarettes": 8.0,
+    "cinema": 12.0,
+    "hotel": 120,
+    "habiterIndex": 108.0,
+    "eau1l": 0.7,
+    "transportLocal": 3.0,
+    "billetAvion": 110,
+    "train": 30,
+    "forfaitMobile": 25
+  },
+  "notes": [
+    "Pays Bas présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Pays Bas affichent souvent des loyers plus élevés...",
+    "Les transports dans Pays Bas influencent fortement le budget...",
+    "Le quotidien dans Pays Bas permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.136296Z"
+  }
+}

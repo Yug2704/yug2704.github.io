@@ -1,0 +1,30 @@
+{
+  "slug": "mexique",
+  "name": "Mexique",
+  "banner": "/banners/mexique.jpg",
+  "aboutTitle": "À savoir sur Mexique",
+  "kpis": {
+    "restaurant": 7.0,
+    "salaireNet": 700,
+    "loyer": 400,
+    "essence": 1.3,
+    "cigarettes": 3.5,
+    "cinema": 4.5,
+    "hotel": 65,
+    "habiterIndex": 55.0,
+    "eau1l": 0.5,
+    "transportLocal": 0.6,
+    "billetAvion": 750,
+    "train": 10,
+    "forfaitMobile": 12
+  },
+  "notes": [
+    "Mexique présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Mexique affichent souvent des loyers plus élevés...",
+    "Les transports dans Mexique influencent fortement le budget...",
+    "Le quotidien dans Mexique permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.135389Z"
+  }
+}

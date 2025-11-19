@@ -1,0 +1,30 @@
+{
+  "slug": "italie",
+  "name": "Italie",
+  "banner": "/banners/italie.jpg",
+  "aboutTitle": "À savoir sur Italie",
+  "kpis": {
+    "restaurant": 14.0,
+    "salaireNet": 1700,
+    "loyer": 750,
+    "essence": 1.9,
+    "cigarettes": 6.0,
+    "cinema": 9.0,
+    "hotel": 100,
+    "habiterIndex": 95.0,
+    "eau1l": 0.45,
+    "transportLocal": 1.7,
+    "billetAvion": 70,
+    "train": 26,
+    "forfaitMobile": 18
+  },
+  "notes": [
+    "Italie présente un coût de la vie très variable selon les régions...",
+    "Les grandes villes de Italie affichent souvent des loyers plus élevés...",
+    "Les transports dans Italie influencent fortement le budget...",
+    "Le quotidien dans Italie permet d'adapter son budget selon son style de vie..."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-19T13:56:41.134799Z"
+  }
+}
