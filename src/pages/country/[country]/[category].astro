@@ -118,7 +118,7 @@ function diffLabel(val?: number | null, ref?: number | null) {
   if (abs < 1) return { text: "similaire", color: "var(--muted)" };
   return pct < 0
     ? { text: `${abs.toFixed(0)}% moins cher`, color: "var(--green)" }
-    : { text: `${abs.toFixed(0)}% plus cher`, color: "var(--red)" };
+    : { text: `${abs.toFixed(0)}% plus cher`,  color: "var(--red)" };
 }
 
 /* 4) Données calculées pour l’affichage enrichi */
@@ -130,6 +130,13 @@ const pctNum =
   val != null && ref != null && isFinite((val - ref) / ref) ? Math.round(((val - ref) / ref) * 100) : null;
 
 const title = `${labels[category]} – ${country?.name ?? ""}`;
+
+/* Date de mise à jour */
+const lastUpdatedRaw = country.meta?.lastUpdated;
+const lastUpdated = lastUpdatedRaw ? new Date(lastUpdatedRaw) : null;
+const lastUpdatedStr = lastUpdated
+  ? lastUpdated.toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" })
+  : null;
 
 /* Bannière de catégorie (fallback si absente) */
 const catBanner = `/banners/categories/${category}.jpg`;
@@ -147,6 +154,12 @@ const bannerSrc = catBanner;
   <h1 class="h1">
     {labels[category]} : <span class="country">{country.name}</span>
   </h1>
+
+  {lastUpdatedStr && (
+    <p class="last-updated">
+      Données mises à jour le {lastUpdatedStr}.
+    </p>
+  )}
 
   <!-- Encadré résumé -->
   <section class="summary">
@@ -203,12 +216,12 @@ const bannerSrc = catBanner;
     :root{ --green:#2f9e44; --red:#e03131; }
     .banner{margin:18px 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);}
     .banner img{width:100%;height:220px;object-fit:cover}
-    .h1{font-size:1.8rem;margin:16px 0 10px 0}
+    .h1{font-size:1.8rem;margin:16px 0 4px 0}
     .country{color:var(--accent)}
     .summary{
       display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;
       background:var(--accent-100);border:1px solid #ffd0df;border-radius:18px;padding:18px;box-shadow:var(--shadow);
-      margin:16px 0 18px 0;
+      margin:12px 0 18px 0;
     }
     .tile{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
     .t-label{color:var(--muted);font-size:.95rem;margin-bottom:6px}
@@ -216,5 +229,10 @@ const bannerSrc = catBanner;
     .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-top:14px}
     .detail-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:14px}
     .muted{color:var(--muted)}
+    .last-updated{
+      margin:0 0 10px 0;
+      font-size:0.9rem;
+      color:var(--muted);
+    }
   </style>
 </BaseLayout>
