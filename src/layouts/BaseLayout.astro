@@ -133,15 +133,11 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script : recherche intelligente pays + fallback catégorie -->
+    <!-- 🔧 Script : slugify de la saisie + redirection simple -->
     <script is:inline>
       const hdrQ  = document.getElementById('hdr-q');
       const hdrGo = document.getElementById('hdr-go');
 
-      // Données pays injectées côté client
-      const COUNTRIES = {JSON.stringify(countries)};
-
-      // Transforme une chaîne en slug propre : etats-unis, armenie, etc.
       function slugify(str) {
         return (str || '')
           .toString()
@@ -149,58 +145,35 @@ const {
           .normalize('NFD')                  // sépare les accents
           .replace(/[\u0300-\u036f]/g, '')  // supprime les accents
           .replace(/&/g, ' et ')
-          .replace(/[^a-z0-9]+/g, '-')      // reste -> tiret
-          .replace(/^-+|-+$/g, '');         // retire tirets début/fin
+          .replace(/[^a-z0-9]+/g, '-')      // tout le reste -> tiret
+          .replace(/^-+|-+$/g, '');         // enlève tirets début/fin
       }
 
-      // Trouve le meilleur pays correspondant à la recherche
-      function findBestCountry(termRaw) {
-        const q = slugify(termRaw);
-        if (!q) return null;
+      function handleSearch() {
+        const raw = (hdrQ?.value || '').trim();
+        if (!raw) return;
 
-        // 1) match exact sur slug
-        let m = COUNTRIES.find(c => slugify(c.slug || '') === q);
-        if (m) return m.slug;
+        const slug = slugify(raw);
 
-        // 2) match exact sur le nom
-        m = COUNTRIES.find(c => slugify(c.name || c.label || '') === q);
-        if (m) return m.slug;
-
-        // 3) match partiel (ex: "etats" -> "etats-unis")
-        m = COUNTRIES.find(c => {
-          const n = slugify(c.name || '');
-          return n.includes(q) || q.includes(n);
-        });
-        if (m) return m.slug;
-
-        return null;
-      }
-
-      function openBestMatchHeader() {
-        const termRaw = (hdrQ?.value || '').trim();
-        if (!termRaw) return;
-
-        const bestSlug = findBestCountry(termRaw);
-
-        if (bestSlug) {
-          // On a trouvé un pays → redirection vers /country/slug
-          window.location.href = `/country/${bestSlug}`;
-        } else {
-          // Aucun pays trouvé → on tente une page catégorie avec un slug propre
-          const catSlug = slugify(termRaw);
-          window.location.href = `/category/${catSlug}`;
+        // Cas particulier : restaurant / restaurants -> page catégorie
+        if (slug === 'restaurant' || slug === 'restaurants') {
+          window.location.href = '/category/restaurant';
+          return;
         }
+
+        // Tous les autres cas -> page pays
+        window.location.href = `/country/${slug}`;
       }
 
       hdrGo?.addEventListener('click', (e) => {
         e.preventDefault();
-        openBestMatchHeader();
+        handleSearch();
       });
 
       hdrQ?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          openBestMatchHeader();
+          handleSearch();
         }
       });
     </script>
