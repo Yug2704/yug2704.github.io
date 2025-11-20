@@ -4,19 +4,19 @@
   "banner": "/banners/quatar.jpg",
   "aboutTitle": "À savoir sur Quatar",
   "kpis": {
-    "restaurant": 10.0,
-    "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "restaurant": 13,
+    "salaireNet": 2500,
+    "loyer": 1100,
+    "essence": 0.45,
+    "cigarettes": 3.5,
+    "cinema": 12,
+    "hotel": 130,
+    "habiterIndex": 110,
+    "eau1l": 0.45,
+    "transportLocal": 0.9,
+    "billetAvion": 450,
+    "train": 0,
+    "forfaitMobile": 28
   },
   "notes": [
     "Quatar présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Quatar par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.466Z"
   }
 }

@@ -4,18 +4,18 @@
   "banner": "/banners/pologne.jpg",
   "aboutTitle": "À savoir sur Pologne",
   "kpis": {
-    "restaurant": 10.0,
+    "restaurant": 8,
     "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
+    "loyer": 550,
+    "essence": 1.7,
+    "cigarettes": 4.2,
+    "cinema": 6.8,
     "hotel": 70,
-    "habiterIndex": 70.0,
+    "habiterIndex": 70,
     "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
+    "transportLocal": 1.1,
+    "billetAvion": 160,
+    "train": 17,
     "forfaitMobile": 15
   },
   "notes": [
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Pologne par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.472Z"
   }
 }

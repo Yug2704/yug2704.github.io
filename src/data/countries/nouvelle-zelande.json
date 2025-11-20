@@ -4,19 +4,19 @@
   "banner": "/banners/nouvelle zelande.jpg",
   "aboutTitle": "À savoir sur Nouvelle-Zélande",
   "kpis": {
-    "restaurant": 10.0,
-    "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "restaurant": 15,
+    "salaireNet": 2300,
+    "loyer": 950,
+    "essence": 1.9,
+    "cigarettes": 20,
+    "cinema": 13,
+    "hotel": 120,
+    "habiterIndex": 110,
+    "eau1l": 0.9,
+    "transportLocal": 2.5,
+    "billetAvion": 1100,
+    "train": 28,
+    "forfaitMobile": 30
   },
   "notes": [
     "Nouvelle-Zélande présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Nouvelle-Zélande par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.471Z"
   }
 }

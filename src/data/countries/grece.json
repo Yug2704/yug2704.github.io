@@ -4,19 +4,19 @@
   "banner": "/banners/grece.jpg",
   "aboutTitle": "À savoir sur Grèce",
   "kpis": {
-    "restaurant": 10.0,
+    "restaurant": 12,
     "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "loyer": 650,
+    "essence": 1.9,
+    "cigarettes": 5.5,
+    "cinema": 7.5,
+    "hotel": 85,
+    "habiterIndex": 80,
+    "eau1l": 0.6,
+    "transportLocal": 1.4,
+    "billetAvion": 120,
+    "train": 22,
+    "forfaitMobile": 18
   },
   "notes": [
     "Grèce présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Grèce par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.463Z"
   }
 }

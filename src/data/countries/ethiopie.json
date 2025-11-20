@@ -4,19 +4,19 @@
   "banner": "/banners/ethiopie.jpg",
   "aboutTitle": "À savoir sur Éthiopie",
   "kpis": {
-    "restaurant": 10.0,
-    "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "restaurant": 3,
+    "salaireNet": 250,
+    "loyer": 180,
+    "essence": 1,
+    "cigarettes": 1.5,
+    "cinema": 3,
+    "hotel": 40,
+    "habiterIndex": 40,
+    "eau1l": 0.2,
+    "transportLocal": 0.25,
+    "billetAvion": 550,
+    "train": 5,
+    "forfaitMobile": 6
   },
   "notes": [
     "Éthiopie présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Éthiopie par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.465Z"
   }
 }

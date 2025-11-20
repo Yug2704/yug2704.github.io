@@ -4,19 +4,19 @@
   "banner": "/banners/arabie saoudite.jpg",
   "aboutTitle": "À savoir sur Arabie saoudite",
   "kpis": {
-    "restaurant": 10.0,
-    "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
-    "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "restaurant": 11,
+    "salaireNet": 2200,
+    "loyer": 900,
+    "essence": 0.55,
+    "cigarettes": 3.5,
+    "cinema": 10,
+    "hotel": 115,
+    "habiterIndex": 105,
+    "eau1l": 0.45,
+    "transportLocal": 0.8,
+    "billetAvion": 400,
+    "train": 0,
+    "forfaitMobile": 26
   },
   "notes": [
     "Arabie saoudite présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Arabie saoudite par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.473Z"
   }
 }

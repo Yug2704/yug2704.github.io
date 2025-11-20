@@ -4,19 +4,19 @@
   "banner": "/banners/egypte.jpg",
   "aboutTitle": "À savoir sur Égypte",
   "kpis": {
-    "restaurant": 10.0,
-    "salaireNet": 1000,
-    "loyer": 600,
-    "essence": 1.5,
-    "cigarettes": 5.0,
-    "cinema": 7.0,
-    "hotel": 70,
-    "habiterIndex": 70.0,
-    "eau1l": 0.5,
-    "transportLocal": 1.0,
+    "restaurant": 4,
+    "salaireNet": 350,
+    "loyer": 250,
+    "essence": 0.9,
+    "cigarettes": 2,
+    "cinema": 3.5,
+    "hotel": 45,
+    "habiterIndex": 45,
+    "eau1l": 0.25,
+    "transportLocal": 0.3,
     "billetAvion": 300,
-    "train": 15,
-    "forfaitMobile": 15
+    "train": 8,
+    "forfaitMobile": 7
   },
   "notes": [
     "Égypte présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
@@ -25,6 +25,6 @@
     "Sur cette page, les indicateurs permettent justement de situer Égypte par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T13:31:08.762517Z"
+    "lastUpdated": "2025-11-20T13:50:22.465Z"
   }
 }
