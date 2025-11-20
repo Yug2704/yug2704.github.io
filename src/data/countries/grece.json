@@ -1,30 +1,30 @@
 {
   "slug": "grece",
-  "name": "Grece",
+  "name": "Grèce",
   "banner": "/banners/grece.jpg",
-  "aboutTitle": "À savoir sur Grece",
+  "aboutTitle": "À savoir sur Grèce",
   "kpis": {
-    "restaurant": 12.0,
+    "restaurant": 10.0,
     "salaireNet": 1000,
-    "loyer": 650,
-    "essence": 1.9,
-    "cigarettes": 5.5,
-    "cinema": 7.5,
-    "hotel": 85,
-    "habiterIndex": 80.0,
-    "eau1l": 0.6,
-    "transportLocal": 1.4,
-    "billetAvion": 120,
-    "train": 22,
-    "forfaitMobile": 18
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "La Grèce offre un coût de la vie souvent plus doux que l’Europe du Nord, surtout dès qu’on sort des îles les plus touristiques.",
-    "À Athènes ou Thessalonique, les loyers restent raisonnables dans les quartiers non touristiques mais grimpent dès qu’on se rapproche de la mer.",
-    "Les marchés de quartier et les tavernes permettent de bien manger pour un budget correct, surtout en privilégiant les adresses fréquentées par les locaux.",
-    "Les transports en commun restent abordables, mais dans les petites villes la marche et le scooter sont souvent les moyens les plus pratiques."
+    "Grèce présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Grèce restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Grèce, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Grèce par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

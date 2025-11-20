@@ -1,30 +1,30 @@
 {
   "slug": "thailande",
-  "name": "Thailande",
+  "name": "Thaïlande",
   "banner": "/banners/thailande.jpg",
-  "aboutTitle": "À savoir sur Thailande",
+  "aboutTitle": "À savoir sur Thaïlande",
   "kpis": {
-    "restaurant": 4.5,
-    "salaireNet": 700,
-    "loyer": 400,
-    "essence": 1.2,
-    "cigarettes": 3.2,
-    "cinema": 4.5,
-    "hotel": 55,
-    "habiterIndex": 55.0,
-    "eau1l": 0.35,
-    "transportLocal": 0.6,
-    "billetAvion": 700,
-    "train": 9,
-    "forfaitMobile": 10
+    "restaurant": 10.0,
+    "salaireNet": 1000,
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "Paragraphe 1 sur thailande.",
-    "Paragraphe 2 sur thailande.",
-    "Paragraphe 3 sur thailande.",
-    "Paragraphe 4 sur thailande."
+    "Thaïlande présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Thaïlande restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Thaïlande, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Thaïlande par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

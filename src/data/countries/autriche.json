@@ -4,27 +4,27 @@
   "banner": "/banners/autriche.jpg",
   "aboutTitle": "À savoir sur Autriche",
   "kpis": {
-    "restaurant": 15.0,
-    "salaireNet": 2300,
-    "loyer": 950,
-    "essence": 2.0,
-    "cigarettes": 6.0,
-    "cinema": 11.5,
-    "hotel": 120,
-    "habiterIndex": 110.0,
-    "eau1l": 0.9,
-    "transportLocal": 2.5,
-    "billetAvion": 160,
-    "train": 30,
-    "forfaitMobile": 23
+    "restaurant": 10.0,
+    "salaireNet": 1000,
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "Paragraphe 1 sur autriche.",
-    "Paragraphe 2 sur autriche.",
-    "Paragraphe 3 sur autriche.",
-    "Paragraphe 4 sur autriche."
+    "Autriche présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Autriche restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Autriche, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Autriche par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

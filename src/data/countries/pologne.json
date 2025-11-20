@@ -4,27 +4,27 @@
   "banner": "/banners/pologne.jpg",
   "aboutTitle": "À savoir sur Pologne",
   "kpis": {
-    "restaurant": 8.0,
+    "restaurant": 10.0,
     "salaireNet": 1000,
-    "loyer": 550,
-    "essence": 1.7,
-    "cigarettes": 4.2,
-    "cinema": 6.8,
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
     "hotel": 70,
     "habiterIndex": 70.0,
     "eau1l": 0.5,
-    "transportLocal": 1.1,
-    "billetAvion": 160,
-    "train": 17,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
     "forfaitMobile": 15
   },
   "notes": [
-    "Paragraphe 1 sur pologne.",
-    "Paragraphe 2 sur pologne.",
-    "Paragraphe 3 sur pologne.",
-    "Paragraphe 4 sur pologne."
+    "Pologne présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Pologne restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Pologne, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Pologne par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

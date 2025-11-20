@@ -4,27 +4,27 @@
   "banner": "/banners/singapour.jpg",
   "aboutTitle": "À savoir sur Singapour",
   "kpis": {
-    "restaurant": 12.0,
-    "salaireNet": 2800,
-    "loyer": 1500,
-    "essence": 2.1,
-    "cigarettes": 10.0,
-    "cinema": 12.5,
-    "hotel": 150,
-    "habiterIndex": 130.0,
-    "eau1l": 1.1,
-    "transportLocal": 2.0,
-    "billetAvion": 900,
-    "train": 22,
-    "forfaitMobile": 28
+    "restaurant": 10.0,
+    "salaireNet": 1000,
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "Paragraphe 1 sur singapour.",
-    "Paragraphe 2 sur singapour.",
-    "Paragraphe 3 sur singapour.",
-    "Paragraphe 4 sur singapour."
+    "Singapour présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Singapour restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Singapour, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Singapour par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

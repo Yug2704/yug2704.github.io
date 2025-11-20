@@ -4,27 +4,27 @@
   "banner": "/banners/chili.jpg",
   "aboutTitle": "À savoir sur Chili",
   "kpis": {
-    "restaurant": 9.0,
-    "salaireNet": 900,
-    "loyer": 500,
-    "essence": 1.4,
-    "cigarettes": 4.5,
-    "cinema": 6.5,
+    "restaurant": 10.0,
+    "salaireNet": 1000,
+    "loyer": 600,
+    "essence": 1.5,
+    "cigarettes": 5.0,
+    "cinema": 7.0,
     "hotel": 70,
-    "habiterIndex": 65.0,
-    "eau1l": 0.55,
-    "transportLocal": 0.9,
-    "billetAvion": 900,
-    "train": 18,
-    "forfaitMobile": 14
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "Le Chili est l’un des pays les plus stables d’Amérique du Sud, avec un coût de la vie intermédiaire entre Europe de l’Est et de l’Ouest.",
-    "Santiago concentre les meilleurs salaires mais aussi les loyers les plus élevés, alors que les villes côtières sont en général plus abordables.",
-    "Les bus longue distance sont très utilisés pour traverser le pays, avec plusieurs niveaux de confort et de prix.",
-    "La cuisine locale (empanadas, poissons, fruits de mer) permet de bien manger sans exploser son budget si l’on évite les quartiers trop touristiques."
+    "Chili présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Chili restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Chili, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Chili par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }

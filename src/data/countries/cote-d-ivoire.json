@@ -1,30 +1,30 @@
 {
   "slug": "cote-d-ivoire",
-  "name": "Cote D Ivoire",
-  "banner": "/banners/cote-d-ivoire.jpg",
-  "aboutTitle": "À savoir sur Cote D Ivoire",
+  "name": "Côte d'Ivoire",
+  "banner": "/banners/cote d'ivoire.jpg",
+  "aboutTitle": "À savoir sur Côte d'Ivoire",
   "kpis": {
-    "restaurant": 5.0,
-    "salaireNet": 500,
-    "loyer": 300,
+    "restaurant": 10.0,
+    "salaireNet": 1000,
+    "loyer": 600,
     "essence": 1.5,
-    "cigarettes": 2.8,
-    "cinema": 4.2,
-    "hotel": 55,
-    "habiterIndex": 52.0,
-    "eau1l": 0.35,
-    "transportLocal": 0.5,
-    "billetAvion": 550,
-    "train": 9,
-    "forfaitMobile": 8
+    "cigarettes": 5.0,
+    "cinema": 7.0,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 300,
+    "train": 15,
+    "forfaitMobile": 15
   },
   "notes": [
-    "Paragraphe 1 sur cote-d-ivoire.",
-    "Paragraphe 2 sur cote-d-ivoire.",
-    "Paragraphe 3 sur cote-d-ivoire.",
-    "Paragraphe 4 sur cote-d-ivoire."
+    "Côte d'Ivoire présente un coût de la vie qui varie fortement entre les grandes villes, les zones touristiques et les régions plus rurales.",
+    "Les postes de dépenses les plus sensibles à Côte d'Ivoire restent le logement et les transports, tandis que la nourriture peut rester abordable en visant les adresses fréquentées par les locaux.",
+    "Pour un voyage ou une expatriation à Côte d'Ivoire, comparer quelques prix clés (loyer, repas, abonnement de transport) aide à se faire une idée rapide du budget nécessaire.",
+    "Sur cette page, les indicateurs permettent justement de situer Côte d'Ivoire par rapport à la France et d’anticiper plus sereinement son projet."
   ],
   "meta": {
-    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+    "lastUpdated": "2025-11-20T13:31:08.762517Z"
   }
 }
