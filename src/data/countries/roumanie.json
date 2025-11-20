@@ -1,0 +1,30 @@
+{
+  "slug": "roumanie",
+  "name": "Roumanie",
+  "banner": "/banners/roumanie.jpg",
+  "aboutTitle": "À savoir sur Roumanie",
+  "kpis": {
+    "restaurant": 8.0,
+    "salaireNet": 750,
+    "loyer": 380,
+    "essence": 1.6,
+    "cigarettes": 3.5,
+    "cinema": 5.5,
+    "hotel": 60,
+    "habiterIndex": 60.0,
+    "eau1l": 0.5,
+    "transportLocal": 0.9,
+    "billetAvion": 180,
+    "train": 15,
+    "forfaitMobile": 11
+  },
+  "notes": [
+    "Paragraphe 1 sur roumanie.",
+    "Paragraphe 2 sur roumanie.",
+    "Paragraphe 3 sur roumanie.",
+    "Paragraphe 4 sur roumanie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

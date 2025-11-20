@@ -1,0 +1,30 @@
+{
+  "slug": "autriche",
+  "name": "Autriche",
+  "banner": "/banners/autriche.jpg",
+  "aboutTitle": "À savoir sur Autriche",
+  "kpis": {
+    "restaurant": 15.0,
+    "salaireNet": 2300,
+    "loyer": 950,
+    "essence": 2.0,
+    "cigarettes": 6.0,
+    "cinema": 11.5,
+    "hotel": 120,
+    "habiterIndex": 110.0,
+    "eau1l": 0.9,
+    "transportLocal": 2.5,
+    "billetAvion": 160,
+    "train": 30,
+    "forfaitMobile": 23
+  },
+  "notes": [
+    "Paragraphe 1 sur autriche.",
+    "Paragraphe 2 sur autriche.",
+    "Paragraphe 3 sur autriche.",
+    "Paragraphe 4 sur autriche."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

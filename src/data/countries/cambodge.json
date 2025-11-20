@@ -1,0 +1,30 @@
+{
+  "slug": "cambodge",
+  "name": "Cambodge",
+  "banner": "/banners/cambodge.jpg",
+  "aboutTitle": "À savoir sur Cambodge",
+  "kpis": {
+    "restaurant": 4.0,
+    "salaireNet": 450,
+    "loyer": 250,
+    "essence": 1.2,
+    "cigarettes": 2.0,
+    "cinema": 3.8,
+    "hotel": 45,
+    "habiterIndex": 45.0,
+    "eau1l": 0.3,
+    "transportLocal": 0.35,
+    "billetAvion": 750,
+    "train": 5,
+    "forfaitMobile": 7
+  },
+  "notes": [
+    "Paragraphe 1 sur cambodge.",
+    "Paragraphe 2 sur cambodge.",
+    "Paragraphe 3 sur cambodge.",
+    "Paragraphe 4 sur cambodge."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

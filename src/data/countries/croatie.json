@@ -1,0 +1,30 @@
+{
+  "slug": "croatie",
+  "name": "Croatie",
+  "banner": "/banners/croatie.jpg",
+  "aboutTitle": "À savoir sur Croatie",
+  "kpis": {
+    "restaurant": 10.0,
+    "salaireNet": 900,
+    "loyer": 500,
+    "essence": 1.8,
+    "cigarettes": 4.5,
+    "cinema": 7.0,
+    "hotel": 80,
+    "habiterIndex": 75.0,
+    "eau1l": 0.6,
+    "transportLocal": 1.4,
+    "billetAvion": 180,
+    "train": 20,
+    "forfaitMobile": 16
+  },
+  "notes": [
+    "Paragraphe 1 sur croatie.",
+    "Paragraphe 2 sur croatie.",
+    "Paragraphe 3 sur croatie.",
+    "Paragraphe 4 sur croatie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

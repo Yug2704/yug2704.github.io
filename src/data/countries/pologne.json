@@ -1,0 +1,30 @@
+{
+  "slug": "pologne",
+  "name": "Pologne",
+  "banner": "/banners/pologne.jpg",
+  "aboutTitle": "À savoir sur Pologne",
+  "kpis": {
+    "restaurant": 8.0,
+    "salaireNet": 1000,
+    "loyer": 550,
+    "essence": 1.7,
+    "cigarettes": 4.2,
+    "cinema": 6.8,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.1,
+    "billetAvion": 160,
+    "train": 17,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Paragraphe 1 sur pologne.",
+    "Paragraphe 2 sur pologne.",
+    "Paragraphe 3 sur pologne.",
+    "Paragraphe 4 sur pologne."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

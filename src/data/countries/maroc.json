@@ -1,0 +1,30 @@
+{
+  "slug": "maroc",
+  "name": "Maroc",
+  "banner": "/banners/maroc.jpg",
+  "aboutTitle": "À savoir sur Maroc",
+  "kpis": {
+    "restaurant": 5.5,
+    "salaireNet": 500,
+    "loyer": 280,
+    "essence": 1.2,
+    "cigarettes": 2.8,
+    "cinema": 4.2,
+    "hotel": 55,
+    "habiterIndex": 50.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.4,
+    "billetAvion": 200,
+    "train": 9,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur maroc.",
+    "Paragraphe 2 sur maroc.",
+    "Paragraphe 3 sur maroc.",
+    "Paragraphe 4 sur maroc."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

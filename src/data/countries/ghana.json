@@ -1,0 +1,30 @@
+{
+  "slug": "ghana",
+  "name": "Ghana",
+  "banner": "/banners/ghana.jpg",
+  "aboutTitle": "À savoir sur Ghana",
+  "kpis": {
+    "restaurant": 5.0,
+    "salaireNet": 480,
+    "loyer": 280,
+    "essence": 1.4,
+    "cigarettes": 2.8,
+    "cinema": 4.0,
+    "hotel": 50,
+    "habiterIndex": 50.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.45,
+    "billetAvion": 600,
+    "train": 9,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur ghana.",
+    "Paragraphe 2 sur ghana.",
+    "Paragraphe 3 sur ghana.",
+    "Paragraphe 4 sur ghana."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

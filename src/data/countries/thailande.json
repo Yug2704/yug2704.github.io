@@ -1,0 +1,30 @@
+{
+  "slug": "thailande",
+  "name": "Thailande",
+  "banner": "/banners/thailande.jpg",
+  "aboutTitle": "À savoir sur Thailande",
+  "kpis": {
+    "restaurant": 4.5,
+    "salaireNet": 700,
+    "loyer": 400,
+    "essence": 1.2,
+    "cigarettes": 3.2,
+    "cinema": 4.5,
+    "hotel": 55,
+    "habiterIndex": 55.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.6,
+    "billetAvion": 700,
+    "train": 9,
+    "forfaitMobile": 10
+  },
+  "notes": [
+    "Paragraphe 1 sur thailande.",
+    "Paragraphe 2 sur thailande.",
+    "Paragraphe 3 sur thailande.",
+    "Paragraphe 4 sur thailande."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

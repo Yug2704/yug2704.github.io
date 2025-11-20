@@ -1,0 +1,30 @@
+{
+  "slug": "senegal",
+  "name": "Senegal",
+  "banner": "/banners/senegal.jpg",
+  "aboutTitle": "À savoir sur Senegal",
+  "kpis": {
+    "restaurant": 5.5,
+    "salaireNet": 480,
+    "loyer": 280,
+    "essence": 1.4,
+    "cigarettes": 2.5,
+    "cinema": 4.0,
+    "hotel": 55,
+    "habiterIndex": 50.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.45,
+    "billetAvion": 500,
+    "train": 7,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur senegal.",
+    "Paragraphe 2 sur senegal.",
+    "Paragraphe 3 sur senegal.",
+    "Paragraphe 4 sur senegal."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

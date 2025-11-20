@@ -1,0 +1,30 @@
+{
+  "slug": "algerie",
+  "name": "Algerie",
+  "banner": "/banners/algerie.jpg",
+  "aboutTitle": "À savoir sur Algerie",
+  "kpis": {
+    "restaurant": 4.5,
+    "salaireNet": 400,
+    "loyer": 220,
+    "essence": 0.9,
+    "cigarettes": 2.0,
+    "cinema": 3.5,
+    "hotel": 45,
+    "habiterIndex": 45.0,
+    "eau1l": 0.25,
+    "transportLocal": 0.35,
+    "billetAvion": 220,
+    "train": 7,
+    "forfaitMobile": 7
+  },
+  "notes": [
+    "Paragraphe 1 sur algerie.",
+    "Paragraphe 2 sur algerie.",
+    "Paragraphe 3 sur algerie.",
+    "Paragraphe 4 sur algerie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

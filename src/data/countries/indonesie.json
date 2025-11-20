@@ -1,0 +1,30 @@
+{
+  "slug": "indonesie",
+  "name": "Indonesie",
+  "banner": "/banners/indonesie.jpg",
+  "aboutTitle": "À savoir sur Indonesie",
+  "kpis": {
+    "restaurant": 4.0,
+    "salaireNet": 550,
+    "loyer": 300,
+    "essence": 1.1,
+    "cigarettes": 2.2,
+    "cinema": 4.0,
+    "hotel": 50,
+    "habiterIndex": 50.0,
+    "eau1l": 0.3,
+    "transportLocal": 0.35,
+    "billetAvion": 850,
+    "train": 7,
+    "forfaitMobile": 9
+  },
+  "notes": [
+    "Paragraphe 1 sur indonesie.",
+    "Paragraphe 2 sur indonesie.",
+    "Paragraphe 3 sur indonesie.",
+    "Paragraphe 4 sur indonesie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

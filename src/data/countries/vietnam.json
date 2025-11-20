@@ -1,0 +1,30 @@
+{
+  "slug": "vietnam",
+  "name": "Vietnam",
+  "banner": "/banners/vietnam.jpg",
+  "aboutTitle": "À savoir sur Vietnam",
+  "kpis": {
+    "restaurant": 3.8,
+    "salaireNet": 550,
+    "loyer": 280,
+    "essence": 1.1,
+    "cigarettes": 1.8,
+    "cinema": 4.0,
+    "hotel": 45,
+    "habiterIndex": 45.0,
+    "eau1l": 0.25,
+    "transportLocal": 0.35,
+    "billetAvion": 750,
+    "train": 8,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur vietnam.",
+    "Paragraphe 2 sur vietnam.",
+    "Paragraphe 3 sur vietnam.",
+    "Paragraphe 4 sur vietnam."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

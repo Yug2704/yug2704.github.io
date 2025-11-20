@@ -1,0 +1,30 @@
+{
+  "slug": "koweit",
+  "name": "Koweit",
+  "banner": "/banners/koweit.jpg",
+  "aboutTitle": "À savoir sur Koweit",
+  "kpis": {
+    "restaurant": 12.0,
+    "salaireNet": 2200,
+    "loyer": 900,
+    "essence": 0.4,
+    "cigarettes": 3.0,
+    "cinema": 11.0,
+    "hotel": 110,
+    "habiterIndex": 105.0,
+    "eau1l": 0.4,
+    "transportLocal": 0.7,
+    "billetAvion": 450,
+    "train": 0,
+    "forfaitMobile": 25
+  },
+  "notes": [
+    "Paragraphe 1 sur koweit.",
+    "Paragraphe 2 sur koweit.",
+    "Paragraphe 3 sur koweit.",
+    "Paragraphe 4 sur koweit."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

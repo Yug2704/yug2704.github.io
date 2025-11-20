@@ -1,0 +1,30 @@
+{
+  "slug": "finlande",
+  "name": "Finlande",
+  "banner": "/banners/finlande.jpg",
+  "aboutTitle": "À savoir sur Finlande",
+  "kpis": {
+    "restaurant": 18.0,
+    "salaireNet": 2500,
+    "loyer": 1050,
+    "essence": 2.1,
+    "cigarettes": 8.5,
+    "cinema": 13.5,
+    "hotel": 140,
+    "habiterIndex": 120.0,
+    "eau1l": 1.0,
+    "transportLocal": 3.2,
+    "billetAvion": 180,
+    "train": 38,
+    "forfaitMobile": 28
+  },
+  "notes": [
+    "Paragraphe 1 sur finlande.",
+    "Paragraphe 2 sur finlande.",
+    "Paragraphe 3 sur finlande.",
+    "Paragraphe 4 sur finlande."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "philippines",
+  "name": "Philippines",
+  "banner": "/banners/philippines.jpg",
+  "aboutTitle": "À savoir sur Philippines",
+  "kpis": {
+    "restaurant": 4.5,
+    "salaireNet": 600,
+    "loyer": 320,
+    "essence": 1.3,
+    "cigarettes": 2.5,
+    "cinema": 4.3,
+    "hotel": 50,
+    "habiterIndex": 50.0,
+    "eau1l": 0.3,
+    "transportLocal": 0.4,
+    "billetAvion": 800,
+    "train": 8,
+    "forfaitMobile": 9
+  },
+  "notes": [
+    "Paragraphe 1 sur philippines.",
+    "Paragraphe 2 sur philippines.",
+    "Paragraphe 3 sur philippines.",
+    "Paragraphe 4 sur philippines."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

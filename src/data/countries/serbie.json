@@ -1,0 +1,30 @@
+{
+  "slug": "serbie",
+  "name": "Serbie",
+  "banner": "/banners/serbie.jpg",
+  "aboutTitle": "À savoir sur Serbie",
+  "kpis": {
+    "restaurant": 7.0,
+    "salaireNet": 650,
+    "loyer": 350,
+    "essence": 1.6,
+    "cigarettes": 3.0,
+    "cinema": 5.0,
+    "hotel": 55,
+    "habiterIndex": 55.0,
+    "eau1l": 0.45,
+    "transportLocal": 0.8,
+    "billetAvion": 220,
+    "train": 14,
+    "forfaitMobile": 10
+  },
+  "notes": [
+    "Paragraphe 1 sur serbie.",
+    "Paragraphe 2 sur serbie.",
+    "Paragraphe 3 sur serbie.",
+    "Paragraphe 4 sur serbie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

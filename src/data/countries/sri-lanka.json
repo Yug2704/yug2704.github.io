@@ -1,0 +1,30 @@
+{
+  "slug": "sri-lanka",
+  "name": "Sri Lanka",
+  "banner": "/banners/sri-lanka.jpg",
+  "aboutTitle": "À savoir sur Sri Lanka",
+  "kpis": {
+    "restaurant": 4.5,
+    "salaireNet": 350,
+    "loyer": 220,
+    "essence": 1.2,
+    "cigarettes": 2.3,
+    "cinema": 3.5,
+    "hotel": 45,
+    "habiterIndex": 45.0,
+    "eau1l": 0.3,
+    "transportLocal": 0.35,
+    "billetAvion": 650,
+    "train": 7,
+    "forfaitMobile": 7
+  },
+  "notes": [
+    "Paragraphe 1 sur sri-lanka.",
+    "Paragraphe 2 sur sri-lanka.",
+    "Paragraphe 3 sur sri-lanka.",
+    "Paragraphe 4 sur sri-lanka."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

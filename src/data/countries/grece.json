@@ -1,0 +1,30 @@
+{
+  "slug": "grece",
+  "name": "Grece",
+  "banner": "/banners/grece.jpg",
+  "aboutTitle": "À savoir sur Grece",
+  "kpis": {
+    "restaurant": 12.0,
+    "salaireNet": 1000,
+    "loyer": 650,
+    "essence": 1.9,
+    "cigarettes": 5.5,
+    "cinema": 7.5,
+    "hotel": 85,
+    "habiterIndex": 80.0,
+    "eau1l": 0.6,
+    "transportLocal": 1.4,
+    "billetAvion": 120,
+    "train": 22,
+    "forfaitMobile": 18
+  },
+  "notes": [
+    "Paragraphe 1 sur grece.",
+    "Paragraphe 2 sur grece.",
+    "Paragraphe 3 sur grece.",
+    "Paragraphe 4 sur grece."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

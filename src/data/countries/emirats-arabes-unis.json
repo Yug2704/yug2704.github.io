@@ -1,0 +1,30 @@
+{
+  "slug": "emirats-arabes-unis",
+  "name": "Emirats Arabes Unis",
+  "banner": "/banners/emirats-arabes-unis.jpg",
+  "aboutTitle": "À savoir sur Emirats Arabes Unis",
+  "kpis": {
+    "restaurant": 14.0,
+    "salaireNet": 2600,
+    "loyer": 1300,
+    "essence": 0.5,
+    "cigarettes": 4.0,
+    "cinema": 12.0,
+    "hotel": 140,
+    "habiterIndex": 115.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.0,
+    "billetAvion": 450,
+    "train": 0,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Paragraphe 1 sur emirats-arabes-unis.",
+    "Paragraphe 2 sur emirats-arabes-unis.",
+    "Paragraphe 3 sur emirats-arabes-unis.",
+    "Paragraphe 4 sur emirats-arabes-unis."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

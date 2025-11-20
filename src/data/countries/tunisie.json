@@ -1,0 +1,30 @@
+{
+  "slug": "tunisie",
+  "name": "Tunisie",
+  "banner": "/banners/tunisie.jpg",
+  "aboutTitle": "À savoir sur Tunisie",
+  "kpis": {
+    "restaurant": 5.0,
+    "salaireNet": 450,
+    "loyer": 260,
+    "essence": 1.1,
+    "cigarettes": 2.2,
+    "cinema": 4.0,
+    "hotel": 50,
+    "habiterIndex": 50.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.4,
+    "billetAvion": 200,
+    "train": 10,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur tunisie.",
+    "Paragraphe 2 sur tunisie.",
+    "Paragraphe 3 sur tunisie.",
+    "Paragraphe 4 sur tunisie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

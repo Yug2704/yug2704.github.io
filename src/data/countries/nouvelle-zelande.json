@@ -1,0 +1,30 @@
+{
+  "slug": "nouvelle-zelande",
+  "name": "Nouvelle Zelande",
+  "banner": "/banners/nouvelle-zelande.jpg",
+  "aboutTitle": "À savoir sur Nouvelle Zelande",
+  "kpis": {
+    "restaurant": 15.0,
+    "salaireNet": 2300,
+    "loyer": 950,
+    "essence": 1.9,
+    "cigarettes": 20.0,
+    "cinema": 13.0,
+    "hotel": 120,
+    "habiterIndex": 110.0,
+    "eau1l": 0.9,
+    "transportLocal": 2.5,
+    "billetAvion": 1100,
+    "train": 28,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Paragraphe 1 sur nouvelle-zelande.",
+    "Paragraphe 2 sur nouvelle-zelande.",
+    "Paragraphe 3 sur nouvelle-zelande.",
+    "Paragraphe 4 sur nouvelle-zelande."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

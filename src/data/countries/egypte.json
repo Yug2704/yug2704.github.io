@@ -1,0 +1,30 @@
+{
+  "slug": "egypte",
+  "name": "Egypte",
+  "banner": "/banners/egypte.jpg",
+  "aboutTitle": "À savoir sur Egypte",
+  "kpis": {
+    "restaurant": 4.0,
+    "salaireNet": 350,
+    "loyer": 250,
+    "essence": 0.9,
+    "cigarettes": 2.0,
+    "cinema": 3.5,
+    "hotel": 45,
+    "habiterIndex": 45.0,
+    "eau1l": 0.25,
+    "transportLocal": 0.3,
+    "billetAvion": 300,
+    "train": 8,
+    "forfaitMobile": 7
+  },
+  "notes": [
+    "Paragraphe 1 sur egypte.",
+    "Paragraphe 2 sur egypte.",
+    "Paragraphe 3 sur egypte.",
+    "Paragraphe 4 sur egypte."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

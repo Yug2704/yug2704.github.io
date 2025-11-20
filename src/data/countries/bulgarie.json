@@ -1,0 +1,30 @@
+{
+  "slug": "bulgarie",
+  "name": "Bulgarie",
+  "banner": "/banners/bulgarie.jpg",
+  "aboutTitle": "À savoir sur Bulgarie",
+  "kpis": {
+    "restaurant": 7.0,
+    "salaireNet": 650,
+    "loyer": 320,
+    "essence": 1.6,
+    "cigarettes": 3.0,
+    "cinema": 5.0,
+    "hotel": 55,
+    "habiterIndex": 55.0,
+    "eau1l": 0.45,
+    "transportLocal": 0.9,
+    "billetAvion": 170,
+    "train": 14,
+    "forfaitMobile": 11
+  },
+  "notes": [
+    "Paragraphe 1 sur bulgarie.",
+    "Paragraphe 2 sur bulgarie.",
+    "Paragraphe 3 sur bulgarie.",
+    "Paragraphe 4 sur bulgarie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

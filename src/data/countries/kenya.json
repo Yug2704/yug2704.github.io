@@ -1,0 +1,30 @@
+{
+  "slug": "kenya",
+  "name": "Kenya",
+  "banner": "/banners/kenya.jpg",
+  "aboutTitle": "À savoir sur Kenya",
+  "kpis": {
+    "restaurant": 5.5,
+    "salaireNet": 500,
+    "loyer": 300,
+    "essence": 1.3,
+    "cigarettes": 2.5,
+    "cinema": 4.5,
+    "hotel": 55,
+    "habiterIndex": 50.0,
+    "eau1l": 0.4,
+    "transportLocal": 0.5,
+    "billetAvion": 550,
+    "train": 9,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur kenya.",
+    "Paragraphe 2 sur kenya.",
+    "Paragraphe 3 sur kenya.",
+    "Paragraphe 4 sur kenya."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

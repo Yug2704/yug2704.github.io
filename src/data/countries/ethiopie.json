@@ -1,0 +1,30 @@
+{
+  "slug": "ethiopie",
+  "name": "Ethiopie",
+  "banner": "/banners/ethiopie.jpg",
+  "aboutTitle": "À savoir sur Ethiopie",
+  "kpis": {
+    "restaurant": 3.0,
+    "salaireNet": 250,
+    "loyer": 180,
+    "essence": 1.0,
+    "cigarettes": 1.5,
+    "cinema": 3.0,
+    "hotel": 40,
+    "habiterIndex": 40.0,
+    "eau1l": 0.2,
+    "transportLocal": 0.25,
+    "billetAvion": 550,
+    "train": 5,
+    "forfaitMobile": 6
+  },
+  "notes": [
+    "Paragraphe 1 sur ethiopie.",
+    "Paragraphe 2 sur ethiopie.",
+    "Paragraphe 3 sur ethiopie.",
+    "Paragraphe 4 sur ethiopie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

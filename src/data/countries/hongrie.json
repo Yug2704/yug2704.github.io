@@ -1,0 +1,30 @@
+{
+  "slug": "hongrie",
+  "name": "Hongrie",
+  "banner": "/banners/hongrie.jpg",
+  "aboutTitle": "À savoir sur Hongrie",
+  "kpis": {
+    "restaurant": 8.5,
+    "salaireNet": 900,
+    "loyer": 550,
+    "essence": 1.7,
+    "cigarettes": 4.0,
+    "cinema": 6.5,
+    "hotel": 70,
+    "habiterIndex": 70.0,
+    "eau1l": 0.5,
+    "transportLocal": 1.1,
+    "billetAvion": 150,
+    "train": 17,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Paragraphe 1 sur hongrie.",
+    "Paragraphe 2 sur hongrie.",
+    "Paragraphe 3 sur hongrie.",
+    "Paragraphe 4 sur hongrie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

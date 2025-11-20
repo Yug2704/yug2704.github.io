@@ -1,0 +1,30 @@
+{
+  "slug": "argentine",
+  "name": "Argentine",
+  "banner": "/banners/argentine.jpg",
+  "aboutTitle": "À savoir sur Argentine",
+  "kpis": {
+    "restaurant": 7.0,
+    "salaireNet": 700,
+    "loyer": 380,
+    "essence": 1.2,
+    "cigarettes": 2.8,
+    "cinema": 5.0,
+    "hotel": 60,
+    "habiterIndex": 55.0,
+    "eau1l": 0.4,
+    "transportLocal": 0.5,
+    "billetAvion": 900,
+    "train": 14,
+    "forfaitMobile": 11
+  },
+  "notes": [
+    "Paragraphe 1 sur argentine.",
+    "Paragraphe 2 sur argentine.",
+    "Paragraphe 3 sur argentine.",
+    "Paragraphe 4 sur argentine."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

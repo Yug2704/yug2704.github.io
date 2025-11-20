@@ -1,0 +1,30 @@
+{
+  "slug": "malaisie",
+  "name": "Malaisie",
+  "banner": "/banners/malaisie.jpg",
+  "aboutTitle": "À savoir sur Malaisie",
+  "kpis": {
+    "restaurant": 5.5,
+    "salaireNet": 900,
+    "loyer": 450,
+    "essence": 1.1,
+    "cigarettes": 3.0,
+    "cinema": 4.8,
+    "hotel": 60,
+    "habiterIndex": 60.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.5,
+    "billetAvion": 700,
+    "train": 10,
+    "forfaitMobile": 12
+  },
+  "notes": [
+    "Paragraphe 1 sur malaisie.",
+    "Paragraphe 2 sur malaisie.",
+    "Paragraphe 3 sur malaisie.",
+    "Paragraphe 4 sur malaisie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

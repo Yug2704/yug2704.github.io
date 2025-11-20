@@ -1,0 +1,30 @@
+{
+  "slug": "singapour",
+  "name": "Singapour",
+  "banner": "/banners/singapour.jpg",
+  "aboutTitle": "À savoir sur Singapour",
+  "kpis": {
+    "restaurant": 12.0,
+    "salaireNet": 2800,
+    "loyer": 1500,
+    "essence": 2.1,
+    "cigarettes": 10.0,
+    "cinema": 12.5,
+    "hotel": 150,
+    "habiterIndex": 130.0,
+    "eau1l": 1.1,
+    "transportLocal": 2.0,
+    "billetAvion": 900,
+    "train": 22,
+    "forfaitMobile": 28
+  },
+  "notes": [
+    "Paragraphe 1 sur singapour.",
+    "Paragraphe 2 sur singapour.",
+    "Paragraphe 3 sur singapour.",
+    "Paragraphe 4 sur singapour."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "cote-d-ivoire",
+  "name": "Cote D Ivoire",
+  "banner": "/banners/cote-d-ivoire.jpg",
+  "aboutTitle": "À savoir sur Cote D Ivoire",
+  "kpis": {
+    "restaurant": 5.0,
+    "salaireNet": 500,
+    "loyer": 300,
+    "essence": 1.5,
+    "cigarettes": 2.8,
+    "cinema": 4.2,
+    "hotel": 55,
+    "habiterIndex": 52.0,
+    "eau1l": 0.35,
+    "transportLocal": 0.5,
+    "billetAvion": 550,
+    "train": 9,
+    "forfaitMobile": 8
+  },
+  "notes": [
+    "Paragraphe 1 sur cote-d-ivoire.",
+    "Paragraphe 2 sur cote-d-ivoire.",
+    "Paragraphe 3 sur cote-d-ivoire.",
+    "Paragraphe 4 sur cote-d-ivoire."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "arabie-saoudite",
+  "name": "Arabie Saoudite",
+  "banner": "/banners/arabie-saoudite.jpg",
+  "aboutTitle": "À savoir sur Arabie Saoudite",
+  "kpis": {
+    "restaurant": 11.0,
+    "salaireNet": 2200,
+    "loyer": 900,
+    "essence": 0.55,
+    "cigarettes": 3.5,
+    "cinema": 10.0,
+    "hotel": 115,
+    "habiterIndex": 105.0,
+    "eau1l": 0.45,
+    "transportLocal": 0.8,
+    "billetAvion": 400,
+    "train": 0,
+    "forfaitMobile": 26
+  },
+  "notes": [
+    "Paragraphe 1 sur arabie-saoudite.",
+    "Paragraphe 2 sur arabie-saoudite.",
+    "Paragraphe 3 sur arabie-saoudite.",
+    "Paragraphe 4 sur arabie-saoudite."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

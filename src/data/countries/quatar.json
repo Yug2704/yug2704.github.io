@@ -1,0 +1,30 @@
+{
+  "slug": "quatar",
+  "name": "Quatar",
+  "banner": "/banners/quatar.jpg",
+  "aboutTitle": "À savoir sur Quatar",
+  "kpis": {
+    "restaurant": 13.0,
+    "salaireNet": 2500,
+    "loyer": 1100,
+    "essence": 0.45,
+    "cigarettes": 3.5,
+    "cinema": 12.0,
+    "hotel": 130,
+    "habiterIndex": 110.0,
+    "eau1l": 0.45,
+    "transportLocal": 0.9,
+    "billetAvion": 450,
+    "train": 0,
+    "forfaitMobile": 28
+  },
+  "notes": [
+    "Paragraphe 1 sur quatar.",
+    "Paragraphe 2 sur quatar.",
+    "Paragraphe 3 sur quatar.",
+    "Paragraphe 4 sur quatar."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

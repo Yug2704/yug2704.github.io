@@ -1,0 +1,30 @@
+{
+  "slug": "tchequie",
+  "name": "Tchequie",
+  "banner": "/banners/tchequie.jpg",
+  "aboutTitle": "À savoir sur Tchequie",
+  "kpis": {
+    "restaurant": 9.0,
+    "salaireNet": 1050,
+    "loyer": 650,
+    "essence": 1.8,
+    "cigarettes": 4.0,
+    "cinema": 7.0,
+    "hotel": 85,
+    "habiterIndex": 80.0,
+    "eau1l": 0.55,
+    "transportLocal": 1.3,
+    "billetAvion": 160,
+    "train": 18,
+    "forfaitMobile": 17
+  },
+  "notes": [
+    "Paragraphe 1 sur tchequie.",
+    "Paragraphe 2 sur tchequie.",
+    "Paragraphe 3 sur tchequie.",
+    "Paragraphe 4 sur tchequie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}

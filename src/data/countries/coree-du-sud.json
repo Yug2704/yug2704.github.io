@@ -1,0 +1,30 @@
+{
+  "slug": "coree-du-sud",
+  "name": "Coree Du Sud",
+  "banner": "/banners/coree-du-sud.jpg",
+  "aboutTitle": "À savoir sur Coree Du Sud",
+  "kpis": {
+    "restaurant": 9.0,
+    "salaireNet": 1900,
+    "loyer": 800,
+    "essence": 1.6,
+    "cigarettes": 4.5,
+    "cinema": 8.5,
+    "hotel": 95,
+    "habiterIndex": 95.0,
+    "eau1l": 0.7,
+    "transportLocal": 1.4,
+    "billetAvion": 900,
+    "train": 25,
+    "forfaitMobile": 23
+  },
+  "notes": [
+    "Paragraphe 1 sur coree-du-sud.",
+    "Paragraphe 2 sur coree-du-sud.",
+    "Paragraphe 3 sur coree-du-sud.",
+    "Paragraphe 4 sur coree-du-sud."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-20T12:16:02.046766Z"
+  }
+}
