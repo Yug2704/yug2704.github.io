@@ -16,7 +16,7 @@
     "transportLocal": 1.45,
     "billetAvion": 900,
     "train": 25,
-    "forfaitMobile": 45
+    "forfaitMobile": 21
   },
   "notes": [
     "Manger à l’extérieur est souvent abordable grâce aux nombreuses petites chaînes, restaurants familiaux et bentos à emporter, particulièrement en dehors des centres ultra-urbains.",
@@ -24,6 +24,6 @@
     "Les pourboires ne font pas partie de la culture japonaise, et la plupart des prix affichés incluent déjà les taxes. La transparence des tarifs et la qualité du service contribuent à une expérience de consommation sereine et prévisible."
   ],
   "meta": {
-    "lastUpdated": "2025-11-19T07:12:05.355Z"
+    "lastUpdated": "2025-11-20T08:00:52.243Z"
   }
 }
