@@ -1,7 +1,7 @@
 {
   "slug": "afrique-du-sud",
   "name": "Afrique Du Sud",
-  "banner": "/banners/afrique-du-sud.jpg",
+  "banner": "/banners/afrique du sud.jpg",
   "aboutTitle": "À savoir sur Afrique Du Sud",
   "kpis": {
     "restaurant": 7.0,
@@ -19,10 +19,10 @@
     "forfaitMobile": 11
   },
   "notes": [
-    "Paragraphe 1 sur afrique-du-sud.",
-    "Paragraphe 2 sur afrique-du-sud.",
-    "Paragraphe 3 sur afrique-du-sud.",
-    "Paragraphe 4 sur afrique-du-sud."
+    "L’Afrique du Sud présente de fortes différences de prix entre quartiers sécurisés et zones plus populaires.",
+    "Le Cap et Johannesburg sont les villes les plus chères, en particulier pour les logements bien situés et sécurisés.",
+    "La voiture est très utilisée, même si certains réseaux de bus modernes se développent dans les grandes villes.",
+    "Pour un visiteur étranger, restaurants et supermarchés restent relativement abordables grâce au taux de change."
   ],
   "meta": {
     "lastUpdated": "2025-11-20T12:16:02.046766Z"
