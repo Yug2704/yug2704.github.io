@@ -1,0 +1,28 @@
+{
+  "slug": "campobasso",
+  "name": "Campobasso",
+  "banner": "/banners/campobasso.jpg",
+  "aboutTitle": "À savoir sur Campobasso",
+  "kpis": {
+    "restaurant": 16,
+    "salaireNet": 1900,
+    "loyer": 750,
+    "essence": 1.9,
+    "cigarettes": 6.5,
+    "cinema": 9,
+    "hotel": 95,
+    "habiterIndex": 89,
+    "eau1l": 0.7,
+    "transportLocal": 1.7,
+    "billetAvion": 150,
+    "train": 33,
+    "forfaitMobile": 14
+  },
+  "notes": [
+    "Quelques repères de prix pour Campobasso. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.589Z"
+  }
+}

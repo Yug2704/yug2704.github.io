@@ -1,0 +1,28 @@
+{
+  "slug": "hainan",
+  "name": "Hainan",
+  "banner": "/banners/hainan.jpg",
+  "aboutTitle": "À savoir sur Hainan",
+  "kpis": {
+    "restaurant": 8,
+    "salaireNet": 1000,
+    "loyer": 420,
+    "essence": 1.3,
+    "cigarettes": 3.5,
+    "cinema": 6.5,
+    "hotel": 70,
+    "habiterIndex": 53,
+    "eau1l": 0.5,
+    "transportLocal": 0.6,
+    "billetAvion": 160,
+    "train": 28,
+    "forfaitMobile": 12
+  },
+  "notes": [
+    "Quelques repères de prix pour Hainan. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.593Z"
+  }
+}

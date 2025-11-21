@@ -4,19 +4,19 @@
   "banner": "/banners/canada.jpg",
   "aboutTitle": "À savoir sur Toronto",
   "kpis": {
-    "restaurant": 15.5,
-    "salaireNet": 2150,
-    "loyer": 800,
-    "essence": 1.9,
-    "cigarettes": 10.0,
-    "cinema": 11.0,
-    "hotel": 100,
-    "habiterIndex": 100.0,
-    "eau1l": 0.7,
-    "transportLocal": 2.1,
-    "billetAvion": 150,
-    "train": 35,
-    "forfaitMobile": 15
+    "restaurant": 17,
+    "salaireNet": 2800,
+    "loyer": 1100,
+    "essence": 1.5,
+    "cigarettes": 10,
+    "cinema": 12,
+    "hotel": 120,
+    "habiterIndex": 94,
+    "eau1l": 0.75,
+    "transportLocal": 2.6,
+    "billetAvion": 190,
+    "train": 38,
+    "forfaitMobile": 30
   },
   "notes": [
     "Toronto est l'une des villes importantes de le Canada, avec un coût de la vie qui dépend fortement du quartier où l'on habite et du niveau de confort recherché.",
@@ -25,6 +25,6 @@
     "Entre restaurants, commerces de proximité et grandes surfaces, Toronto offre de nombreuses options pour adapter son budget nourriture et loisirs à son style de vie."
   ],
   "meta": {
-    "lastUpdated": "2025-11-21T07:40:30.166920Z"
+    "lastUpdated": "2025-11-21T08:10:12.606Z"
   }
 }

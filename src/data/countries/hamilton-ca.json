@@ -1,0 +1,28 @@
+{
+  "slug": "hamilton-ca",
+  "name": "Hamilton-ca",
+  "banner": "/banners/hamilton-ca.jpg",
+  "aboutTitle": "À savoir sur Hamilton-ca",
+  "kpis": {
+    "restaurant": 17,
+    "salaireNet": 2800,
+    "loyer": 1100,
+    "essence": 1.5,
+    "cigarettes": 10,
+    "cinema": 12,
+    "hotel": 120,
+    "habiterIndex": 94,
+    "eau1l": 0.75,
+    "transportLocal": 2.6,
+    "billetAvion": 190,
+    "train": 38,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Quelques repères de prix pour Hamilton-ca. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.594Z"
+  }
+}

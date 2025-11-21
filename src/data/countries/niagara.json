@@ -1,0 +1,28 @@
+{
+  "slug": "niagara",
+  "name": "Niagara",
+  "banner": "/banners/niagara.jpg",
+  "aboutTitle": "À savoir sur Niagara",
+  "kpis": {
+    "restaurant": 17,
+    "salaireNet": 2800,
+    "loyer": 1100,
+    "essence": 1.5,
+    "cigarettes": 10,
+    "cinema": 12,
+    "hotel": 120,
+    "habiterIndex": 94,
+    "eau1l": 0.75,
+    "transportLocal": 2.6,
+    "billetAvion": 190,
+    "train": 38,
+    "forfaitMobile": 30
+  },
+  "notes": [
+    "Quelques repères de prix pour Niagara. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.600Z"
+  }
+}

@@ -5,13 +5,13 @@
   "aboutTitle": "À savoir sur Rennes",
   "kpis": {
     "restaurant": 15.5,
-    "salaireNet": 2150,
+    "salaireNet": 2193,
     "loyer": 880,
     "essence": 1.9,
-    "cigarettes": 10.0,
-    "cinema": 11.0,
+    "cigarettes": 10,
+    "cinema": 11,
     "hotel": 100,
-    "habiterIndex": 100,
+    "habiterIndex": 103,
     "eau1l": 0.7,
     "transportLocal": 2.1,
     "billetAvion": 150,
@@ -25,6 +25,6 @@
     "Le quotidien est globalement accessible, avec une forte présence de bars et de petites adresses adaptées aux budgets limités."
   ],
   "meta": {
-    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+    "lastUpdated": "2025-11-21T08:10:12.576Z"
   }
 }

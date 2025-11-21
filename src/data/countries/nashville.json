@@ -4,19 +4,19 @@
   "banner": "/banners/etats-unis.jpg",
   "aboutTitle": "À savoir sur Nashville",
   "kpis": {
-    "restaurant": 15.5,
-    "salaireNet": 2150,
-    "loyer": 800,
-    "essence": 1.9,
-    "cigarettes": 10.0,
-    "cinema": 11.0,
-    "hotel": 100,
-    "habiterIndex": 100.0,
-    "eau1l": 0.7,
-    "transportLocal": 2.1,
-    "billetAvion": 150,
-    "train": 35,
-    "forfaitMobile": 15
+    "restaurant": 20,
+    "salaireNet": 3200,
+    "loyer": 1400,
+    "essence": 1.2,
+    "cigarettes": 8,
+    "cinema": 13,
+    "hotel": 130,
+    "habiterIndex": 101,
+    "eau1l": 0.8,
+    "transportLocal": 2.75,
+    "billetAvion": 200,
+    "train": 40,
+    "forfaitMobile": 35
   },
   "notes": [
     "Nashville est l'une des villes importantes de les États-Unis, avec un coût de la vie qui dépend fortement du quartier où l'on habite et du niveau de confort recherché.",
@@ -25,6 +25,6 @@
     "Entre restaurants, commerces de proximité et grandes surfaces, Nashville offre de nombreuses options pour adapter son budget nourriture et loisirs à son style de vie."
   ],
   "meta": {
-    "lastUpdated": "2025-11-21T07:40:30.166920Z"
+    "lastUpdated": "2025-11-21T08:10:12.599Z"
   }
 }

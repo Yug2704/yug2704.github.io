@@ -4,19 +4,19 @@
   "banner": "/banners/royaume uni.jpg",
   "aboutTitle": "À savoir sur Southampton",
   "kpis": {
-    "restaurant": 18.0,
-    "salaireNet": 2300,
-    "loyer": 1000,
+    "restaurant": 17.64,
+    "salaireNet": 2400,
+    "loyer": 1045,
     "essence": 1.95,
-    "cigarettes": 13.0,
-    "cinema": 12.0,
-    "hotel": 120,
-    "habiterIndex": 110,
-    "eau1l": 0.8,
-    "transportLocal": 2.5,
-    "billetAvion": 160,
-    "train": 40,
-    "forfaitMobile": 18
+    "cigarettes": 13,
+    "cinema": 13.72,
+    "hotel": 114,
+    "habiterIndex": 114,
+    "eau1l": 0.9,
+    "transportLocal": 3.136,
+    "billetAvion": 120,
+    "train": 45,
+    "forfaitMobile": 30
   },
   "notes": [
     "Southampton affiche un coût de la vie dans la moyenne des grandes villes du Royaume-Uni, avec un poids important du logement dans le budget global.",
@@ -25,6 +25,6 @@
     "Entre pubs, supermarchés et restauration rapide, il est possible d’adapter son budget alimentation et loisirs au niveau de vie local de Southampton."
   ],
   "meta": {
-    "lastUpdated": "2025-11-21T06:44:50.286667Z"
+    "lastUpdated": "2025-11-21T08:10:12.584Z"
   }
 }

@@ -1,0 +1,28 @@
+{
+  "slug": "parana",
+  "name": "Parana",
+  "banner": "/banners/parana.jpg",
+  "aboutTitle": "À savoir sur Parana",
+  "kpis": {
+    "restaurant": 9.5,
+    "salaireNet": 800,
+    "loyer": 350,
+    "essence": 1.3,
+    "cigarettes": 3,
+    "cinema": 5.5,
+    "hotel": 70,
+    "habiterIndex": 48,
+    "eau1l": 0.45,
+    "transportLocal": 0.9,
+    "billetAvion": 135,
+    "train": 24,
+    "forfaitMobile": 9
+  },
+  "notes": [
+    "Quelques repères de prix pour Parana. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.601Z"
+  }
+}

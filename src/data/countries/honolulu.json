@@ -1,0 +1,28 @@
+{
+  "slug": "honolulu",
+  "name": "Honolulu",
+  "banner": "/banners/honolulu.jpg",
+  "aboutTitle": "À savoir sur Honolulu",
+  "kpis": {
+    "restaurant": 19,
+    "salaireNet": 2600,
+    "loyer": 950,
+    "essence": 1.4,
+    "cigarettes": 4.5,
+    "cinema": 13,
+    "hotel": 120,
+    "habiterIndex": 79,
+    "eau1l": 0.9,
+    "transportLocal": 2.2,
+    "billetAvion": 220,
+    "train": 42,
+    "forfaitMobile": 25
+  },
+  "notes": [
+    "Quelques repères de prix pour Honolulu. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.594Z"
+  }
+}

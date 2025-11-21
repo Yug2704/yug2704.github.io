@@ -1,0 +1,28 @@
+{
+  "slug": "monterey-mx",
+  "name": "Monterey-mx",
+  "banner": "/banners/monterey-mx.jpg",
+  "aboutTitle": "À savoir sur Monterey-mx",
+  "kpis": {
+    "restaurant": 10,
+    "salaireNet": 900,
+    "loyer": 400,
+    "essence": 1.4,
+    "cigarettes": 3.5,
+    "cinema": 5,
+    "hotel": 65,
+    "habiterIndex": 54,
+    "eau1l": 0.5,
+    "transportLocal": 0.8,
+    "billetAvion": 130,
+    "train": 25,
+    "forfaitMobile": 10
+  },
+  "notes": [
+    "Quelques repères de prix pour Monterey-mx. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.598Z"
+  }
+}

@@ -4,19 +4,19 @@
   "banner": "/banners/chine.jpg",
   "aboutTitle": "À savoir sur Chongqing",
   "kpis": {
-    "restaurant": 15.5,
-    "salaireNet": 2150,
-    "loyer": 800,
-    "essence": 1.9,
-    "cigarettes": 10.0,
-    "cinema": 11.0,
-    "hotel": 100,
-    "habiterIndex": 100.0,
-    "eau1l": 0.7,
-    "transportLocal": 2.1,
-    "billetAvion": 150,
-    "train": 35,
-    "forfaitMobile": 15
+    "restaurant": 8,
+    "salaireNet": 1000,
+    "loyer": 420,
+    "essence": 1.3,
+    "cigarettes": 3.5,
+    "cinema": 6.5,
+    "hotel": 70,
+    "habiterIndex": 53,
+    "eau1l": 0.5,
+    "transportLocal": 0.6,
+    "billetAvion": 160,
+    "train": 28,
+    "forfaitMobile": 12
   },
   "notes": [
     "Chongqing est l'une des villes importantes de la Chine, avec un coût de la vie qui dépend fortement du quartier où l'on habite et du niveau de confort recherché.",
@@ -25,6 +25,6 @@
     "Entre restaurants, commerces de proximité et grandes surfaces, Chongqing offre de nombreuses options pour adapter son budget nourriture et loisirs à son style de vie."
   ],
   "meta": {
-    "lastUpdated": "2025-11-21T07:40:30.166920Z"
+    "lastUpdated": "2025-11-21T08:10:12.590Z"
   }
 }

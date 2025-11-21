@@ -1,0 +1,28 @@
+{
+  "slug": "orlando",
+  "name": "Orlando",
+  "banner": "/banners/orlando.jpg",
+  "aboutTitle": "À savoir sur Orlando",
+  "kpis": {
+    "restaurant": 20,
+    "salaireNet": 3200,
+    "loyer": 1400,
+    "essence": 1.2,
+    "cigarettes": 8,
+    "cinema": 13,
+    "hotel": 130,
+    "habiterIndex": 101,
+    "eau1l": 0.8,
+    "transportLocal": 2.75,
+    "billetAvion": 200,
+    "train": 40,
+    "forfaitMobile": 35
+  },
+  "notes": [
+    "Quelques repères de prix pour Orlando. Les valeurs peuvent varier selon la ville et la saison.",
+    "Ajoute ou ajuste les informations au besoin."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T08:10:12.600Z"
+  }
+}
