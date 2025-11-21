@@ -1,0 +1,30 @@
+{
+  "slug": "toulouse",
+  "name": "Toulouse",
+  "banner": "/banners/france.jpg",
+  "aboutTitle": "À savoir sur Toulouse",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 880,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Toulouse attire beaucoup d’étudiants et de salariés de l’aéronautique, ce qui entretient une demande forte sur le marché locatif.",
+    "Les loyers y sont en hausse mais restent plus doux que dans les très grandes métropoles françaises.",
+    "Le réseau de transports (métro, tram, bus) couvre bien la ville, même si certains secteurs restent plus dépendants de la voiture.",
+    "Le coût de la vie quotidienne est raisonnable, avec de nombreux bars et restaurants adaptés aux budgets étudiants."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+  }
+}

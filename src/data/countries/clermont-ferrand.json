@@ -1,0 +1,30 @@
+{
+  "slug": "clermont-ferrand",
+  "name": "Clermont-Ferrand",
+  "banner": "/banners/france.jpg",
+  "aboutTitle": "À savoir sur Clermont-Ferrand",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 880,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Clermont-Ferrand offre un coût de la vie plutôt contenu, notamment sur le logement, par rapport aux grandes métropoles françaises.",
+    "La présence historique de grandes entreprises industrielles et d’universités crée un mix d’étudiants et de salariés.",
+    "Les déplacements restent simples grâce à un réseau de bus et de trams, complété par une circulation encore gérable en voiture.",
+    "Les commerces de proximité et les marchés permettent de maîtriser assez facilement le budget alimentaire."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+  }
+}

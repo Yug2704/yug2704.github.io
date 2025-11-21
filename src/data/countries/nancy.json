@@ -1,0 +1,30 @@
+{
+  "slug": "nancy",
+  "name": "Nancy",
+  "banner": "/banners/france.jpg",
+  "aboutTitle": "À savoir sur Nancy",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 880,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Nancy est une ville étudiante où les loyers sont globalement abordables, même s’ils augmentent dans certains quartiers centraux.",
+    "La présence de nombreuses facultés et écoles maintient une forte demande sur les studios et petites surfaces.",
+    "Les bus et le tram facilitent les déplacements sans voiture, surtout pour les trajets entre campus et centre-ville.",
+    "Le coût de la vie quotidienne reste correct, avec une offre de bars et de restaurants adaptée aux budgets étudiants."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+  }
+}

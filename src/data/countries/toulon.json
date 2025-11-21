@@ -1,0 +1,30 @@
+{
+  "slug": "toulon",
+  "name": "Toulon",
+  "banner": "/banners/france.jpg",
+  "aboutTitle": "À savoir sur Toulon",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 880,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Toulon bénéficie d’un cadre méditerranéen, avec des loyers variables selon la proximité de la mer et la qualité du quartier.",
+    "La présence de la base navale et d’emplois publics stabilise en partie le marché de l’emploi et du logement.",
+    "Le réseau de bus reste le principal moyen de transport en commun, même si de nombreux habitants utilisent la voiture.",
+    "Le coût de la vie quotidienne est influencé par la saison touristique, surtout pour la restauration et certains services."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+  }
+}

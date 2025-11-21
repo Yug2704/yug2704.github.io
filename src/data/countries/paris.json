@@ -1,0 +1,30 @@
+{
+  "slug": "paris",
+  "name": "Paris",
+  "banner": "/banners/france.jpg",
+  "aboutTitle": "À savoir sur Paris",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 880,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Paris est la ville la plus chère de France, avec des loyers très élevés, surtout dans les arrondissements centraux.",
+    "Le coût de la vie quotidienne varie énormément selon que l’on fréquente les commerces de quartier ou les zones très touristiques.",
+    "Les transports en commun sont denses et permettent de se passer de voiture, mais l’abonnement peut représenter un vrai poste de dépense.",
+    "Restaurants, cafés et sorties culturelles tirent le budget vers le haut, mais il existe aussi de nombreuses options gratuites ou peu coûteuses."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T06:29:54.984335Z"
+  }
+}
