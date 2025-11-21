@@ -1,0 +1,30 @@
+{
+  "slug": "portland",
+  "name": "Portland",
+  "banner": "/banners/etats-unis.jpg",
+  "aboutTitle": "À savoir sur Portland",
+  "kpis": {
+    "restaurant": 15.5,
+    "salaireNet": 2150,
+    "loyer": 800,
+    "essence": 1.9,
+    "cigarettes": 10.0,
+    "cinema": 11.0,
+    "hotel": 100,
+    "habiterIndex": 100.0,
+    "eau1l": 0.7,
+    "transportLocal": 2.1,
+    "billetAvion": 150,
+    "train": 35,
+    "forfaitMobile": 15
+  },
+  "notes": [
+    "Portland est l'une des villes importantes de les États-Unis, avec un coût de la vie qui dépend fortement du quartier où l'on habite et du niveau de confort recherché.",
+    "Les loyers à Portland peuvent varier du simple au double entre centre-ville, zones historiques et quartiers plus résidentiels, ce qui permet d'ajuster assez finement son budget logement.",
+    "Les transports à Portland combinent souvent transports en commun, voiture et déplacements à pied ; bien choisir son mode de transport aide à garder la maîtrise de ses dépenses au quotidien.",
+    "Entre restaurants, commerces de proximité et grandes surfaces, Portland offre de nombreuses options pour adapter son budget nourriture et loisirs à son style de vie."
+  ],
+  "meta": {
+    "lastUpdated": "2025-11-21T07:40:30.166920Z"
+  }
+}
