@@ -13,6 +13,16 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Google Analytics GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNJ39WVYG1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZNJ39WVYG1');
+    </script>
+
     <style>
       :root{
         --bg:#ffffff;
@@ -76,6 +86,7 @@ const {
       .footer-strong a{color:#fff;background:rgba(255,255,255,.15)}
     </style>
   </head>
+
   <body>
     <header>
       <div class="container" style="display:flex;justify-content:space-between;align-items:center;height:64px;gap:12px;">
@@ -84,15 +95,8 @@ const {
           <a class="pill" href="/">Accueil</a>
           <a class="pill" href="/category/restaurant">Toutes catégories</a>
 
-          <!-- 🔎 Recherche header -->
           <div class="search" role="search" aria-label="Recherche">
-            <input
-              id="hdr-q"
-              type="search"
-              placeholder="Pays ou ville…"
-              autocomplete="off"
-              aria-label="Rechercher un pays ou une catégorie"
-            />
+            <input id="hdr-q" type="search" placeholder="Pays ou ville…" autocomplete="off" />
             <button class="pill" type="button" id="hdr-go">Chercher</button>
           </div>
         </nav>
@@ -110,8 +114,7 @@ const {
             <h3>À propos</h3>
             <p>
               Prix de la vie compare des prix de biens et services dans différents pays et villes,
-              avec une référence claire : la France. Parcourez nos pages pour obtenir des repères concrets
-              (repas, loyers, transports, produits du quotidien) et préparer un voyage, une expatriation ou un budget.
+              avec une référence claire : la France.
             </p>
           </div>
           <div class="links">
@@ -133,20 +136,18 @@ const {
       </div>
     </section>
 
-    <!-- 🔧 Script : slugify de la saisie + redirection simple -->
     <script is:inline>
       const hdrQ  = document.getElementById('hdr-q');
       const hdrGo = document.getElementById('hdr-go');
 
       function slugify(str) {
         return (str || '')
-          .toString()
           .toLowerCase()
-          .normalize('NFD')                  // sépare les accents
-          .replace(/[\u0300-\u036f]/g, '')  // supprime les accents
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
           .replace(/&/g, ' et ')
-          .replace(/[^a-z0-9]+/g, '-')      // tout le reste -> tiret
-          .replace(/^-+|-+$/g, '');         // enlève tirets début/fin
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
       }
 
       function handleSearch() {
@@ -154,28 +155,15 @@ const {
         if (!raw) return;
 
         const slug = slugify(raw);
-
-        // Cas particulier : restaurant / restaurants -> page catégorie
         if (slug === 'restaurant' || slug === 'restaurants') {
           window.location.href = '/category/restaurant';
           return;
         }
-
-        // Tous les autres cas -> page pays
         window.location.href = `/country/${slug}`;
       }
 
-      hdrGo?.addEventListener('click', (e) => {
-        e.preventDefault();
-        handleSearch();
-      });
-
-      hdrQ?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          handleSearch();
-        }
-      });
+      hdrGo?.addEventListener('click', e => { e.preventDefault(); handleSearch(); });
+      hdrQ?.addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
     </script>
   </body>
 </html>
